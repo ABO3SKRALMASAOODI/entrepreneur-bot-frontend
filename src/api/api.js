@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5001", // Flask backend
+  baseURL: "https://entrepreneur-bot-backend.onrender.com",
+
 });
 
 export default API;
