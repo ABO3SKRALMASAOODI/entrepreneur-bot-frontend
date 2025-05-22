@@ -1,0 +1,65 @@
+import React, { useState } from "react";
+import API from "../api/api";
+import { useNavigate } from "react-router-dom";
+
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setMessage("");
+    console.log("📤 Attempting login...");
+
+    try {
+      const response = await API.post("/auth/login", { email, password });
+      console.log("✅ Server response:", response.data);
+      localStorage.setItem("token", response.data.token);
+      setMessage("✅ Login successful!");
+
+      // Redirect to chat after short delay
+      setTimeout(() => {
+        navigate("/chat");
+      }, 500);
+    } catch (error) {
+      console.log("❌ Login failed:", error.response?.data || error.message);
+      setMessage(error.response?.data?.error || "Login failed");
+    }
+  };
+
+  return (
+    <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          required
+          onChange={(e) => setEmail(e.target.value)}
+          style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          required
+          onChange={(e) => setPassword(e.target.value)}
+          style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
+        />
+        <button type="submit" style={{ padding: "10px 20px" }}>
+          Login
+        </button>
+      </form>
+      {message && <p>{message}</p>}
+
+      <p style={{ textAlign: "center", marginTop: "1rem" }}>
+        Don’t have an account? <a href="/register">Register</a>
+      </p>
+    </div>
+  );
+}
+
+export default Login;
