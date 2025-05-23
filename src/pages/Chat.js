@@ -50,6 +50,28 @@ function Chat() {
     setError("");
   };
 
+  const handleSubscribe = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return alert("Please log in first.");
+
+    try {
+      const res = await API.post(
+        "/stripe/create-checkout-session",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // Redirect to Stripe checkout
+      window.location.href = res.data.checkout_url;
+    } catch (err) {
+      console.error("Subscription error:", err);
+      alert("Failed to create checkout session.");
+    }
+  };
+
   return (
     <div style={{ padding: "2rem", maxWidth: "700px", margin: "auto", position: "relative" }}>
       {/* Top Right Controls */}
@@ -61,6 +83,23 @@ function Chat() {
       </div>
 
       <h2>💬 AI Business Mentor</h2>
+
+      {/* Subscription CTA */}
+      <div style={{ marginBottom: "1rem" }}>
+        <button
+          onClick={handleSubscribe}
+          style={{
+            backgroundColor: "#6753ea",
+            color: "white",
+            padding: "10px 20px",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          💳 Subscribe to Unlock Full Access
+        </button>
+      </div>
 
       {/* Message History */}
       <div
