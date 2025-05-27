@@ -11,7 +11,7 @@ function Chat() {
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-
+// hello
     const token = localStorage.getItem("token");
     if (!token) {
       setError("⚠️ You're not logged in.");
@@ -50,25 +50,25 @@ function Chat() {
     setError("");
   };
 
-  const handleSubscribe = () => {
+  const handleSubscribe = async () => {
     const token = localStorage.getItem("token");
     if (!token) return alert("Please log in first.");
 
-    // Extract user ID from JWT (optional)
-    let userId = "unknown";
     try {
-      userId = JSON.parse(atob(token.split('.')[1]))?.sub || "unknown";
-    } catch (e) {
-      console.error("Invalid token format");
+      const res = await API.post(
+        "/paddle/create-checkout-session",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      window.location.href = res.data.checkout_url; // Redirect to Paddle-hosted checkout
+    } catch (err) {
+      console.error("Failed to start checkout:", err);
+      alert("Failed to start checkout session.");
     }
-
-    window.Paddle.Checkout.open({
-      product: "pri_01jw8722trngfyz12kq158vrz7",
-      passthrough: JSON.stringify({ user_id: userId }),
-      successCallback: () => {
-        alert("✅ Payment successful! Access will be activated shortly.");
-      },
-    });
   };
 
   return (
