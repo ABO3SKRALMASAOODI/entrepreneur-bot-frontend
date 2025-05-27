@@ -63,7 +63,7 @@ function Chat() {
     }
 
     window.Paddle.Checkout.open({
-      product: "pro_01jw86xwvp9b5dvkmaywqy52na",
+      product: "pri_01jw8722trngfyz12kq158vrz7",
       passthrough: JSON.stringify({ user_id: userId }),
       successCallback: () => {
         alert("✅ Payment successful! Access will be activated shortly.");
