@@ -50,26 +50,25 @@ function Chat() {
     setError("");
   };
 
-  const handleSubscribe = async () => {
+  const handleSubscribe = () => {
     const token = localStorage.getItem("token");
     if (!token) return alert("Please log in first.");
 
+    // Extract user ID from JWT (optional)
+    let userId = "unknown";
     try {
-      const res = await API.post(
-        "/stripe/create-checkout-session",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // Redirect to Stripe checkout
-      window.location.href = res.data.checkout_url;
-    } catch (err) {
-      console.error("Subscription error:", err);
-      alert("Failed to create checkout session.");
+      userId = JSON.parse(atob(token.split('.')[1]))?.sub || "unknown";
+    } catch (e) {
+      console.error("Invalid token format");
     }
+
+    window.Paddle.Checkout.open({
+      product: "pro_01jw86xwvp9b5dvkmaywqy52na",
+      passthrough: JSON.stringify({ user_id: userId }),
+      successCallback: () => {
+        alert("✅ Payment successful! Access will be activated shortly.");
+      },
+    });
   };
 
   return (
