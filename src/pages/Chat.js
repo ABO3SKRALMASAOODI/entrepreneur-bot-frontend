@@ -11,7 +11,7 @@ function Chat() {
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-// hello
+
     const token = localStorage.getItem("token");
     if (!token) {
       setError("⚠️ You're not logged in.");
@@ -28,7 +28,7 @@ function Chat() {
         { prompt },
         {
           headers: {
-            Authorization: Bearer ${token},
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -52,31 +52,29 @@ function Chat() {
 
   const handleSubscribe = async () => {
     const token = localStorage.getItem("token");
-    console.log("📦 Token being sent to backend:", token); // 👈 Add this line
-  
+    console.log("📦 Token being sent to backend:", token);
+
     if (!token) return alert("Please log in first.");
-  
+
     try {
       const res = await API.post(
         "/paddle/create-checkout-session",
         {},
         {
           headers: {
-            Authorization: Bearer ${token},
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-      window.location.href = res.data.checkout_url; // Redirect to Paddle-hosted checkout
+      window.location.href = res.data.checkout_url;
     } catch (err) {
       console.error("Failed to start checkout:", err);
       alert("Failed to start checkout session.");
     }
   };
-  
 
   return (
     <div style={{ padding: "2rem", maxWidth: "700px", margin: "auto", position: "relative" }}>
-      {/* Top Right Controls */}
       <div style={{ position: "absolute", top: "10px", right: "10px" }}>
         <button onClick={handleNewSession} style={{ marginRight: "10px" }}>
           🔁 New Session
@@ -86,7 +84,6 @@ function Chat() {
 
       <h2>💬 AI Business Mentor</h2>
 
-      {/* Subscription CTA */}
       <div style={{ marginBottom: "1rem" }}>
         <button
           onClick={handleSubscribe}
@@ -103,7 +100,6 @@ function Chat() {
         </button>
       </div>
 
-      {/* Message History */}
       <div
         style={{
           maxHeight: "60vh",
@@ -139,7 +135,6 @@ function Chat() {
         ))}
       </div>
 
-      {/* Chat Input */}
       <form onSubmit={handleSend}>
         <textarea
           placeholder="Ask your business question..."
