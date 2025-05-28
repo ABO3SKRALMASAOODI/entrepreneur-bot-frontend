@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
-import SubscribeModal from "../components/SubscribeModal";
 
 function Chat() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState("");
-  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-
+    // hello
     const token = localStorage.getItem("token");
     if (!token) {
       setError("⚠️ You're not logged in.");
@@ -30,127 +28,138 @@ function Chat() {
         { prompt },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: Bearer ${ token },
           },
-        }
+  }
       );
-      const botReply = res.data.reply;
-      setMessages((prev) => [...prev, { role: "assistant", content: botReply }]);
+  const botReply = res.data.reply;
+  setMessages((prev) => [...prev, { role: "assistant", content: botReply }]);
+} catch (err) {
+  setError(err.response?.data?.error || "Error during chat");
+}
+  };
+
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  navigate("/login");
+};
+
+const handleNewSession = () => {
+  setMessages([]);
+  setPrompt("");
+  setError("");
+};
+
+const handleSubscribe = async () => {
+  const token = localStorage.getItem("token");
+  console.log("📦 Token being sent to backend:", token); // 👈 Add this line
+
+  if (!token) return alert("Please log in first.");
+
+  try {
+    const res = await API.post(
+      "/paddle/create-checkout-session",
+      {},
+      {
+        headers: {
+          Authorization: Bearer ${ token },
+          },
+}
+      );
+window.location.href = res.data.checkout_url; // Redirect to Paddle-hosted checkout
     } catch (err) {
-      setError(err.response?.data?.error || "Error during chat");
-    }
+  console.error("Failed to start checkout:", err);
+  alert("Failed to start checkout session.");
+}
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
 
-  const handleNewSession = () => {
-    setMessages([]);
-    setPrompt("");
-    setError("");
-  };
-
-  const openSubscribeModal = () => {
-    setShowModal(true);
-  };
-
-  const closeSubscribeModal = () => {
-    setShowModal(false);
-  };
-
-  return (
-    <div style={{ padding: "2rem", maxWidth: "700px", margin: "auto", position: "relative" }}>
-      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
-        <button onClick={handleNewSession} style={{ marginRight: "10px" }}>
-          🔁 New Session
-        </button>
-        <button onClick={handleLogout}>🚪 Logout</button>
-      </div>
-
-      <h2>💬 AI Business Mentor</h2>
-
-      <div style={{ marginBottom: "1rem" }}>
-        <button
-          onClick={openSubscribeModal}
-          style={{
-            backgroundColor: "#6753ea",
-            color: "white",
-            padding: "10px 20px",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer",
-          }}
-        >
-          💳 Subscribe to Unlock Full Access
-        </button>
-      </div>
-
-      <div
-        style={{
-          maxHeight: "60vh",
-          overflowY: "auto",
-          border: "1px solid #ccc",
-          padding: "1rem",
-          marginBottom: "1rem",
-          borderRadius: "8px",
-          backgroundColor: "#f9f9f9",
-        }}
-      >
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            style={{
-              textAlign: msg.role === "user" ? "right" : "left",
-              marginBottom: "1rem",
-            }}
-          >
-            <div
-              style={{
-                display: "inline-block",
-                padding: "10px",
-                borderRadius: "10px",
-                backgroundColor: msg.role === "user" ? "#d1e7ff" : "#e2ffe1",
-                maxWidth: "80%",
-              }}
-            >
-              <strong>{msg.role === "user" ? "You" : "Mentor"}</strong>
-              <div>{msg.content}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <form onSubmit={handleSend}>
-        <textarea
-          placeholder="Ask your business question..."
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          rows={3}
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
-        <button type="submit" style={{ padding: "10px 20px" }}>
-          Send
-        </button>
-      </form>
-
-      {error && (
-        <p style={{ color: "red", marginTop: "10px" }}>
-          ❌ {error}
-        </p>
-      )}
-
-      {/* Modal Render */}
-      {showModal && <SubscribeModal onClose={closeSubscribeModal} />}
-<div style={{ textAlign: "center", marginTop: "20px" }}>
-  <a href="/policy" target="_blank" rel="noopener noreferrer">
-    Privacy, Terms & Refunds
-  </a>
-</div>
+return (
+  <div style={{ padding: "2rem", maxWidth: "700px", margin: "auto", position: "relative" }}>
+    {/* Top Right Controls */}
+    <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+      <button onClick={handleNewSession} style={{ marginRight: "10px" }}>
+        🔁 New Session
+      </button>
+      <button onClick={handleLogout}>🚪 Logout</button>
     </div>
 
-  );
+    <h2>💬 AI Business Mentor</h2>
+
+    {/* Subscription CTA */}
+    <div style={{ marginBottom: "1rem" }}>
+      <button
+        onClick={handleSubscribe}
+        style={{
+          backgroundColor: "#6753ea",
+          color: "white",
+          padding: "10px 20px",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
+        }}
+      >
+        💳 Subscribe to Unlock Full Access
+      </button>
+    </div>
+
+    {/* Message History */}
+    <div
+      style={{
+        maxHeight: "60vh",
+        overflowY: "auto",
+        border: "1px solid #ccc",
+        padding: "1rem",
+        marginBottom: "1rem",
+        borderRadius: "8px",
+        backgroundColor: "#f9f9f9",
+      }}
+    >
+      {messages.map((msg, i) => (
+        <div
+          key={i}
+          style={{
+            textAlign: msg.role === "user" ? "right" : "left",
+            marginBottom: "1rem",
+          }}
+        >
+          <div
+            style={{
+              display: "inline-block",
+              padding: "10px",
+              borderRadius: "10px",
+              backgroundColor: msg.role === "user" ? "#d1e7ff" : "#e2ffe1",
+              maxWidth: "80%",
+            }}
+          >
+            <strong>{msg.role === "user" ? "You" : "Mentor"}</strong>
+            <div>{msg.content}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Chat Input */}
+    <form onSubmit={handleSend}>
+      <textarea
+        placeholder="Ask your business question..."
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        rows={3}
+        style={{ width: "100%", marginBottom: "10px" }}
+      />
+      <button type="submit" style={{ padding: "10px 20px" }}>
+        Send
+      </button>
+    </form>
+
+    {error && (
+      <p style={{ color: "red", marginTop: "10px" }}>
+        ❌ {error}
+      </p>
+    )}
+  </div>
+);
 }
 
 export default Chat;
