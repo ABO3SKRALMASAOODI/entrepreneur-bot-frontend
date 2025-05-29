@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
-import LegalModal from "../components/LegalModal";
+import LegalModal from "./LegalModal";
 
 function Login() {
   const [email, setEmail] = useState("");
