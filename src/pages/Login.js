@@ -13,19 +13,13 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setMessage("");
-    console.log("📤 Attempting login...");
 
     try {
       const response = await API.post("/auth/login", { email, password });
-      console.log("✅ Server response:", response.data);
       localStorage.setItem("token", response.data.token);
       setMessage("✅ Login successful!");
-
-      setTimeout(() => {
-        navigate("/chat");
-      }, 500);
+      setTimeout(() => navigate("/chat"), 500);
     } catch (error) {
-      console.log("❌ Login failed:", error.response?.data || error.message);
       setMessage(error.response?.data?.error || "Login failed");
     }
   };
@@ -50,9 +44,7 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
           style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
         />
-        <button type="submit" style={{ padding: "10px 20px" }}>
-          Login
-        </button>
+        <button type="submit" style={{ padding: "10px 20px" }}>Login</button>
       </form>
       {message && <p>{message}</p>}
 
@@ -61,16 +53,7 @@ function Login() {
       </p>
 
       <p style={{ textAlign: "center", marginTop: "1rem" }}>
-        <button
-          onClick={() => setShowLegal(true)}
-          style={{
-            background: "none",
-            border: "none",
-            color: "blue",
-            textDecoration: "underline",
-            cursor: "pointer"
-          }}
-        >
+        <button onClick={() => setShowLegal(true)} style={{ background: "none", border: "none", color: "blue", textDecoration: "underline", cursor: "pointer" }}>
           View Terms & Policies
         </button>
       </p>
