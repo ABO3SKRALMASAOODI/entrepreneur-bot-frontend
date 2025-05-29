@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
-
-// ✅ Modal component for pricing and subscribe
 function SubscribeModal({ onClose, onSubscribe }) {
   return (
     <div
@@ -12,41 +10,59 @@ function SubscribeModal({ onClose, onSubscribe }) {
         left: 0,
         height: "100vh",
         width: "100vw",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        zIndex: 999,
+        zIndex: 9999,
+        padding: "1rem",
       }}
     >
       <div
         style={{
           backgroundColor: "#fff",
-          padding: "2rem",
-          borderRadius: "10px",
-          width: "90%",
-          maxWidth: "500px",
+          borderRadius: "16px",
+          maxWidth: "600px",
+          width: "100%",
+          padding: "2.5rem",
+          boxShadow: "0 10px 25px rgba(0, 0, 0, 0.25)",
+          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
           textAlign: "center",
         }}
       >
-        <h2>Unlock Full Access</h2>
-        <p><strong>Price:</strong> $20 USD/month</p>
-        <ul style={{ textAlign: "left", margin: "1rem auto", maxWidth: "80%" }}>
-          <li>✅ Unlimited business strategy questions</li>
-          <li>✅ Personalized AI mentorship</li>
-          <li>✅ Exclusive tools and success plans</li>
-          <li>✅ Priority updates & support</li>
+        <h1 style={{ fontSize: "2rem", marginBottom: "1rem", color: "#333" }}>
+          💼 Upgrade Your Business Plan
+        </h1>
+        <p style={{ fontSize: "1.25rem", color: "#666", marginBottom: "1.5rem" }}>
+          Get full access to your AI mentor for just <strong>$20/month</strong>
+        </p>
+        <ul
+          style={{
+            textAlign: "left",
+            fontSize: "1.1rem",
+            color: "#444",
+            lineHeight: "1.8",
+            marginBottom: "2rem",
+            paddingLeft: "1.5rem",
+          }}
+        >
+          <li>🚀 Unlimited personalized business advice</li>
+          <li>📊 Step-by-step strategies to grow fast</li>
+          <li>🛠️ Exclusive tools for founders</li>
+          <li>⚡ Priority access and support</li>
         </ul>
         <button
           onClick={onSubscribe}
           style={{
             backgroundColor: "#6753ea",
-            color: "white",
-            padding: "10px 20px",
+            color: "#fff",
+            padding: "14px 28px",
+            fontSize: "1.1rem",
             border: "none",
             borderRadius: "8px",
             cursor: "pointer",
             marginBottom: "1rem",
+            transition: "background 0.3s",
           }}
         >
           💳 Subscribe Now
@@ -54,7 +70,14 @@ function SubscribeModal({ onClose, onSubscribe }) {
         <br />
         <button
           onClick={onClose}
-          style={{ color: "#888", border: "none", background: "none", cursor: "pointer" }}
+          style={{
+            fontSize: "0.95rem",
+            color: "#999",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            textDecoration: "underline",
+          }}
         >
           Cancel
         </button>
