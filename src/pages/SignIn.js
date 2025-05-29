@@ -3,7 +3,7 @@ import API from "../api/api";
 import { useNavigate } from "react-router-dom";
 import LegalModal from "./LegalModal";
 
-function Login() {
+function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -53,7 +53,16 @@ function Login() {
       </p>
 
       <p style={{ textAlign: "center", marginTop: "1rem" }}>
-        <button onClick={() => setShowLegal(true)} style={{ background: "none", border: "none", color: "blue", textDecoration: "underline", cursor: "pointer" }}>
+        <button
+          onClick={() => setShowLegal(true)}
+          style={{
+            background: "none",
+            border: "none",
+            color: "blue",
+            textDecoration: "underline",
+            cursor: "pointer"
+          }}
+        >
           View Terms & Policies
         </button>
       </p>
@@ -63,4 +72,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default SignIn;
