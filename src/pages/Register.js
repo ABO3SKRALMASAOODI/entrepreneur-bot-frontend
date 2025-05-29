@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import API from "../api/api";
-import LegalModal from "../components/LegalModal";
+import LegalModal from "./LegalModal";
+
 
 function Register() {
   const [email, setEmail] = useState("");
