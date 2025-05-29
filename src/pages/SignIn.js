@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
-import LegalModal from "./LegalModal";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [showLegal, setShowLegal] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -53,21 +51,15 @@ function SignIn() {
       </p>
 
       <p style={{ textAlign: "center", marginTop: "1rem" }}>
-        <button
-          onClick={() => setShowLegal(true)}
-          style={{
-            background: "none",
-            border: "none",
-            color: "blue",
-            textDecoration: "underline",
-            cursor: "pointer"
-          }}
+        <a
+          href="/legal"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "blue", textDecoration: "underline" }}
         >
           View Terms & Policies
-        </button>
+        </a>
       </p>
-
-      <LegalModal isOpen={showLegal} onClose={() => setShowLegal(false)} />
     </div>
   );
 }
