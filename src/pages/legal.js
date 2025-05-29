@@ -16,79 +16,70 @@ function Legal() {
     >
       <h1>Privacy Policy</h1>
       <p>
-        DIYAR TAREQ TRADING L.L.C ("we", "our", or "us") respects your privacy. This Privacy Policy outlines how we collect, use, and protect your data when using our AI chatbot services.
+        At DIYAR TAREQ TRADING L.L.C, we care deeply about your privacy. This policy explains what information we collect when you use our AI chatbot service, and how we protect and use that information.
       </p>
       <p>
-        <strong>Information We Collect:</strong> We may collect your email, usage activity, subscription status, and support messages. No chat content is stored unless required for diagnostics or explicitly saved by the user.
+        <strong>What we collect:</strong> When you sign up or interact with our platform, we may collect your email address, subscription details, and general usage data (like time of access or feature usage). We do not save your conversations unless it's required for diagnostics.
       </p>
       <p>
-        <strong>Use of Information:</strong> Data is used to verify access, manage subscriptions, provide customer support, prevent abuse, and improve service features.
+        <strong>How we use your data:</strong> Your information helps us verify your access, provide technical support, improve features, and communicate important updates. We never sell or share your personal data with unrelated third parties.
       </p>
       <p>
-        <strong>Third Parties:</strong> We use services like Paddle for payment processing. Your information is shared only with services that help us operate and is never sold.
+        <strong>Security:</strong> Your data is securely stored, encrypted, and only accessed by authorized team members. We also work with trusted providers like Paddle for billing and secure payment handling.
       </p>
       <p>
-        <strong>Your Rights:</strong> You may request to view, delete, or correct your data at any time by emailing <a href="mailto:pandas5620@gmail.com">pandas5620@gmail.com</a>.
-      </p>
-      <p>
-        <strong>Security:</strong> Your data is encrypted and stored securely. Access is limited to authorized personnel only.
+        <strong>Want your data deleted or changed?</strong> Just email us at <a href="mailto:pandas5620@gmail.com">pandas5620@gmail.com</a> and we’ll take care of it promptly.
 
       </p>
 
       <h1>Terms of Use</h1>
       <p>
-        By using this chatbot service, provided by DIYAR TAREQ TRADING L.L.C, you agree to abide by the following terms.
+        By using this service, you agree to follow these terms. If you don’t agree with them, please don’t use the chatbot.
       </p>
       <p>
-        <strong>Usage License:</strong> You are granted a non-exclusive, limited license to use the chatbot for personal or professional purposes. You may not resell, copy, or reverse engineer the system.
+        <strong>Fair use:</strong> You can use the chatbot for your own personal or business productivity, research, or learning. Please don’t use it for anything harmful, abusive, illegal, or misleading.
       </p>
       <p>
-        <strong>Prohibited Use:</strong> You must not:
+        <strong>Don't misuse the system:</strong>
         <ul>
-          <li>Use the chatbot to create or share illegal, harmful, or abusive content</li>
-          <li>Attempt to exploit system vulnerabilities or impersonate others</li>
-          <li>Use automated bots to overload or misuse the system</li>
+          <li>No spamming or flooding the system with requests</li>
+          <li>No scraping, hacking, or reverse engineering</li>
+          <li>No attempts to trick the system into producing dangerous content</li>
         </ul>
       </p>
       <p>
-        <strong>Disclaimer:</strong> The chatbot provides AI-generated responses. We do not guarantee the accuracy or reliability of its output, and it should not replace professional advice.
+        <strong>Disclaimer:</strong> The chatbot is powered by AI and generates content automatically. While we strive for accuracy, we can't guarantee every output will be perfect. Always double-check information before making important decisions.
       </p>
       <p>
-        <strong>Termination:</strong> We may suspend or terminate access if terms are violated, with or without notice.
-      </p>
-      <p>
-        <strong>Modifications:</strong> Terms may be updated as necessary. Continued use constitutes acceptance of changes.
+        <strong>Access and enforcement:</strong> DIYAR TAREQ TRADING L.L.C may suspend or restrict access if misuse is detected or if payments fail. We may also update these terms from time to time.
 
       </p>
 
       <h1>Refund Policy</h1>
       <p>
-        DIYAR TAREQ TRADING L.L.C provides a subscription-based chatbot service. The following policy governs refunds and billing.
+        We want you to be satisfied with your subscription, but we also need to keep things fair and sustainable.
       </p>
       <p>
-        <strong>General Policy:</strong> All purchases are final unless exceptions apply as outlined below.
-      </p>
-      <p>
-        <strong>Eligible Refunds:</strong> You may request a refund within 7 days of purchase if:
+        <strong>Refunds are granted if:</strong>
         <ul>
-          <li>You were incorrectly charged or charged multiple times</li>
-          <li>Our system failed to provide access after payment</li>
-          <li>A confirmed technical fault prevented reasonable use</li>
+          <li>You were charged incorrectly or multiple times</li>
+          <li>You paid but couldn’t access the service due to a technical issue</li>
+          <li>Key features promised at purchase were not available</li>
         </ul>
       </p>
       <p>
-        <strong>Not Eligible:</strong> Refunds will not be issued for:
+        <strong>Refunds are not granted if:</strong>
         <ul>
-          <li>Dissatisfaction with AI responses</li>
-          <li>Failure to cancel before renewal</li>
-          <li>Partial use of a subscription</li>
+          <li>You used the service and simply changed your mind</li>
+          <li>You expected different results from the chatbot’s responses</li>
+          <li>You forgot to cancel before your subscription renewed</li>
         </ul>
       </p>
       <p>
-        <strong>How to Request:</strong> Email <a href="mailto:pandas5620@gmail.com">pandas5620@gmail.com</a> with your account email, payment ID, and reason. Refunds are reviewed within 5 business days.
+        To request a refund, please email <a href="mailto:pandas5620@gmail.com">pandas5620@gmail.com</a> within 7 days of the charge and include your email and payment details. We’ll review your case within a few business days.
       </p>
       <p>
-        <strong>Subscription Management:</strong> You may cancel at any time to avoid future charges. Cancelation does not entitle a refund for the current billing cycle.
+        You can cancel your subscription at any time to avoid future charges. Canceling does not automatically refund your current billing period.
       </p>
     </div>
   );
