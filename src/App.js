@@ -1,7 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import SignIn from "./pages/SignIn";
-import LegalPage from "./pages/LegalPage";
+import Legal from "./pages/legal";
+
+
+
 
 import Register from "./pages/Register";
 import Chat from "./pages/Chat";
@@ -16,7 +19,8 @@ function App() {
     <Router>
       <Routes>
       <Route path="/login" element={<SignIn />} />
-      <Route path="/legal" element={<LegalPage />} />
+      <Route path="/legal" element={<Legal />} />
+
 
         <Route path="/register" element={<Register />} />
         <Route
@@ -27,7 +31,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="*" element={<Navigate to="/login" />} />
+        
       </Routes>
     </Router>
   );

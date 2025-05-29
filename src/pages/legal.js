@@ -1,6 +1,7 @@
 import React from "react";
 
-function LegalPage() {
+function Legal() {
+
   return (
     <div style={{ padding: "2rem", maxWidth: "800px", margin: "auto" }}>
       <h1>Privacy Policy</h1>
@@ -30,4 +31,5 @@ function LegalPage() {
   );
 }
 
-export default LegalPage;
+export default Legal;
+
