@@ -2,10 +2,72 @@ import React, { useState } from "react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
 
+// ✅ Modal component for pricing and subscribe
+function SubscribeModal({ onClose, onSubscribe }) {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        height: "100vh",
+        width: "100vw",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 999,
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "#fff",
+          padding: "2rem",
+          borderRadius: "10px",
+          width: "90%",
+          maxWidth: "500px",
+          textAlign: "center",
+        }}
+      >
+        <h2>Unlock Full Access</h2>
+        <p><strong>Price:</strong> $20 USD/month</p>
+        <ul style={{ textAlign: "left", margin: "1rem auto", maxWidth: "80%" }}>
+          <li>✅ Unlimited business strategy questions</li>
+          <li>✅ Personalized AI mentorship</li>
+          <li>✅ Exclusive tools and success plans</li>
+          <li>✅ Priority updates & support</li>
+        </ul>
+        <button
+          onClick={onSubscribe}
+          style={{
+            backgroundColor: "#6753ea",
+            color: "white",
+            padding: "10px 20px",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            marginBottom: "1rem",
+          }}
+        >
+          💳 Subscribe Now
+        </button>
+        <br />
+        <button
+          onClick={onClose}
+          style={{ color: "#888", border: "none", background: "none", cursor: "pointer" }}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function Chat() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const handleSend = async (e) => {
@@ -86,7 +148,7 @@ function Chat() {
 
       <div style={{ marginBottom: "1rem" }}>
         <button
-          onClick={handleSubscribe}
+          onClick={() => setShowModal(true)}
           style={{
             backgroundColor: "#6753ea",
             color: "white",
@@ -152,6 +214,14 @@ function Chat() {
         <p style={{ color: "red", marginTop: "10px" }}>
           ❌ {error}
         </p>
+      )}
+
+      {/* ✅ Modal at the bottom */}
+      {showModal && (
+        <SubscribeModal
+          onClose={() => setShowModal(false)}
+          onSubscribe={handleSubscribe}
+        />
       )}
     </div>
   );
