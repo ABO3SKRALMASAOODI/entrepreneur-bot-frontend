@@ -20,6 +20,7 @@ function App() {
       <Routes>
       <Route path="/login" element={<SignIn />} />
       <Route path="/legal" element={<Legal />} />
+      <Route path="/" element={<Navigate to="/login" />} />
 
 
         <Route path="/register" element={<Register />} />
