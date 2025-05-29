@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import API from "../api/api";
 import LegalModal from "./LegalModal";
 
-
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,14 +11,11 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     setMessage("");
-    console.log("📨 Sending registration...");
 
     try {
       const res = await API.post("/auth/register", { email, password });
-      console.log("✅ Registration successful:", res.data);
       setMessage("✅ Registered! You can now log in.");
     } catch (err) {
-      console.log("❌ Registration failed:", err.response?.data || err.message);
       setMessage(err.response?.data?.error || "Registration failed");
     }
   };
