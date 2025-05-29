@@ -1,35 +1,73 @@
 import React from "react";
 
 function Legal() {
-
   return (
-    <div style={{ padding: "2rem", maxWidth: "800px", margin: "auto" }}>
+    <div
+      style={{
+        maxWidth: "800px",
+        height: "90vh",
+        overflowY: "scroll",
+        margin: "auto",
+        padding: "2rem",
+        border: "1px solid #ccc",
+        borderRadius: "10px",
+        backgroundColor: "#fff",
+      }}
+    >
       <h1>Privacy Policy</h1>
       <p>
-        We value your privacy. Our chatbot collects only the necessary information such as your email address for the purpose of user authentication and managing subscriptions. Your data is stored securely and never sold or shared with third parties. We may use anonymized usage data to improve our service.
+        We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you about how we handle your data when you use our chatbot.
       </p>
       <p>
-        You have the right to request access to your data, request deletion, or opt out of communications at any time by contacting us at <strong>support@yourdomain.com</strong>.
+        <strong>Data We Collect:</strong> We collect your email address, payment status, and usage logs strictly for authentication and support. No conversation data is stored unless explicitly stated.
+      </p>
+      <p>
+        <strong>How We Use Your Data:</strong> Your data is used solely to manage subscriptions, provide access control, and improve service quality. We do not sell or share your information with third parties.
+      </p>
+      <p>
+        <strong>Security:</strong> All data is stored securely with encryption, and access is restricted to essential personnel only.
+      </p>
+      <p>
+        <strong>Contact:</strong> You may request data deletion or modification by contacting <a href="mailto:support@yourdomain.com">support@yourdomain.com</a>.
       </p>
 
       <h1>Terms of Use</h1>
       <p>
-        By using this chatbot, you agree to abide by all applicable laws and not use the service to generate or disseminate harmful, illegal, or offensive content. This includes, but is not limited to, hate speech, threats, or misleading financial advice.
+        By using this chatbot, you agree to these terms and conditions. If you do not agree, you must not use the service.
       </p>
       <p>
-        This chatbot is provided “as is” with no warranty or guarantee of specific results. We reserve the right to update the service, pause access, or terminate accounts found violating these terms without notice.
+        <strong>License:</strong> You are granted a limited, non-transferable, non-exclusive license to access and use the chatbot for personal or business learning.
+      </p>
+      <p>
+        <strong>Restrictions:</strong> You may not misuse the chatbot for illegal, abusive, or malicious purposes. Reverse engineering, data harvesting, or generating false financial claims is prohibited.
+      </p>
+      <p>
+        <strong>Disclaimer:</strong> The chatbot is provided “as is” with no warranties. We do not guarantee accuracy of generated content. You assume responsibility for decisions made based on its output.
+      </p>
+      <p>
+        <strong>Termination:</strong> We reserve the right to suspend access if misuse is detected or payments are declined.
       </p>
 
       <h1>Refund Policy</h1>
       <p>
-        All purchases and subscriptions are final. However, if you experience a technical issue or were charged incorrectly, you may contact our support team within 7 days of the transaction for review.
+        We offer subscriptions to access premium features of the chatbot. All purchases are considered final unless covered by the exceptions below.
       </p>
       <p>
-        Refunds are handled on a case-by-case basis and typically issued only in the event of system malfunctions or billing errors. To request a refund, email us at <strong>billing@yourdomain.com</strong> with your account and payment details.
+        <strong>Eligible Refunds:</strong> We may issue a refund within 7 days if:
+        <ul>
+          <li>You were charged incorrectly</li>
+          <li>You experienced technical issues that prevented use</li>
+          <li>You did not receive access after payment</li>
+        </ul>
+      </p>
+      <p>
+        <strong>How to Request:</strong> Email <a href="mailto:billing@yourdomain.com">billing@yourdomain.com</a> with your account email and payment ID. All refund decisions are final and at our discretion.
+      </p>
+      <p>
+        <strong>Recurring Payments:</strong> Subscriptions automatically renew unless canceled before the next billing cycle. You may cancel anytime via your account.
       </p>
     </div>
   );
 }
 
 export default Legal;
-
