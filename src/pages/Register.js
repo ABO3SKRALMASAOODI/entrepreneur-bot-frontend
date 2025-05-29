@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import API from "../api/api";
+import { Link } from "react-router-dom";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -45,18 +46,20 @@ function Register() {
       {message && <p>{message}</p>}
 
       <p style={{ textAlign: "center", marginTop: "1rem" }}>
-        Already have an account? <a href="/login">Login</a>
+        Already have an account? <Link to="/login">Login</Link>
       </p>
 
       <p style={{ textAlign: "center", marginTop: "1rem" }}>
-        <a
-          href="/legal"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "blue", textDecoration: "underline" }}
+        <Link
+          to="/legal"
+          style={{
+            color: "blue",
+            textDecoration: "underline",
+            cursor: "pointer"
+          }}
         >
           View Terms & Policies
-        </a>
+        </Link>
       </p>
     </div>
   );

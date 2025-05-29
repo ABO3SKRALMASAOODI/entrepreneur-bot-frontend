@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import API from "../api/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -47,18 +47,20 @@ function SignIn() {
       {message && <p>{message}</p>}
 
       <p style={{ textAlign: "center", marginTop: "1rem" }}>
-        Don’t have an account? <a href="/register">Register</a>
+        Don’t have an account? <Link to="/register">Register</Link>
       </p>
 
       <p style={{ textAlign: "center", marginTop: "1rem" }}>
-        <a
-          href="/legal"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "blue", textDecoration: "underline" }}
+        <Link
+          to="/legal"
+          style={{
+            color: "blue",
+            textDecoration: "underline",
+            cursor: "pointer"
+          }}
         >
           View Terms & Policies
-        </a>
+        </Link>
       </p>
     </div>
   );
