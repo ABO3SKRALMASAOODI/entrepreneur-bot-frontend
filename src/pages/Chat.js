@@ -6,36 +6,41 @@ function SubscribeModal({ onClose, onSubscribe }) {
   return (
     <div style={{
       position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
-      backgroundColor: "rgba(0, 0, 0, 0.7)", display: "flex",
+      backgroundColor: "rgba(0, 0, 0, 0.85)", display: "flex",
       justifyContent: "center", alignItems: "center", zIndex: 9999
     }}>
       <div style={{
-        background: "#000", borderRadius: "1rem", padding: "2rem",
-        width: "90%", maxWidth: "500px", color: "#fff", boxShadow: "0 0 30px #000"
+        background: "#111", borderRadius: "1.5rem", padding: "3rem",
+        width: "95%", maxWidth: "650px", color: "#fff", boxShadow: "0 0 50px rgba(0,0,0,0.8)"
       }}>
-        <h2 style={{ marginBottom: "1rem" }}>Upgrade to Pro</h2>
-        <p style={{ marginBottom: "1rem" }}>
-          Full access for <strong>$20/month</strong>
+        <h1 style={{ marginBottom: "1.5rem", fontSize: "2rem", textAlign: "center" }}>
+          Unlock Full Access to EntrepreneursBot 🚀
+        </h1>
+        <p style={{ marginBottom: "1.5rem", fontSize: "1.1rem", textAlign: "center", color: "#ccc" }}>
+          Upgrade to the Pro version for just <strong>$20/month</strong> and get unlimited access to a powerful AI mentor
+          that helps you build and grow your business, step-by-step.
         </p>
-        <ul style={{ paddingLeft: "1.5rem", lineHeight: "1.7", color: "#ccc" }}>
-          <li>🚀 Unlimited business questions</li>
-          <li>📊 Step-by-step strategies</li>
-          <li>🛠️ Tools for founders</li>
-          <li>⚡ Priority support</li>
+        <ul style={{ paddingLeft: "1.8rem", lineHeight: "1.8", fontSize: "1rem", color: "#ddd" }}>
+          <li>✅ Unlimited business questions, advice, and mentoring</li>
+          <li>📈 Personalized startup strategies tailored to your goals</li>
+          <li>🧠 Expert-level insights on marketing, funding, product, and more</li>
+          <li>🛠️ Access to exclusive tools and entrepreneurial resources</li>
+          <li>⚡ Faster responses and priority support</li>
+          <li>🌐 Future features and updates included for free</li>
         </ul>
         <button onClick={onSubscribe} style={{
-          background: "#8b0000", color: "#fff", padding: "12px 24px",
-          borderRadius: "10px", border: "none", cursor: "pointer", fontSize: "1rem",
-          width: "100%", marginTop: "1rem"
+          background: "#8b0000", color: "#fff", padding: "14px 28px",
+          borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1.1rem",
+          width: "100%", marginTop: "2rem", fontWeight: "bold"
         }}>
-          Subscribe Now
+          Upgrade to Pro
         </button>
-        <br /><br />
         <button onClick={onClose} style={{
           background: "none", border: "none", color: "#aaa",
-          textDecoration: "underline", cursor: "pointer"
+          textDecoration: "underline", cursor: "pointer", display: "block",
+          margin: "1rem auto 0", fontSize: "0.95rem"
         }}>
-          Cancel
+          No thanks, maybe later
         </button>
       </div>
     </div>
