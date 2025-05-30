@@ -14,6 +14,11 @@ function Legal() {
         backgroundColor: "#fff",
       }}
     >
+      <h1>About EntrepreneurBot</h1>
+      <p>
+        EntrepreneurBot is an AI-powered chatbot developed by DIYAR TAREQ TRADING L.L.C to help aspiring and experienced entrepreneurs build successful businesses and strategies. The chatbot offers guidance on startup ideas, marketing tactics, funding tips, growth planning, and other essential tools that empower users to make better business decisions. Whether you're validating a business model or refining your pitch, EntrepreneurBot is designed to act like a smart, always-available AI business assistant.
+      </p>
+
       <h1>Privacy Policy</h1>
       <p>
         At DIYAR TAREQ TRADING L.L.C, we care deeply about your privacy. This policy explains what information we collect when you use our AI chatbot service, and how we protect and use that information.
@@ -28,8 +33,7 @@ function Legal() {
         <strong>Security:</strong> Your data is securely stored, encrypted, and only accessed by authorized team members. We also work with trusted providers like Paddle for billing and secure payment handling.
       </p>
       <p>
-        <strong>Want your data deleted or changed?</strong> Just email us at <a href="mailto:pandas5620@gmail.com">pandas5620@gmail.com</a> and we’ll take care of it promptly.
-
+        <strong>Want your data deleted or changed?</strong> Just email us at <a href="mailto:hustlerbot@gmail.com">hustlerbot@gmail.com</a> and we’ll take care of it promptly.
       </p>
 
       <h1>Terms of Use</h1>
@@ -52,7 +56,6 @@ function Legal() {
       </p>
       <p>
         <strong>Access and enforcement:</strong> DIYAR TAREQ TRADING L.L.C may suspend or restrict access if misuse is detected or if payments fail. We may also update these terms from time to time.
-
       </p>
 
       <h1>Refund Policy</h1>
@@ -60,7 +63,7 @@ function Legal() {
         We want you to be satisfied with your subscription, but we also need to keep things fair and sustainable.
       </p>
       <p>
-        <strong>Refunds are granted if:</strong>
+        <strong>Refunds are granted if requested within 7 days:</strong>
         <ul>
           <li>You were charged incorrectly or multiple times</li>
           <li>You paid but couldn’t access the service due to a technical issue</li>
@@ -76,10 +79,10 @@ function Legal() {
         </ul>
       </p>
       <p>
-        To request a refund, please email <a href="mailto:pandas5620@gmail.com">pandas5620@gmail.com</a> within 7 days of the charge and include your email and payment details. We’ll review your case within a few business days.
+        To request a refund, please email <a href="mailto:hustlerbot@gmail.com">hustlerbot@gmail.com</a> within 7 days of the charge. Include your email, payment ID, and a brief explanation. We’ll review your case within 5 business days.
       </p>
       <p>
-        You can cancel your subscription at any time to avoid future charges. Canceling does not automatically refund your current billing period.
+        You can cancel your subscription anytime to avoid future charges. Canceling does not refund the current billing period.
       </p>
     </div>
   );
