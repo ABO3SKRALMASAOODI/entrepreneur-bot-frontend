@@ -63,7 +63,7 @@ function Legal() {
         We want you to be satisfied with your subscription, but we also need to keep things fair and sustainable.
       </p>
       <p>
-        <strong>Refunds are granted if requested within 7 days:</strong>
+        <strong>Refunds are granted if requested within 14 days:</strong>
         <ul>
           <li>You were charged incorrectly or multiple times</li>
           <li>You paid but couldn’t access the service due to a technical issue</li>
@@ -79,7 +79,7 @@ function Legal() {
         </ul>
       </p>
       <p>
-        To request a refund, please email <a href="mailto:hustlerbot@gmail.com">hustlerbot@gmail.com</a> within 7 days of the charge. Include your email, payment ID, and a brief explanation. We’ll review your case within 5 business days.
+        To request a refund, please email <a href="mailto:hustlerbot@gmail.com">hustlerbot@gmail.com</a> within 14 days of the charge. Include your email, payment ID, and a brief explanation. We’ll review your case within 5 business days.
       </p>
       <p>
         You can cancel your subscription anytime to avoid future charges. Canceling does not refund the current billing period.
