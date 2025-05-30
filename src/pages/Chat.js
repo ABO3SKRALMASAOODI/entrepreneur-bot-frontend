@@ -4,36 +4,82 @@ import { useNavigate } from "react-router-dom";
 
 function SubscribeModal({ onClose, onSubscribe }) {
   return (
-    <div style={{
-      position: "fixed", top: 0, left: 0, height: "100vh", width: "100vw",
-      backgroundColor: "rgba(0, 0, 0, 0.6)", display: "flex",
-      justifyContent: "center", alignItems: "center", zIndex: 9999
-    }}>
-      <div style={{
-        background: "#fff", padding: "2rem", borderRadius: "1rem",
-        width: "90%", maxWidth: "500px", textAlign: "center", boxShadow: "0 10px 20px rgba(0,0,0,0.2)"
-      }}>
-        <h2 style={{ marginBottom: "1rem", color: "#333" }}>💼 Upgrade Your Business Plan</h2>
-        <p style={{ marginBottom: "1rem", fontSize: "1.1rem", color: "#555" }}>
-          Full access for <strong>$20/month</strong>
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        height: "100vh",
+        width: "100vw",
+        backgroundColor: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 9999,
+        padding: "1rem",
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "#fff",
+          borderRadius: "16px",
+          maxWidth: "600px",
+          width: "100%",
+          padding: "2.5rem",
+          boxShadow: "0 10px 25px rgba(0, 0, 0, 0.25)",
+          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+          textAlign: "center",
+        }}
+      >
+        <h1 style={{ fontSize: "2rem", marginBottom: "1rem", color: "#333" }}>
+          💼 Upgrade Your Business Plan
+        </h1>
+        <p style={{ fontSize: "1.25rem", color: "#666", marginBottom: "1.5rem" }}>
+          Get full access to your AI mentor for just <strong>$20/month</strong>
         </p>
-        <ul style={{ textAlign: "left", paddingLeft: "1.5rem", marginBottom: "1.5rem" }}>
+        <ul
+          style={{
+            textAlign: "left",
+            fontSize: "1.1rem",
+            color: "#444",
+            lineHeight: "1.8",
+            marginBottom: "2rem",
+            paddingLeft: "1.5rem",
+          }}
+        >
           <li>🚀 Unlimited personalized business advice</li>
           <li>📊 Step-by-step strategies to grow fast</li>
           <li>🛠️ Exclusive tools for founders</li>
           <li>⚡ Priority access and support</li>
         </ul>
-        <button onClick={onSubscribe} style={{
-          background: "#6753ea", color: "#fff", padding: "12px 24px",
-          borderRadius: "8px", fontSize: "1rem", border: "none", cursor: "pointer"
-        }}>
+        <button
+          onClick={onSubscribe}
+          style={{
+            backgroundColor: "#6753ea",
+            color: "#fff",
+            padding: "14px 28px",
+            fontSize: "1.1rem",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            marginBottom: "1rem",
+            transition: "background 0.3s",
+          }}
+        >
           💳 Subscribe Now
         </button>
-        <br /><br />
-        <button onClick={onClose} style={{
-          background: "none", border: "none", color: "#888",
-          cursor: "pointer", textDecoration: "underline"
-        }}>
+        <br />
+        <button
+          onClick={onClose}
+          style={{
+            fontSize: "0.95rem",
+            color: "#999",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            textDecoration: "underline",
+          }}
+        >
           Cancel
         </button>
       </div>
@@ -63,9 +109,15 @@ function Chat() {
     setPrompt("");
 
     try {
-      const res = await API.post("/chat/", { prompt }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await API.post(
+        "/chat/",
+        { prompt },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const botReply = res.data.reply;
       setMessages((prev) => [...prev, { role: "assistant", content: botReply }]);
     } catch (err) {
@@ -86,11 +138,20 @@ function Chat() {
 
   const handleSubscribe = async () => {
     const token = localStorage.getItem("token");
+    console.log("📦 Token being sent to backend:", token);
+
     if (!token) return alert("Please log in first.");
+
     try {
-      const res = await API.post("/paddle/create-checkout-session", {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await API.post(
+        "/paddle/create-checkout-session",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       window.location.href = res.data.checkout_url;
     } catch (err) {
       console.error("Failed to start checkout:", err);
@@ -99,65 +160,138 @@ function Chat() {
   };
 
   return (
-    <div style={{
-      maxWidth: "700px", margin: "auto", padding: "2rem", fontFamily: "Segoe UI, sans-serif"
-    }}>
-      <div style={{
-        display: "flex", justifyContent: "flex-end", marginBottom: "1rem", gap: "10px"
-      }}>
-        <button onClick={handleNewSession} style={btnStyle}>🔁 New Session</button>
-        <button onClick={handleLogout} style={btnStyle}>🚪 Logout</button>
+    <div
+      style={{
+        padding: "2rem",
+        maxWidth: "700px",
+        margin: "auto",
+        position: "relative",
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      }}
+    >
+      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+        <button
+          onClick={handleNewSession}
+          style={{
+            marginRight: "10px",
+            backgroundColor: "#eee",
+            border: "1px solid #ccc",
+            padding: "8px 16px",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          🔁 New Session
+        </button>
+        <button
+          onClick={handleLogout}
+          style={{
+            backgroundColor: "#eee",
+            border: "1px solid #ccc",
+            padding: "8px 16px",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          🚪 Logout
+        </button>
       </div>
 
-      <h2 style={{ textAlign: "center", color: "#333", marginBottom: "1.5rem" }}>💬 AI Business Mentor</h2>
+      <h2 style={{ textAlign: "center", marginBottom: "1.5rem", color: "#333" }}>
+        💬 AI Business Mentor
+      </h2>
 
-      <div style={{ textAlign: "center", marginBottom: "1rem" }}>
-        <button onClick={() => setShowModal(true)} style={{
-          backgroundColor: "#6753ea", color: "white", padding: "12px 24px",
-          border: "none", borderRadius: "10px", cursor: "pointer", fontSize: "1rem"
-        }}>
+      <div style={{ marginBottom: "1rem", textAlign: "center" }}>
+        <button
+          onClick={() => setShowModal(true)}
+          style={{
+            backgroundColor: "#6753ea",
+            color: "white",
+            padding: "12px 24px",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontSize: "1rem",
+          }}
+        >
           💳 Subscribe to Unlock Full Access
         </button>
       </div>
 
-      <div style={{
-        background: "#f1f3f6", padding: "1rem", borderRadius: "10px", height: "60vh",
-        overflowY: "auto", marginBottom: "1rem", border: "1px solid #ccc"
-      }}>
+      <div
+        style={{
+          maxHeight: "60vh",
+          overflowY: "auto",
+          border: "1px solid #ccc",
+          padding: "1rem",
+          marginBottom: "1rem",
+          borderRadius: "10px",
+          backgroundColor: "#f1f3f6",
+        }}
+      >
         {messages.map((msg, i) => (
-          <div key={i} style={{ marginBottom: "1rem", textAlign: msg.role === "user" ? "right" : "left" }}>
-            <div style={{
-              display: "inline-block", padding: "10px 14px", borderRadius: "12px",
-              backgroundColor: msg.role === "user" ? "#dceeff" : "#e8ffe7",
-              maxWidth: "75%", boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
-            }}>
+          <div
+            key={i}
+            style={{
+              textAlign: msg.role === "user" ? "right" : "left",
+              marginBottom: "1rem",
+            }}
+          >
+            <div
+              style={{
+                display: "inline-block",
+                padding: "12px 16px",
+                borderRadius: "12px",
+                backgroundColor: msg.role === "user" ? "#dceeff" : "#e8ffe7",
+                maxWidth: "80%",
+                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.05)",
+              }}
+            >
               <strong>{msg.role === "user" ? "You" : "Mentor"}</strong>
-              <div style={{ marginTop: "5px", whiteSpace: "pre-wrap" }}>{msg.content}</div>
+              <div style={{ marginTop: "6px", whiteSpace: "pre-wrap" }}>{msg.content}</div>
             </div>
           </div>
         ))}
       </div>
 
-      <form onSubmit={handleSend} style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+      <form onSubmit={handleSend}>
         <textarea
+          placeholder="Ask your business question..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Ask your business question..."
           rows={3}
           style={{
-            resize: "none", padding: "12px", borderRadius: "8px", border: "1px solid #ccc",
-            fontSize: "1rem", width: "100%"
+            width: "100%",
+            marginBottom: "10px",
+            padding: "12px",
+            fontSize: "1rem",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+            resize: "none",
           }}
         />
-        <button type="submit" style={{
-          alignSelf: "flex-end", padding: "10px 20px", background: "#333",
-          color: "#fff", borderRadius: "8px", border: "none", cursor: "pointer"
-        }}>
+        <button
+          type="submit"
+          style={{
+            padding: "12px 24px",
+            fontSize: "1rem",
+            backgroundColor: "#333",
+            color: "#fff",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
           ➤ Send
         </button>
       </form>
 
-      {error && <p style={{ color: "red", marginTop: "10px" }}>❌ {error}</p>}
+      {error && (
+        <p style={{ color: "red", marginTop: "10px" }}>
+          ❌ {error}
+        </p>
+      )}
+
       {showModal && (
         <SubscribeModal
           onClose={() => setShowModal(false)}
@@ -167,15 +301,5 @@ function Chat() {
     </div>
   );
 }
-
-const btnStyle = {
-  backgroundColor: "#eee",
-  color: "#333",
-  padding: "8px 16px",
-  border: "1px solid #ccc",
-  borderRadius: "6px",
-  cursor: "pointer",
-  fontSize: "0.95rem",
-};
 
 export default Chat;
