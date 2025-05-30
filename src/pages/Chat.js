@@ -13,7 +13,7 @@ function SubscribeModal({ onClose, onSubscribe }) {
         background: "#000", borderRadius: "1rem", padding: "2rem",
         width: "90%", maxWidth: "500px", color: "#fff", boxShadow: "0 0 30px #000"
       }}>
-        <h2 style={{ marginBottom: "1rem" }}>💼 Upgrade to Pro</h2>
+        <h2 style={{ marginBottom: "1rem" }}>Upgrade to Pro</h2>
         <p style={{ marginBottom: "1rem" }}>
           Full access for <strong>$20/month</strong>
         </p>
@@ -28,7 +28,7 @@ function SubscribeModal({ onClose, onSubscribe }) {
           borderRadius: "10px", border: "none", cursor: "pointer", fontSize: "1rem",
           width: "100%", marginTop: "1rem"
         }}>
-          💳 Subscribe Now
+          Subscribe Now
         </button>
         <br /><br />
         <button onClick={onClose} style={{
@@ -114,11 +114,11 @@ function Chat() {
         padding: "1rem", background: "#000", borderBottom: "1px solid #222",
         display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap"
       }}>
-        <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>💬 EntrepreneursBot</h2>
+        <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>EntrepreneursBot</h2>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "0.5rem" }}>
-          <button onClick={handleNewSession} style={mainBtn}>🔁 New Session</button>
-          <button onClick={handleLogout} style={mainBtn}>🚪 Logout</button>
-          <button onClick={() => setShowModal(true)} style={mainBtn}>💳 Subscribe</button>
+          <button onClick={handleNewSession} style={mainBtn}>New Session</button>
+          <button onClick={handleLogout} style={mainBtn}>Logout</button>
+          <button onClick={() => setShowModal(true)} style={mainBtn}>Subscribe</button>
         </div>
       </div>
 
@@ -137,7 +137,7 @@ function Chat() {
               color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
               boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
             }}>
-              <strong>{msg.role === "user" ? "You" : "Mentor"}</strong>
+              <strong>{msg.role === "user" ? "You" : "EntrepreneursBot"}</strong>
               <div style={{ marginTop: "6px" }}>{msg.content}</div>
             </div>
           </div>
