@@ -10,10 +10,10 @@ function SubscribeModal({ onClose, onSubscribe }) {
       justifyContent: "center", alignItems: "center", zIndex: 9999
     }}>
       <div style={{
-        background: "#1e1e2f", borderRadius: "1rem", padding: "2rem",
+        background: "#1a1a1a", borderRadius: "1rem", padding: "2rem",
         width: "90%", maxWidth: "500px", color: "#fff", boxShadow: "0 0 30px #000"
       }}>
-        <h2 style={{ marginBottom: "1rem", color: "#fff" }}>💼 Upgrade to Pro</h2>
+        <h2 style={{ marginBottom: "1rem" }}>💼 Upgrade to Pro</h2>
         <p style={{ marginBottom: "1rem" }}>
           Full access for <strong>$20/month</strong>
         </p>
@@ -24,9 +24,9 @@ function SubscribeModal({ onClose, onSubscribe }) {
           <li>⚡ Priority support</li>
         </ul>
         <button onClick={onSubscribe} style={{
-          background: "linear-gradient(135deg, #9c27b0, #673ab7)",
-          color: "#fff", padding: "12px 20px", borderRadius: "8px",
-          fontSize: "1rem", border: "none", cursor: "pointer", marginTop: "1rem"
+          background: "#8b0000", color: "#fff", padding: "12px 24px",
+          borderRadius: "10px", border: "none", cursor: "pointer", fontSize: "1rem",
+          width: "100%", marginTop: "1rem"
         }}>
           💳 Subscribe Now
         </button>
@@ -107,46 +107,34 @@ function Chat() {
   return (
     <div style={{
       height: "100vh", width: "100vw", display: "flex", flexDirection: "column",
-      backgroundColor: "#121212", color: "#f0f0f0", fontFamily: "Segoe UI, sans-serif"
+      backgroundColor: "#111", color: "#eee", fontFamily: "Segoe UI, sans-serif"
     }}>
       {/* Header */}
       <div style={{
-        padding: "1rem", background: "#1f1f2e", borderBottom: "1px solid #333",
-        display: "flex", justifyContent: "space-between", alignItems: "center"
+        padding: "1rem", background: "#1a1a1a", borderBottom: "1px solid #333",
+        display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap"
       }}>
-        <h2 style={{ margin: 0 }}>💬 AI Business Mentor</h2>
-        <div>
-          <button onClick={handleNewSession} style={btnStyle}>🔁 New Session</button>
-          <button onClick={handleLogout} style={btnStyle}>🚪 Logout</button>
+        <h2 style={{ margin: 0, fontSize: "1.25rem" }}>💬 AI Business Mentor</h2>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "0.5rem" }}>
+          <button onClick={handleNewSession} style={smallBtn}>🔁 New Session</button>
+          <button onClick={handleLogout} style={smallBtn}>🚪 Logout</button>
+          <button onClick={() => setShowModal(true)} style={mainBtn}>💳 Subscribe</button>
         </div>
-      </div>
-
-      {/* Subscribe */}
-      <div style={{ padding: "0.5rem 1rem", textAlign: "center", backgroundColor: "#1c1c2b" }}>
-        <button onClick={() => setShowModal(true)} style={{
-          background: "linear-gradient(135deg, #ff416c, #ff4b2b)",
-          color: "#fff", border: "none", padding: "10px 18px", borderRadius: "10px",
-          cursor: "pointer", fontSize: "1rem"
-        }}>
-          💳 Unlock Full Access
-        </button>
       </div>
 
       {/* Chat Messages */}
       <div style={{
-        flexGrow: 1, overflowY: "auto", padding: "1rem", display: "flex",
-        flexDirection: "column", gap: "1rem", backgroundColor: "#181818"
+        flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem",
+        display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#111"
       }}>
         {messages.map((msg, i) => (
           <div key={i} style={{
             display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
           }}>
             <div style={{
-              background: msg.role === "user"
-                ? "linear-gradient(135deg, #2196f3, #21cbf3)"
-                : "linear-gradient(135deg, #4caf50, #81c784)",
+              background: msg.role === "user" ? "#8b0000" : "#660000",
               padding: "12px 16px", borderRadius: "16px",
-              color: "#fff", maxWidth: "70%", whiteSpace: "pre-wrap",
+              color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
               boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
             }}>
               <strong>{msg.role === "user" ? "You" : "Mentor"}</strong>
@@ -159,24 +147,23 @@ function Chat() {
 
       {/* Prompt Area */}
       <form onSubmit={handleSend} style={{
-        padding: "1rem", backgroundColor: "#1f1f2f", display: "flex", justifyContent: "center",
-        borderTop: "1px solid #333"
+        padding: "1rem", backgroundColor: "#1a1a1a", display: "flex",
+        justifyContent: "center", borderTop: "1px solid #333"
       }}>
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Type your question..."
+          placeholder="Ask your business question..."
           rows={2}
           style={{
-            width: "70%", maxWidth: "800px", backgroundColor: "#2a2a3b", color: "#fff",
-            border: "1px solid #444", borderRadius: "12px", padding: "12px",
-            fontSize: "1rem", resize: "none", marginRight: "10px"
+            width: "70%", maxWidth: "800px", backgroundColor: "#222",
+            color: "#fff", border: "1px solid #555", borderRadius: "12px",
+            padding: "12px", fontSize: "1rem", resize: "none", marginRight: "10px"
           }}
         />
         <button type="submit" style={{
-          background: "linear-gradient(135deg, #ff8a00, #e52e71)",
-          color: "#fff", padding: "12px 20px", fontSize: "1.1rem",
-          borderRadius: "10px", border: "none", cursor: "pointer"
+          backgroundColor: "#8b0000", color: "#fff", padding: "12px 20px",
+          fontSize: "1.1rem", borderRadius: "10px", border: "none", cursor: "pointer"
         }}>
           ➤
         </button>
@@ -198,15 +185,24 @@ function Chat() {
   );
 }
 
-const btnStyle = {
-  backgroundColor: "#2a2a3a",
+const mainBtn = {
+  backgroundColor: "#8b0000",
+  color: "#fff",
+  padding: "10px 22px",
+  borderRadius: "10px",
+  border: "none",
+  cursor: "pointer",
+  fontSize: "1rem",
+};
+
+const smallBtn = {
+  backgroundColor: "#2a2a2a",
   color: "#ccc",
   border: "1px solid #444",
-  padding: "8px 14px",
+  padding: "8px 12px",
   borderRadius: "8px",
-  marginLeft: "10px",
   cursor: "pointer",
-  fontSize: "0.9rem"
+  fontSize: "0.9rem",
 };
 
 export default Chat;
