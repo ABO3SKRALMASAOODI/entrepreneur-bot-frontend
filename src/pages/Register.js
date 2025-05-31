@@ -10,14 +10,17 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     setMessage("");
-
+  
     try {
       const res = await API.post("/auth/register", { email, password });
-      setMessage("✅ Registered! You can now log in.");
+      localStorage.setItem("verify_email", email); // store email for verification
+      setMessage("✅ Verification code sent to your email.");
+      setTimeout(() => window.location.href = "/verify", 1000); // redirect to /verify
     } catch (err) {
       setMessage(err.response?.data?.error || "Registration failed");
     }
   };
+  
 
   return (
     <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>

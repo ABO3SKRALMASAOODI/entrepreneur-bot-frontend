@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import SignIn from "./pages/SignIn";
 import Legal from "./pages/legal";
+import VerifyCode from "./pages/VerifyCode";
 
 
 
@@ -21,6 +22,7 @@ function App() {
       <Route path="/login" element={<SignIn />} />
       <Route path="/legal" element={<Legal />} />
       <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/verify" element={<VerifyCode />} />
 
 
         <Route path="/register" element={<Register />} />
