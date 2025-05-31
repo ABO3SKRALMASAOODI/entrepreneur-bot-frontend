@@ -14,9 +14,9 @@ function Legal() {
         backgroundColor: "#fff",
       }}
     >
-      <h1>About EntrepreneurBot</h1>
+      <h1>About The Hustler Bot</h1>
       <p>
-        EntrepreneurBot is an AI-powered chatbot developed by DIYAR TAREQ TRADING L.L.C to help aspiring and experienced entrepreneurs build successful businesses and strategies. The chatbot offers guidance on startup ideas, marketing tactics, funding tips, growth planning, and other essential tools that empower users to make better business decisions. Whether you're validating a business model or refining your pitch, EntrepreneurBot is designed to act like a smart, always-available AI business assistant.
+        The Hustler Bot is an AI-powered chatbot developed by DIYAR TAREQ TRADING L.L.C to help aspiring and experienced entrepreneurs build successful businesses and strategies. The chatbot offers guidance on startup ideas, marketing tactics, funding tips, growth planning, and other essential tools that empower users to make better business decisions. Whether you're validating a business model or refining your pitch, The Hustler Bot is designed to act like a smart, always-available AI business assistant.
       </p>
 
       <h1>Privacy Policy</h1>
@@ -33,7 +33,7 @@ function Legal() {
         <strong>Security:</strong> Your data is securely stored, encrypted, and only accessed by authorized team members. We also work with trusted providers like Paddle for billing and secure payment handling.
       </p>
       <p>
-        <strong>Want your data deleted or changed?</strong> Just email us at <a href="mailto:hustlerbot@gmail.com">hustlerbot@gmail.com</a> and we’ll take care of it promptly.
+        <strong>Want your data deleted or changed?</strong> Just email us at <a href="mailto:support@thehustlerbot.com">support@thehustlerbot.com</a> and we’ll take care of it promptly.
       </p>
 
       <h1>Terms of Use</h1>
@@ -79,7 +79,7 @@ function Legal() {
         </ul>
       </p>
       <p>
-        To request a refund, please email <a href="mailto:hustlerbot@gmail.com">hustlerbot@gmail.com</a> within 14 days of the charge. Include your email, payment ID, and a brief explanation. We’ll review your case within 5 business days.
+        To request a refund, please email <a href="mailto:support@thehustlerbot.com">support@thehustlerbot.com</a> within 14 days of the charge. Include your email, payment ID, and a brief explanation. We’ll review your case within 5 business days.
       </p>
       <p>
         You can cancel your subscription anytime to avoid future charges. Canceling does not refund the current billing period.
