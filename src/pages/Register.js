@@ -1,26 +1,26 @@
 import React, { useState } from "react";
 import API from "../api/api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate(); // React Router navigation
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setMessage("");
-  
+
     try {
       const res = await API.post("/auth/register", { email, password });
-      localStorage.setItem("verify_email", email); // store email for verification
+      localStorage.setItem("verify_email", email); // store email locally
       setMessage("✅ Verification code sent to your email.");
-      setTimeout(() => window.location.href = "/verify", 1000); // redirect to /verify
+      navigate("/verify"); // redirect using React Router
     } catch (err) {
       setMessage(err.response?.data?.error || "Registration failed");
     }
   };
-  
 
   return (
     <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>
@@ -58,7 +58,7 @@ function Register() {
           style={{
             color: "blue",
             textDecoration: "underline",
-            cursor: "pointer"
+            cursor: "pointer",
           }}
         >
           View Terms & Policies
