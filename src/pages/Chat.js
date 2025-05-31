@@ -14,7 +14,7 @@ function SubscribeModal({ onClose, onSubscribe }) {
         width: "95%", maxWidth: "650px", color: "#fff", boxShadow: "0 0 50px rgba(0,0,0,0.8)"
       }}>
         <h1 style={{ marginBottom: "1.5rem", fontSize: "2rem", textAlign: "center" }}>
-          Unlock Full Access to EntrepreneursBot 🚀
+          Unlock Full Access to The Hustler Bot 🚀
         </h1>
         <p style={{ marginBottom: "1.5rem", fontSize: "1.1rem", textAlign: "center", color: "#ccc" }}>
           Upgrade to the Pro version for just <strong>$20/month</strong> and get unlimited access to a powerful AI mentor
@@ -119,7 +119,7 @@ function Chat() {
         padding: "1rem", background: "#000", borderBottom: "1px solid #222",
         display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap"
       }}>
-        <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>EntrepreneursBot</h2>
+        <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "0.5rem" }}>
           <button onClick={handleNewSession} style={mainBtn}>New Session</button>
           <button onClick={handleLogout} style={mainBtn}>Logout</button>
@@ -142,7 +142,7 @@ function Chat() {
               color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
               boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
             }}>
-              <strong>{msg.role === "user" ? "You" : "EntrepreneursBot"}</strong>
+              <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
               <div style={{ marginTop: "6px" }}>{msg.content}</div>
             </div>
           </div>
