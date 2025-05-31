@@ -15,7 +15,7 @@ function VerifyCode() {
     setMessage("");
 
     try {
-      const res = await API.post("/verify-code", { email, code });
+      const res = await API.post("/verify/verify-code", { email, code });
       setMessage("✅ Verified! You can now log in.");
       localStorage.removeItem("verify_email");
       setTimeout(() => navigate("/login"), 1000);
