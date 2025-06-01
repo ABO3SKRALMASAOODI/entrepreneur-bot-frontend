@@ -1,26 +1,35 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import API from "../api/api";
 
-function SignIn() {
-  const [email, setEmail] = useState("");
+function EnterPassword() {
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleNext = (e) => {
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const emailFromURL = params.get("email");
+    if (emailFromURL) setEmail(emailFromURL);
+    else navigate("/login"); // if no email, send back
+  }, [location, navigate]);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setMessage("");
-
-    if (!email) {
-      setMessage("Please enter your email");
-      return;
+    try {
+      const response = await API.post("/auth/login", { email, password });
+      localStorage.setItem("token", response.data.token);
+      setMessage("✅ Login successful!");
+      setTimeout(() => navigate("/chat"), 500);
+    } catch (error) {
+      setMessage(error.response?.data?.error || "Login failed");
     }
-
-    navigate(`/enter-password?email=${encodeURIComponent(email)}`);
   };
 
   return (
     <div style={{ height: "100vh", backgroundColor: "#000", color: "#fff", fontFamily: "Segoe UI, sans-serif" }}>
-      {/* Header */}
       <div style={{
         padding: "1rem",
         background: "#000",
@@ -32,7 +41,6 @@ function SignIn() {
         <h2 style={{ margin: 0, fontSize: "1.5rem", color: "#fff" }}>The Hustler Bot</h2>
       </div>
 
-      {/* Form Container */}
       <div style={{
         maxWidth: "400px",
         margin: "2rem auto",
@@ -41,34 +49,26 @@ function SignIn() {
         borderRadius: "16px",
         boxShadow: "0 0 20px rgba(0,0,0,0.6)"
       }}>
-        <h3 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Welcome Back</h3>
+        <h3 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Enter Your Password</h3>
 
-        <form onSubmit={handleNext}>
+        <form onSubmit={handleLogin}>
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
+            type="password"
+            placeholder="Password"
+            value={password}
             required
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             style={inputStyle}
           />
-
-          <button type="submit" style={btnStyle}>Next</button>
+          <button type="submit" style={btnStyle}>Login</button>
         </form>
 
         {message && (
           <p style={{ marginTop: "1rem", color: "#ccc", fontSize: "0.95rem", textAlign: "center" }}>{message}</p>
         )}
 
-        {/* Register link */}
         <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.9rem" }}>
-          Don’t have an account?{" "}
-          <Link to="/register" style={linkStyle}>Register</Link>
-        </p>
-
-        {/* Legal link */}
-        <p style={{ textAlign: "center", marginTop: "1rem", fontSize: "0.9rem" }}>
-          <Link to="/legal" style={linkStyle}>View Terms & Policies</Link>
+          <Link to="/change-password" style={linkStyle}>Forgot or Change Password?</Link>
         </p>
       </div>
     </div>
@@ -103,4 +103,4 @@ const linkStyle = {
   cursor: "pointer"
 };
 
-export default SignIn;
+export default EnterPassword;
