@@ -6,6 +6,9 @@ import VerifyCode from "./pages/VerifyCode";
 import Register from "./pages/Register";
 import Chat from "./pages/Chat";
 import EnterPassword from "./pages/EnterPassword"; // ✅ Add this
+import ChangePassword from "./pages/ChangePassword";
+import ResetPassword from "./pages/ResetPassword";
+
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -21,6 +24,9 @@ function App() {
         <Route path="/enter-password" element={<EnterPassword />} /> {/* ✅ NEW */}
         <Route path="/register" element={<Register />} />
         <Route path="/verify" element={<VerifyCode />} />
+        <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+
         <Route path="/legal" element={<Legal />} />
         <Route
           path="/chat"
