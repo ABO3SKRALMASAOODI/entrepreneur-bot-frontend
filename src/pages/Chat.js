@@ -6,6 +6,7 @@ import {
   getSessions,
   getMessagesForSession,
 } from "../api/api";
+import API from "../api/api"; // 👈 Add this back in
 
 function SubscribeModal({ onClose, onSubscribe }) {
   return (
