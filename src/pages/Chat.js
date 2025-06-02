@@ -165,9 +165,10 @@ function Chat() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user_email");
+    localStorage.removeItem("seen_intro"); 
     navigate("/login");
   };
-
+  
   const handleSubscribe = async () => {
     const token = localStorage.getItem("token");
     if (!token) return alert("Please log in first.");
