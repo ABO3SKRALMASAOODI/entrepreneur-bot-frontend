@@ -193,11 +193,7 @@ function Chat() {
         backgroundColor: "#111",
         color: "#fff",
         padding: sidebarOpen ? "2rem 1rem" : "0",
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        height: "100vh"
+        overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between"
       }}>
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -208,7 +204,6 @@ function Chat() {
               fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
             }}>×</button>
           </div>
-
           <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
             {userEmail || "User"}
           </p>
@@ -234,7 +229,7 @@ function Chat() {
           </div>
         </div>
 
-        <div style={{ paddingTop: "1rem" }}>
+        <div style={{ marginTop: "1rem" }}>
           <Link to="/change-password" style={linkStyle}>Change Password</Link>
           <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
         </div>
