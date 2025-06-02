@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import API from "../api/api";
 import { useNavigate, Link } from "react-router-dom";
+import {
+  startSession,
+  sendMessageToSession,
+  getSessions,
+  getMessagesForSession,
+} from "../api/api";
 
 function SubscribeModal({ onClose, onSubscribe }) {
   return (
@@ -50,6 +55,8 @@ function SubscribeModal({ onClose, onSubscribe }) {
 function Chat() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
+  const [sessions, setSessions] = useState([]);
+  const [currentSessionId, setCurrentSessionId] = useState(null);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -61,28 +68,56 @@ function Chat() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    loadSessions();
+  }, []);
+
+  const loadSessions = async () => {
+    try {
+      const data = await getSessions();
+      setSessions(data);
+    } catch {
+      setSessions([]);
+    }
+  };
+
+  const loadMessages = async (sessionId) => {
+    try {
+      const data = await getMessagesForSession(sessionId);
+      setMessages(data);
+      setCurrentSessionId(sessionId);
+    } catch {
+      setMessages([]);
+    }
+  };
+
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setError("⚠️ You're not logged in.");
-      return;
-    }
+    if (!currentSessionId) return setError("Please start a new session.");
 
     const userMessage = { role: "user", content: prompt };
     setMessages((prev) => [...prev, userMessage]);
     setPrompt("");
 
     try {
-      const res = await API.post("/chat/", { prompt }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const botReply = res.data.reply;
-      setMessages((prev) => [...prev, { role: "assistant", content: botReply }]);
+      const reply = await sendMessageToSession(currentSessionId, prompt);
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
+    }
+  };
+
+  const handleNewSession = async () => {
+    try {
+      const id = await startSession();
+      setCurrentSessionId(id);
+      setMessages([]);
+      setPrompt("");
+      setError("");
+      loadSessions();
+    } catch {
+      setError("Failed to create a new session.");
     }
   };
 
@@ -90,12 +125,6 @@ function Chat() {
     localStorage.removeItem("token");
     localStorage.removeItem("user_email");
     navigate("/login");
-  };
-
-  const handleNewSession = () => {
-    setMessages([]);
-    setPrompt("");
-    setError("");
   };
 
   const handleSubscribe = async () => {
@@ -107,7 +136,6 @@ function Chat() {
       });
       window.location.href = res.data.checkout_url;
     } catch (err) {
-      console.error("Failed to start checkout:", err);
       alert("Failed to start checkout session.");
     }
   };
@@ -129,22 +157,10 @@ function Chat() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
           <button onClick={() => setSidebarOpen(false)} style={{
-            backgroundColor: "#222",
-            border: "none",
-            borderRadius: "50%",
-            width: "32px",
-            height: "32px",
-            color: "#fff",
-            fontSize: "1.2rem",
-            fontWeight: "bold",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 0 8px rgba(255, 255, 255, 0.1)"
-          }}>
-            ×
-          </button>
+            backgroundColor: "#222", border: "none", borderRadius: "50%",
+            width: "32px", height: "32px", color: "#fff", fontSize: "1.2rem",
+            fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
+          }}>×</button>
         </div>
         <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
           {userEmail || "User"}
@@ -155,26 +171,36 @@ function Chat() {
           setShowModal(true);
         }} style={sidebarBtn}>Subscribe</button>
         <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
+
         <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
+        <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
+        <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+          {sessions.map((s) => (
+            <button key={s.id} onClick={() => loadMessages(s.id)} style={{
+              ...sidebarBtn,
+              backgroundColor: currentSessionId === s.id ? "#b30000" : "#222",
+              marginBottom: "0.5rem"
+            }}>
+              {s.title || `Session ${s.id}`}
+            </button>
+          ))}
+        </div>
+
         <Link to="/change-password" style={linkStyle}>Change Password</Link>
         <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
       </div>
 
       {/* Main Area */}
       <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-        {/* Header */}
         <div style={{
           padding: "1rem", background: "#000", borderBottom: "1px solid #222",
           display: "flex", justifyContent: "space-between", alignItems: "center"
         }}>
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>
-            ☰
-          </button>
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>☰</button>
           <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
           <div style={{ width: "30px" }} />
         </div>
 
-        {/* Messages */}
         <div style={{
           flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem",
           display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#000"
@@ -197,7 +223,6 @@ function Chat() {
           <div ref={bottomRef} />
         </div>
 
-        {/* Prompt */}
         <form onSubmit={handleSend} style={{
           padding: "1rem", backgroundColor: "#000", display: "flex",
           justifyContent: "center", borderTop: "1px solid #222"
