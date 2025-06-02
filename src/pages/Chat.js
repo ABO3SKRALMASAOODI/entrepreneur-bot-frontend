@@ -53,6 +53,37 @@ function SubscribeModal({ onClose, onSubscribe }) {
   );
 }
 
+function IntroModal({ onContinue }) {
+  return (
+    <div style={{
+      position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
+      backgroundColor: "rgba(0, 0, 0, 0.85)", display: "flex",
+      justifyContent: "center", alignItems: "center", zIndex: 10001
+    }}>
+      <div style={{
+        background: "#111", borderRadius: "1.5rem", padding: "3rem",
+        width: "95%", maxWidth: "700px", color: "#fff", textAlign: "center",
+        boxShadow: "0 0 50px rgba(0,0,0,0.9)"
+      }}>
+        <h1 style={{ marginBottom: "1rem", fontSize: "2.2rem" }}>Welcome to The Hustler Bot 💼</h1>
+        <p style={{ fontSize: "1.1rem", color: "#ccc", marginBottom: "2rem" }}>
+          This AI-powered chatbot is your personal startup mentor. It helps you brainstorm, plan, and grow your business with expert insights on marketing, funding, product development, and more.
+        </p>
+        <p style={{ fontSize: "1rem", color: "#aaa", marginBottom: "2rem" }}>
+          Ask anything from “How do I find product-market fit?” to “What's a good launch strategy for my app?” and get step-by-step guidance instantly.
+        </p>
+        <button onClick={onContinue} style={{
+          background: "#8b0000", color: "#fff", padding: "14px 28px",
+          borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1.1rem",
+          width: "100%", fontWeight: "bold"
+        }}>
+          Continue
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function Chat() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
@@ -60,6 +91,7 @@ function Chat() {
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
   const bottomRef = useRef(null);
@@ -71,6 +103,13 @@ function Chat() {
 
   useEffect(() => {
     loadSessions();
+  }, []);
+
+  useEffect(() => {
+    const hasSeenIntro = localStorage.getItem("seen_intro");
+    if (!hasSeenIntro) {
+      setShowIntro(true);
+    }
   }, []);
 
   const loadSessions = async () => {
@@ -99,11 +138,10 @@ function Chat() {
     try {
       let sessionId = currentSessionId;
 
-      // Create a session only when user sends a message
       if (!sessionId) {
         sessionId = await startSession();
         setCurrentSessionId(sessionId);
-        loadSessions(); // refresh list
+        loadSessions();
       }
 
       const userMessage = { role: "user", content: prompt };
@@ -118,7 +156,6 @@ function Chat() {
   };
 
   const handleNewSession = () => {
-    // Just reset UI state — don't create session yet
     setMessages([]);
     setPrompt("");
     setError("");
@@ -149,7 +186,6 @@ function Chat() {
       height: "100vh", width: "100vw", display: "flex", flexDirection: "row",
       backgroundColor: "#000", color: "#eee", fontFamily: "Segoe UI, sans-serif"
     }}>
-      {/* Sidebar */}
       <div style={{
         width: sidebarOpen ? "260px" : "0",
         transition: "width 0.3s ease",
@@ -194,7 +230,6 @@ function Chat() {
         <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
       </div>
 
-      {/* Main Area */}
       <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
         <div style={{
           padding: "1rem", background: "#000", borderBottom: "1px solid #222",
@@ -256,6 +291,15 @@ function Chat() {
         <SubscribeModal
           onClose={() => setShowModal(false)}
           onSubscribe={handleSubscribe}
+        />
+      )}
+
+      {showIntro && (
+        <IntroModal
+          onContinue={() => {
+            localStorage.setItem("seen_intro", "true");
+            setShowIntro(false);
+          }}
         />
       )}
     </div>
