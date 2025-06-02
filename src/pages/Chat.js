@@ -61,7 +61,6 @@ function Chat() {
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [hasChatted, setHasChatted] = useState(false);
   const navigate = useNavigate();
   const bottomRef = useRef(null);
   const userEmail = localStorage.getItem("user_email");
@@ -71,21 +70,7 @@ function Chat() {
   }, [messages]);
 
   useEffect(() => {
-    const init = async () => {
-      const existing = await getSessions();
-      setSessions(existing);
-
-      if (existing.length === 0) {
-        const id = await startSession();
-        setCurrentSessionId(id);
-        setHasChatted(false);
-        loadSessions();
-      } else {
-        setCurrentSessionId(existing[0].id);
-        loadMessages(existing[0].id);
-      }
-    };
-    init();
+    loadSessions();
   }, []);
 
   const loadSessions = async () => {
@@ -102,7 +87,6 @@ function Chat() {
       const data = await getMessagesForSession(sessionId);
       setMessages(data);
       setCurrentSessionId(sessionId);
-      setHasChatted(data.length > 0);
     } catch {
       setMessages([]);
     }
@@ -111,35 +95,34 @@ function Chat() {
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-    if (!currentSessionId) return setError("Please start a new session.");
-
-    const userMessage = { role: "user", content: prompt };
-    setMessages((prev) => [...prev, userMessage]);
-    setPrompt("");
-    setHasChatted(true);
 
     try {
-      const reply = await sendMessageToSession(currentSessionId, prompt);
+      let sessionId = currentSessionId;
+
+      // Create a session only when user sends a message
+      if (!sessionId) {
+        sessionId = await startSession();
+        setCurrentSessionId(sessionId);
+        loadSessions(); // refresh list
+      }
+
+      const userMessage = { role: "user", content: prompt };
+      setMessages((prev) => [...prev, userMessage]);
+      setPrompt("");
+
+      const reply = await sendMessageToSession(sessionId, prompt);
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
     }
   };
 
-  const handleNewSession = async () => {
-    if (!hasChatted) return;
-
-    try {
-      const id = await startSession();
-      setCurrentSessionId(id);
-      setMessages([]);
-      setPrompt("");
-      setError("");
-      setHasChatted(false);
-      loadSessions();
-    } catch {
-      setError("Failed to create a new session.");
-    }
+  const handleNewSession = () => {
+    // Just reset UI state — don't create session yet
+    setMessages([]);
+    setPrompt("");
+    setError("");
+    setCurrentSessionId(null);
   };
 
   const handleLogout = () => {
