@@ -117,34 +117,35 @@ function Chat() {
       height: "100vh", width: "100vw", display: "flex", flexDirection: "column",
       backgroundColor: "#000", color: "#eee", fontFamily: "Segoe UI, sans-serif"
     }}>
-      {/* Sidebar */}
-      <div style={{
-        position: "fixed",
-        top: 0,
-        left: sidebarOpen ? 0 : "-260px",
-        width: "260px",
-        height: "100vh",
-        backgroundColor: "#111",
-        color: "#fff",
-        transition: "left 0.3s ease",
-        zIndex: 10001,
-        padding: "2rem 1rem",
-        overflow: "hidden"
-      }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
-          <button onClick={() => setSidebarOpen(false)} style={{ ...mainBtn, padding: "4px 10px", fontSize: "1.1rem" }}>✕</button>
-        </div>
-        <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
-          {userEmail || "User"}
-        </p>
-        <button onClick={handleNewSession} style={sidebarBtn}>🆕 New Session</button>
-        <button onClick={() => setShowModal(true)} style={sidebarBtn}>🚀 Subscribe</button>
-        <button onClick={handleLogout} style={sidebarBtn}>🔒 Logout</button>
-        <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
-        <Link to="/change-password" style={linkStyle}>Change Password</Link>
-        <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
-      </div>
+     {/* Sidebar */}
+<div style={{
+  position: "fixed",
+  top: 0,
+  left: 0,
+  transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
+  transition: "transform 0.3s ease",
+  width: "260px",
+  height: "100vh",
+  backgroundColor: "#111",
+  color: "#fff",
+  zIndex: 10001,
+  padding: "2rem 1rem",
+  overflow: "hidden"
+}}>
+  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
+    <button onClick={() => setSidebarOpen(false)} style={{ ...mainBtn, padding: "4px 10px", fontSize: "1.1rem" }}>✕</button>
+  </div>
+  <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
+    {userEmail || "User"}
+  </p>
+  <button onClick={handleNewSession} style={sidebarBtn}>🆕 New Session</button>
+  <button onClick={() => setShowModal(true)} style={sidebarBtn}>🚀 Subscribe</button>
+  <button onClick={handleLogout} style={sidebarBtn}>🔒 Logout</button>
+  <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
+  <Link to="/change-password" style={linkStyle}>Change Password</Link>
+  <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
+</div>
 
       {/* Overlay when sidebar is open */}
       {sidebarOpen && (
