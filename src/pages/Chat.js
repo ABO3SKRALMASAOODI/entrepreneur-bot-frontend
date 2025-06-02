@@ -6,7 +6,7 @@ import {
   getSessions,
   getMessagesForSession,
 } from "../api/api";
-import API from "../api/api"; // 👈 Add this back in
+import API from "../api/api";
 
 function SubscribeModal({ onClose, onSubscribe }) {
   return (
@@ -61,6 +61,7 @@ function Chat() {
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [hasChatted, setHasChatted] = useState(false);
   const navigate = useNavigate();
   const bottomRef = useRef(null);
   const userEmail = localStorage.getItem("user_email");
@@ -70,7 +71,21 @@ function Chat() {
   }, [messages]);
 
   useEffect(() => {
-    loadSessions();
+    const init = async () => {
+      const existing = await getSessions();
+      setSessions(existing);
+
+      if (existing.length === 0) {
+        const id = await startSession();
+        setCurrentSessionId(id);
+        setHasChatted(false);
+        loadSessions();
+      } else {
+        setCurrentSessionId(existing[0].id);
+        loadMessages(existing[0].id);
+      }
+    };
+    init();
   }, []);
 
   const loadSessions = async () => {
@@ -87,6 +102,7 @@ function Chat() {
       const data = await getMessagesForSession(sessionId);
       setMessages(data);
       setCurrentSessionId(sessionId);
+      setHasChatted(data.length > 0);
     } catch {
       setMessages([]);
     }
@@ -100,6 +116,7 @@ function Chat() {
     const userMessage = { role: "user", content: prompt };
     setMessages((prev) => [...prev, userMessage]);
     setPrompt("");
+    setHasChatted(true);
 
     try {
       const reply = await sendMessageToSession(currentSessionId, prompt);
@@ -110,12 +127,15 @@ function Chat() {
   };
 
   const handleNewSession = async () => {
+    if (!hasChatted) return;
+
     try {
       const id = await startSession();
       setCurrentSessionId(id);
       setMessages([]);
       setPrompt("");
       setError("");
+      setHasChatted(false);
       loadSessions();
     } catch {
       setError("Failed to create a new session.");
