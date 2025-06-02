@@ -130,19 +130,20 @@ function Chat() {
           <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
           <button onClick={() => setSidebarOpen(false)} style={{
             backgroundColor: "#222",
-            border: "1px solid #444",
-            borderRadius: "10px",
-            padding: "6px 12px",
+            border: "none",
+            borderRadius: "50%",
+            width: "32px",
+            height: "32px",
             color: "#fff",
-            fontSize: "1.3rem",
+            fontSize: "1.2rem",
             fontWeight: "bold",
             cursor: "pointer",
-            lineHeight: "1",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "center",
+            boxShadow: "0 0 8px rgba(255, 255, 255, 0.1)"
           }}>
-            &#124;&#124;
+            ×
           </button>
         </div>
         <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
@@ -160,9 +161,7 @@ function Chat() {
       </div>
 
       {/* Main Area */}
-      <div style={{
-        flexGrow: 1, display: "flex", flexDirection: "column"
-      }}>
+      <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
         {/* Header */}
         <div style={{
           padding: "1rem", background: "#000", borderBottom: "1px solid #222",
