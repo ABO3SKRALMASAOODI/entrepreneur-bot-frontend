@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import API from "../api/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function SubscribeModal({ onClose, onSubscribe }) {
   return (
@@ -52,8 +52,10 @@ function Chat() {
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const bottomRef = useRef(null);
+  const userEmail = localStorage.getItem("user_email");
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -86,6 +88,7 @@ function Chat() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user_email");
     navigate("/login");
   };
 
@@ -114,17 +117,41 @@ function Chat() {
       height: "100vh", width: "100vw", display: "flex", flexDirection: "column",
       backgroundColor: "#000", color: "#eee", fontFamily: "Segoe UI, sans-serif"
     }}>
+      {/* Sidebar */}
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: sidebarOpen ? 0 : "-260px",
+        width: "260px",
+        height: "100vh",
+        backgroundColor: "#111",
+        color: "#fff",
+        transition: "left 0.3s ease",
+        zIndex: 10000,
+        padding: "2rem 1rem"
+      }}>
+        <h2 style={{ fontSize: "1.4rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
+        <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
+          {userEmail || "User"}
+        </p>
+        <button onClick={handleNewSession} style={sidebarBtn}>🆕 New Session</button>
+        <button onClick={() => setShowModal(true)} style={sidebarBtn}>🚀 Subscribe</button>
+        <button onClick={handleLogout} style={sidebarBtn}>🔒 Logout</button>
+        <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
+        <Link to="/change-password" style={linkStyle}>Change Password</Link>
+        <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
+      </div>
+
       {/* Header */}
       <div style={{
         padding: "1rem", background: "#000", borderBottom: "1px solid #222",
-        display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap"
+        display: "flex", justifyContent: "space-between", alignItems: "center"
       }}>
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>
+          ☰
+        </button>
         <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "0.5rem" }}>
-          <button onClick={handleNewSession} style={mainBtn}>New Session</button>
-          <button onClick={handleLogout} style={mainBtn}>Logout</button>
-          <button onClick={() => setShowModal(true)} style={mainBtn}>Subscribe</button>
-        </div>
+        <div style={{ width: "30px" }} />
       </div>
 
       {/* Chat Messages */}
@@ -195,6 +222,26 @@ const mainBtn = {
   border: "none",
   cursor: "pointer",
   fontSize: "1rem"
+};
+
+const sidebarBtn = {
+  width: "100%",
+  marginBottom: "0.8rem",
+  backgroundColor: "#8b0000",
+  color: "#fff",
+  padding: "12px",
+  borderRadius: "10px",
+  border: "none",
+  fontSize: "1rem",
+  cursor: "pointer"
+};
+
+const linkStyle = {
+  display: "block",
+  margin: "0.5rem 0",
+  color: "#ccc",
+  textDecoration: "underline",
+  fontSize: "0.95rem"
 };
 
 export default Chat;
