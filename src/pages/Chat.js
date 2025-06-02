@@ -117,7 +117,7 @@ function Chat() {
       height: "100vh", width: "100vw", display: "flex", flexDirection: "row",
       backgroundColor: "#000", color: "#eee", fontFamily: "Segoe UI, sans-serif"
     }}>
-      {/* Sidebar (no overlay, integrated layout) */}
+      {/* Sidebar */}
       <div style={{
         width: sidebarOpen ? "260px" : "0",
         transition: "width 0.3s ease",
@@ -128,23 +128,33 @@ function Chat() {
       }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
-          <button onClick={() => setSidebarOpen(false)} style={{ ...mainBtn, padding: "4px 10px", fontSize: "1.1rem" }}>✕</button>
+          <button onClick={() => setSidebarOpen(false)} style={{
+            background: "none",
+            border: "none",
+            color: "#fff",
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            cursor: "pointer",
+            lineHeight: "1"
+          }}>
+            &#9612;&#9612;&#9612;
+          </button>
         </div>
         <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
           {userEmail || "User"}
         </p>
-        <button onClick={handleNewSession} style={sidebarBtn}>🆕 New Session</button>
+        <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
         <button onClick={() => {
           setSidebarOpen(false);
           setShowModal(true);
-        }} style={sidebarBtn}>🚀 Subscribe</button>
-        <button onClick={handleLogout} style={sidebarBtn}>🔒 Logout</button>
+        }} style={sidebarBtn}>Subscribe</button>
+        <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
         <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
         <Link to="/change-password" style={linkStyle}>Change Password</Link>
         <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
       </div>
 
-      {/* Main Chat Area */}
+      {/* Main Area */}
       <div style={{
         flexGrow: 1, display: "flex", flexDirection: "column"
       }}>
@@ -160,7 +170,7 @@ function Chat() {
           <div style={{ width: "30px" }} />
         </div>
 
-        {/* Chat Messages */}
+        {/* Messages */}
         <div style={{
           flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem",
           display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#000"
@@ -183,7 +193,7 @@ function Chat() {
           <div ref={bottomRef} />
         </div>
 
-        {/* Prompt Input */}
+        {/* Prompt */}
         <form onSubmit={handleSend} style={{
           padding: "1rem", backgroundColor: "#000", display: "flex",
           justifyContent: "center", borderTop: "1px solid #222"
