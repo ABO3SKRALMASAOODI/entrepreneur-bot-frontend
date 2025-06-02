@@ -127,10 +127,14 @@ function Chat() {
         backgroundColor: "#111",
         color: "#fff",
         transition: "left 0.3s ease",
-        zIndex: 10000,
-        padding: "2rem 1rem"
+        zIndex: 10001,
+        padding: "2rem 1rem",
+        overflow: "hidden"
       }}>
-        <h2 style={{ fontSize: "1.4rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
+          <button onClick={() => setSidebarOpen(false)} style={{ ...mainBtn, padding: "4px 10px", fontSize: "1.1rem" }}>✕</button>
+        </div>
         <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
           {userEmail || "User"}
         </p>
@@ -141,6 +145,22 @@ function Chat() {
         <Link to="/change-password" style={linkStyle}>Change Password</Link>
         <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
       </div>
+
+      {/* Overlay when sidebar is open */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            zIndex: 10000
+          }}
+        />
+      )}
 
       {/* Header */}
       <div style={{
