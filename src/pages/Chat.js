@@ -165,7 +165,7 @@ function Chat() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user_email");
-    localStorage.removeItem("seen_intro"); 
+    localStorage.removeItem("seen_intro");
     navigate("/login");
   };
   
@@ -193,46 +193,42 @@ function Chat() {
         backgroundColor: "#111",
         color: "#fff",
         padding: sidebarOpen ? "2rem 1rem" : "0",
-        overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between"
+        overflow: "hidden"
       }}>
-        <div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
-            <button onClick={() => setSidebarOpen(false)} style={{
-              backgroundColor: "#222", border: "none", borderRadius: "50%",
-              width: "32px", height: "32px", color: "#fff", fontSize: "1.2rem",
-              fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
-            }}>×</button>
-          </div>
-          <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
-            {userEmail || "User"}
-          </p>
-          <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
-          <button onClick={() => {
-            setSidebarOpen(false);
-            setShowModal(true);
-          }} style={sidebarBtn}>Subscribe</button>
-          <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
+          <button onClick={() => setSidebarOpen(false)} style={{
+            backgroundColor: "#222", border: "none", borderRadius: "50%",
+            width: "32px", height: "32px", color: "#fff", fontSize: "1.2rem",
+            fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
+          }}>×</button>
+        </div>
+        <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
+          {userEmail || "User"}
+        </p>
+        <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
+        <button onClick={() => {
+          setSidebarOpen(false);
+          setShowModal(true);
+        }} style={sidebarBtn}>Subscribe</button>
+        <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
 
-          <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
-          <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
-          <div style={{ maxHeight: "calc(100vh - 420px)", overflowY: "auto", paddingRight: "4px" }}>
-            {sessions.map((s) => (
-              <button key={s.id} onClick={() => loadMessages(s.id)} style={{
-                ...sidebarBtn,
-                backgroundColor: currentSessionId === s.id ? "#b30000" : "#222",
-                marginBottom: "0.5rem"
-              }}>
-                {s.title || `Session ${s.id}`}
-              </button>
-            ))}
-          </div>
+        <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
+        <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
+        <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+          {sessions.map((s) => (
+            <button key={s.id} onClick={() => loadMessages(s.id)} style={{
+              ...sidebarBtn,
+              backgroundColor: currentSessionId === s.id ? "#b30000" : "#222",
+              marginBottom: "0.5rem"
+            }}>
+              {s.title || `Session ${s.id}`}
+            </button>
+          ))}
         </div>
 
-        <div style={{ marginTop: "1rem" }}>
-          <Link to="/change-password" style={linkStyle}>Change Password</Link>
-          <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
-        </div>
+        <Link to="/change-password" style={linkStyle}>Change Password</Link>
+        <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
       </div>
 
       <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
