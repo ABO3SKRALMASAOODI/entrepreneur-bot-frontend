@@ -7,7 +7,7 @@ function SubscribeModal({ onClose, onSubscribe }) {
     <div style={{
       position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
       backgroundColor: "rgba(0, 0, 0, 0.85)", display: "flex",
-      justifyContent: "center", alignItems: "center", zIndex: 9999
+      justifyContent: "center", alignItems: "center", zIndex: 10002
     }}>
       <div style={{
         background: "#111", borderRadius: "1.5rem", padding: "3rem",
@@ -117,38 +117,41 @@ function Chat() {
       height: "100vh", width: "100vw", display: "flex", flexDirection: "column",
       backgroundColor: "#000", color: "#eee", fontFamily: "Segoe UI, sans-serif"
     }}>
-     {/* Sidebar */}
-<div style={{
-  position: "fixed",
-  top: 0,
-  left: 0,
-  transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
-  transition: "transform 0.3s ease",
-  width: "260px",
-  height: "100vh",
-  backgroundColor: "#111",
-  color: "#fff",
-  zIndex: 10001,
-  padding: "2rem 1rem",
-  overflow: "hidden"
-}}>
-  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-    <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
-    <button onClick={() => setSidebarOpen(false)} style={{ ...mainBtn, padding: "4px 10px", fontSize: "1.1rem" }}>✕</button>
-  </div>
-  <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
-    {userEmail || "User"}
-  </p>
-  <button onClick={handleNewSession} style={sidebarBtn}>🆕 New Session</button>
-  <button onClick={() => setShowModal(true)} style={sidebarBtn}>🚀 Subscribe</button>
-  <button onClick={handleLogout} style={sidebarBtn}>🔒 Logout</button>
-  <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
-  <Link to="/change-password" style={linkStyle}>Change Password</Link>
-  <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
-</div>
+      {/* Sidebar */}
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
+        transition: "transform 0.3s ease",
+        width: "260px",
+        height: "100vh",
+        backgroundColor: "#111",
+        color: "#fff",
+        zIndex: 10001,
+        padding: "2rem 1rem",
+        overflow: "hidden"
+      }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
+          <button onClick={() => setSidebarOpen(false)} style={{ ...mainBtn, padding: "4px 10px", fontSize: "1.1rem" }}>✕</button>
+        </div>
+        <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
+          {userEmail || "User"}
+        </p>
+        <button onClick={handleNewSession} style={sidebarBtn}>🆕 New Session</button>
+        <button onClick={() => {
+          setSidebarOpen(false);
+          setShowModal(true);
+        }} style={sidebarBtn}>🚀 Subscribe</button>
+        <button onClick={handleLogout} style={sidebarBtn}>🔒 Logout</button>
+        <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
+        <Link to="/change-password" style={linkStyle}>Change Password</Link>
+        <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
+      </div>
 
-      {/* Overlay when sidebar is open */}
-      {sidebarOpen && (
+      {/* Overlay */}
+      {sidebarOpen && !showModal && (
         <div
           onClick={() => setSidebarOpen(false)}
           style={{
@@ -175,7 +178,7 @@ function Chat() {
         <div style={{ width: "30px" }} />
       </div>
 
-      {/* Chat Messages */}
+      {/* Chat Area */}
       <div style={{
         flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem",
         display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#000"
@@ -214,9 +217,7 @@ function Chat() {
             padding: "12px", fontSize: "1rem", resize: "none", marginRight: "10px"
           }}
         />
-        <button type="submit" style={mainBtn}>
-          ➤
-        </button>
+        <button type="submit" style={mainBtn}>➤</button>
       </form>
 
       {error && (
