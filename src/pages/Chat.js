@@ -52,7 +52,7 @@ function Chat() {
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
   const bottomRef = useRef(null);
   const userEmail = localStorage.getItem("user_email");
@@ -114,22 +114,16 @@ function Chat() {
 
   return (
     <div style={{
-      height: "100vh", width: "100vw", display: "flex", flexDirection: "column",
+      height: "100vh", width: "100vw", display: "flex", flexDirection: "row",
       backgroundColor: "#000", color: "#eee", fontFamily: "Segoe UI, sans-serif"
     }}>
-      {/* Sidebar */}
+      {/* Sidebar (no overlay, integrated layout) */}
       <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
-        transition: "transform 0.3s ease",
-        width: "260px",
-        height: "100vh",
+        width: sidebarOpen ? "260px" : "0",
+        transition: "width 0.3s ease",
         backgroundColor: "#111",
         color: "#fff",
-        zIndex: 10001,
-        padding: "2rem 1rem",
+        padding: sidebarOpen ? "2rem 1rem" : "0",
         overflow: "hidden"
       }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -150,81 +144,70 @@ function Chat() {
         <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
       </div>
 
-      {/* Overlay */}
-      {sidebarOpen && !showModal && (
-        <div
-          onClick={() => setSidebarOpen(false)}
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            zIndex: 10000
-          }}
-        />
-      )}
-
-      {/* Header */}
+      {/* Main Chat Area */}
       <div style={{
-        padding: "1rem", background: "#000", borderBottom: "1px solid #222",
-        display: "flex", justifyContent: "space-between", alignItems: "center"
+        flexGrow: 1, display: "flex", flexDirection: "column"
       }}>
-        <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>
-          ☰
-        </button>
-        <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
-        <div style={{ width: "30px" }} />
-      </div>
-
-      {/* Chat Area */}
-      <div style={{
-        flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem",
-        display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#000"
-      }}>
-        {messages.map((msg, i) => (
-          <div key={i} style={{
-            display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
-          }}>
-            <div style={{
-              background: msg.role === "user" ? "#8b0000" : "#660000",
-              padding: "12px 16px", borderRadius: "16px",
-              color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
-            }}>
-              <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
-              <div style={{ marginTop: "6px" }}>{msg.content}</div>
-            </div>
-          </div>
-        ))}
-        <div ref={bottomRef} />
-      </div>
-
-      {/* Prompt Area */}
-      <form onSubmit={handleSend} style={{
-        padding: "1rem", backgroundColor: "#000", display: "flex",
-        justifyContent: "center", borderTop: "1px solid #222"
-      }}>
-        <textarea
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Ask your business question..."
-          rows={2}
-          style={{
-            width: "70%", maxWidth: "800px", backgroundColor: "#111",
-            color: "#fff", border: "1px solid #444", borderRadius: "12px",
-            padding: "12px", fontSize: "1rem", resize: "none", marginRight: "10px"
-          }}
-        />
-        <button type="submit" style={mainBtn}>➤</button>
-      </form>
-
-      {error && (
-        <div style={{ padding: "0.5rem 1rem", color: "#ff8080", backgroundColor: "#2f1f1f" }}>
-          ❌ {error}
+        {/* Header */}
+        <div style={{
+          padding: "1rem", background: "#000", borderBottom: "1px solid #222",
+          display: "flex", justifyContent: "space-between", alignItems: "center"
+        }}>
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>
+            ☰
+          </button>
+          <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
+          <div style={{ width: "30px" }} />
         </div>
-      )}
+
+        {/* Chat Messages */}
+        <div style={{
+          flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem",
+          display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#000"
+        }}>
+          {messages.map((msg, i) => (
+            <div key={i} style={{
+              display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
+            }}>
+              <div style={{
+                background: msg.role === "user" ? "#8b0000" : "#660000",
+                padding: "12px 16px", borderRadius: "16px",
+                color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+              }}>
+                <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
+                <div style={{ marginTop: "6px" }}>{msg.content}</div>
+              </div>
+            </div>
+          ))}
+          <div ref={bottomRef} />
+        </div>
+
+        {/* Prompt Input */}
+        <form onSubmit={handleSend} style={{
+          padding: "1rem", backgroundColor: "#000", display: "flex",
+          justifyContent: "center", borderTop: "1px solid #222"
+        }}>
+          <textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Ask your business question..."
+            rows={2}
+            style={{
+              width: "70%", maxWidth: "800px", backgroundColor: "#111",
+              color: "#fff", border: "1px solid #444", borderRadius: "12px",
+              padding: "12px", fontSize: "1rem", resize: "none", marginRight: "10px"
+            }}
+          />
+          <button type="submit" style={mainBtn}>➤</button>
+        </form>
+
+        {error && (
+          <div style={{ padding: "0.5rem 1rem", color: "#ff8080", backgroundColor: "#2f1f1f" }}>
+            ❌ {error}
+          </div>
+        )}
+      </div>
 
       {showModal && (
         <SubscribeModal
