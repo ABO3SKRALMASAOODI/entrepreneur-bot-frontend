@@ -143,6 +143,9 @@ function Chat() {
 
   return (
     <div style={layout}>
+      {/* 👤 Floating account icon */}
+      <Link to="/account" style={floatingAccountBtn}>👤</Link>
+
       {/* Sidebar */}
       <div style={{
         width: sidebarOpen ? "260px" : "0",
@@ -181,12 +184,6 @@ function Chat() {
               {s.title || `Session ${s.id}`}
             </button>
           ))}
-        </div>
-
-        <div style={{ borderTop: "1px solid #333", paddingTop: "1rem" }}>
-          <Link to="/account" style={linkStyle}>My Account</Link>
-          <Link to="/change-password" style={linkStyle}>Change Password</Link>
-          <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
         </div>
       </div>
 
@@ -246,7 +243,8 @@ function Chat() {
   );
 }
 
-// Styles
+// 🔧 Styles
+
 const layout = {
   height: "100vh", width: "100vw", display: "flex", flexDirection: "row",
   backgroundColor: "#000", color: "#eee", fontFamily: "Segoe UI, sans-serif"
@@ -295,18 +293,29 @@ const sidebarBtn = {
   cursor: "pointer"
 };
 
-const linkStyle = {
-  display: "block",
-  margin: "0.5rem 0",
-  color: "#ccc",
-  textDecoration: "underline",
-  fontSize: "0.95rem"
-};
-
 const closeBtn = {
   backgroundColor: "#222", border: "none", borderRadius: "50%",
   width: "32px", height: "32px", color: "#fff", fontSize: "1.2rem",
   fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
+};
+
+const floatingAccountBtn = {
+  position: "fixed",
+  top: "16px",
+  right: "16px",
+  backgroundColor: "#222",
+  color: "#fff",
+  borderRadius: "50%",
+  width: "42px",
+  height: "42px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  fontSize: "1.2rem",
+  zIndex: 10005,
+  textDecoration: "none",
+  border: "1px solid #444",
+  boxShadow: "0 0 10px rgba(0,0,0,0.4)"
 };
 
 const modalOverlay = {
