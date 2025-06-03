@@ -281,6 +281,13 @@ const mainBtn = {
   cursor: "pointer",
   fontSize: "1rem"
 };
+const linkStyle = {
+  display: "block",
+  marginTop: "0.5rem",
+  color: "#ccc",
+  textDecoration: "underline",
+  fontSize: "0.95rem"
+};
 
 const sidebarBtn = {
   width: "100%",
