@@ -14,6 +14,7 @@ function SignIn() {
       setMessage("Please enter your email");
       return;
     }
+    localStorage.removeItem("seen_intro"); // Always show intro on new login
 
     navigate(`/enter-password?email=${encodeURIComponent(email)}`);
   };

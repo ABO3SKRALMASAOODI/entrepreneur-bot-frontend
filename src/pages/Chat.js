@@ -35,11 +35,21 @@ function IntroModal({ onContinue }) {
   return (
     <div style={modalOverlay}>
       <div style={modalContent}>
-        <h1 style={modalTitle}>Welcome to The Hustler Bot 💼</h1>
+        <h1 style={modalTitle}>Welcome to EntrepreneurBot 💼</h1>
         <p style={modalDescription}>
-          This AI-powered chatbot is your personal startup mentor. Ask business questions and get expert advice instantly.
+          EntrepreneurBot is your AI-powered startup mentor — designed to help entrepreneurs like you build smarter, faster, and more profitable businesses.
         </p>
-        <button onClick={onContinue} style={subscribeButton}>Continue</button>
+        <ul style={modalList}>
+          <li>💡 Validate business ideas instantly with AI guidance</li>
+          <li>📈 Get personalized growth, marketing, and funding strategies</li>
+          <li>🧠 Ask unlimited business questions, 24/7</li>
+          <li>⚙️ Access startup tools and decision-making support</li>
+          <li>🔒 Your data stays private and secure at all times</li>
+        </ul>
+        <p style={{ ...modalDescription, marginTop: "2rem" }}>
+          Let’s get started and make your next big idea a success 🚀
+        </p>
+        <button onClick={onContinue} style={subscribeButton}>Start Chatting</button>
       </div>
     </div>
   );
