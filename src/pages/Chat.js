@@ -94,7 +94,7 @@ function Chat() {
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-  
+
     try {
       let sessionId = currentSessionId;
       if (!sessionId) {
@@ -102,24 +102,22 @@ function Chat() {
         setCurrentSessionId(sessionId);
         loadSessions();
       }
-  
+
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-  
+
       const reply = await sendMessageToSession(sessionId, prompt);
-  
-      // ✅ Refresh sidebar to show GPT title after 3rd message
+
       if (messages.length === 5) {
         await loadSessions();
       }
-  
+
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
     }
   };
-  
 
   const handleNewSession = () => {
     setMessages([]);
@@ -150,12 +148,13 @@ function Chat() {
 
   return (
     <div style={layout}>
-      {/* 👤 Floating account icon */}
       <Link to="/account" style={floatingAccountBtn}>👤</Link>
 
-      {/* Sidebar */}
       <div style={{
+        flex: "0 0 260px",
         width: sidebarOpen ? "260px" : "0",
+        minWidth: sidebarOpen ? "260px" : "0",
+        maxWidth: sidebarOpen ? "260px" : "0",
         transition: "width 0.3s ease",
         backgroundColor: "#111",
         color: "#fff",
@@ -195,8 +194,13 @@ function Chat() {
         <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
       </div>
 
-      {/* Chat Section */}
-      <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+      <div style={{
+        flexGrow: 1,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        minWidth: 0
+      }}>
         <div style={topBar}>
           <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>☰</button>
           <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
@@ -288,6 +292,7 @@ const mainBtn = {
   cursor: "pointer",
   fontSize: "1rem"
 };
+
 const linkStyle = {
   display: "block",
   marginTop: "0.5rem",
