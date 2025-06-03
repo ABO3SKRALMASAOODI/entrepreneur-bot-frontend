@@ -110,7 +110,7 @@ function Chat() {
       const reply = await sendMessageToSession(sessionId, prompt);
   
       // ✅ Refresh sidebar to show GPT title after 3rd message
-      if (messages.length === 2) {
+      if (messages.length === 5) {
         await loadSessions();
       }
   
