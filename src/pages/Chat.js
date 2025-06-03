@@ -185,6 +185,7 @@ function Chat() {
             </button>
           ))}
         </div>
+        <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
       </div>
 
       {/* Chat Section */}
