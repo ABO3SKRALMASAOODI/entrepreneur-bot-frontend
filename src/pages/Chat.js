@@ -94,7 +94,7 @@ function Chat() {
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-
+  
     try {
       let sessionId = currentSessionId;
       if (!sessionId) {
@@ -102,17 +102,24 @@ function Chat() {
         setCurrentSessionId(sessionId);
         loadSessions();
       }
-
+  
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-
+  
       const reply = await sendMessageToSession(sessionId, prompt);
+  
+      // ✅ Refresh sidebar to show GPT title after 3rd message
+      if (messages.length === 2) {
+        await loadSessions();
+      }
+  
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
     }
   };
+  
 
   const handleNewSession = () => {
     setMessages([]);
