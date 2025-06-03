@@ -10,23 +10,13 @@ import API from "../api/api";
 
 function SubscribeModal({ onClose, onSubscribe }) {
   return (
-    <div style={{
-      position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
-      backgroundColor: "rgba(0, 0, 0, 0.85)", display: "flex",
-      justifyContent: "center", alignItems: "center", zIndex: 10002
-    }}>
-      <div style={{
-        background: "#111", borderRadius: "1.5rem", padding: "3rem",
-        width: "95%", maxWidth: "650px", color: "#fff", boxShadow: "0 0 50px rgba(0,0,0,0.8)"
-      }}>
-        <h1 style={{ marginBottom: "1.5rem", fontSize: "2rem", textAlign: "center" }}>
-          Unlock Full Access to The Hustler Bot 🚀
-        </h1>
-        <p style={{ marginBottom: "1.5rem", fontSize: "1.1rem", textAlign: "center", color: "#ccc" }}>
-          Upgrade to the Pro version for just <strong>$20/month</strong> and get unlimited access to a powerful AI mentor
-          that helps you build and grow your business, step-by-step.
+    <div style={modalOverlay}>
+      <div style={modalContent}>
+        <h1 style={modalTitle}>Unlock Full Access to The Hustler Bot 🚀</h1>
+        <p style={modalDescription}>
+          Upgrade to the Pro version for just <strong>$20/month</strong> and get unlimited access to a powerful AI mentor.
         </p>
-        <ul style={{ paddingLeft: "1.8rem", lineHeight: "1.8", fontSize: "1rem", color: "#ddd" }}>
+        <ul style={modalList}>
           <li>✅ Unlimited business questions, advice, and mentoring</li>
           <li>📈 Personalized startup strategies tailored to your goals</li>
           <li>🧠 Expert-level insights on marketing, funding, product, and more</li>
@@ -34,20 +24,8 @@ function SubscribeModal({ onClose, onSubscribe }) {
           <li>⚡ Faster responses and priority support</li>
           <li>🌐 Future features and updates included for free</li>
         </ul>
-        <button onClick={onSubscribe} style={{
-          background: "#8b0000", color: "#fff", padding: "14px 28px",
-          borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1.1rem",
-          width: "100%", marginTop: "2rem", fontWeight: "bold"
-        }}>
-          Upgrade to Pro
-        </button>
-        <button onClick={onClose} style={{
-          background: "none", border: "none", color: "#aaa",
-          textDecoration: "underline", cursor: "pointer", display: "block",
-          margin: "1rem auto 0", fontSize: "0.95rem"
-        }}>
-          No thanks, maybe later
-        </button>
+        <button onClick={onSubscribe} style={subscribeButton}>Upgrade to Pro</button>
+        <button onClick={onClose} style={cancelButton}>No thanks, maybe later</button>
       </div>
     </div>
   );
@@ -55,30 +33,13 @@ function SubscribeModal({ onClose, onSubscribe }) {
 
 function IntroModal({ onContinue }) {
   return (
-    <div style={{
-      position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
-      backgroundColor: "rgba(0, 0, 0, 0.85)", display: "flex",
-      justifyContent: "center", alignItems: "center", zIndex: 10001
-    }}>
-      <div style={{
-        background: "#111", borderRadius: "1.5rem", padding: "3rem",
-        width: "95%", maxWidth: "700px", color: "#fff", textAlign: "center",
-        boxShadow: "0 0 50px rgba(0,0,0,0.9)"
-      }}>
-        <h1 style={{ marginBottom: "1rem", fontSize: "2.2rem" }}>Welcome to The Hustler Bot 💼</h1>
-        <p style={{ fontSize: "1.1rem", color: "#ccc", marginBottom: "2rem" }}>
-          This AI-powered chatbot is your personal startup mentor. It helps you brainstorm, plan, and grow your business with expert insights on marketing, funding, product development, and more.
+    <div style={modalOverlay}>
+      <div style={modalContent}>
+        <h1 style={modalTitle}>Welcome to The Hustler Bot 💼</h1>
+        <p style={modalDescription}>
+          This AI-powered chatbot is your personal startup mentor. Ask business questions and get expert advice instantly.
         </p>
-        <p style={{ fontSize: "1rem", color: "#aaa", marginBottom: "2rem" }}>
-          Ask anything from “How do I find product-market fit?” to “What's a good launch strategy for my app?” and get step-by-step guidance instantly.
-        </p>
-        <button onClick={onContinue} style={{
-          background: "#8b0000", color: "#fff", padding: "14px 28px",
-          borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1.1rem",
-          width: "100%", fontWeight: "bold"
-        }}>
-          Continue
-        </button>
+        <button onClick={onContinue} style={subscribeButton}>Continue</button>
       </div>
     </div>
   );
@@ -106,8 +67,7 @@ function Chat() {
   }, []);
 
   useEffect(() => {
-    const hasSeenIntro = localStorage.getItem("seen_intro");
-    if (!hasSeenIntro) {
+    if (!localStorage.getItem("seen_intro")) {
       setShowIntro(true);
     }
   }, []);
@@ -137,7 +97,6 @@ function Chat() {
 
     try {
       let sessionId = currentSessionId;
-
       if (!sessionId) {
         sessionId = await startSession();
         setCurrentSessionId(sessionId);
@@ -168,7 +127,7 @@ function Chat() {
     localStorage.removeItem("seen_intro");
     navigate("/login");
   };
-  
+
   const handleSubscribe = async () => {
     const token = localStorage.getItem("token");
     if (!token) return alert("Please log in first.");
@@ -177,16 +136,14 @@ function Chat() {
         headers: { Authorization: `Bearer ${token}` },
       });
       window.location.href = res.data.checkout_url;
-    } catch (err) {
+    } catch {
       alert("Failed to start checkout session.");
     }
   };
 
   return (
-    <div style={{
-      height: "100vh", width: "100vw", display: "flex", flexDirection: "row",
-      backgroundColor: "#000", color: "#eee", fontFamily: "Segoe UI, sans-serif"
-    }}>
+    <div style={layout}>
+      {/* Sidebar */}
       <div style={{
         width: sidebarOpen ? "260px" : "0",
         transition: "width 0.3s ease",
@@ -197,15 +154,13 @@ function Chat() {
       }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
-          <button onClick={() => setSidebarOpen(false)} style={{
-            backgroundColor: "#222", border: "none", borderRadius: "50%",
-            width: "32px", height: "32px", color: "#fff", fontSize: "1.2rem",
-            fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
-          }}>×</button>
+          <button onClick={() => setSidebarOpen(false)} style={closeBtn}>×</button>
         </div>
+
         <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
           {userEmail || "User"}
         </p>
+
         <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
         <button onClick={() => {
           setSidebarOpen(false);
@@ -215,7 +170,8 @@ function Chat() {
 
         <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
         <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
-        <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+
+        <div style={{ maxHeight: "300px", overflowY: "auto", marginBottom: "1rem" }}>
           {sessions.map((s) => (
             <button key={s.id} onClick={() => loadMessages(s.id)} style={{
               ...sidebarBtn,
@@ -227,24 +183,22 @@ function Chat() {
           ))}
         </div>
 
-        <Link to="/change-password" style={linkStyle}>Change Password</Link>
-        <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
+        <div style={{ borderTop: "1px solid #333", paddingTop: "1rem" }}>
+          <Link to="/account" style={linkStyle}>My Account</Link>
+          <Link to="/change-password" style={linkStyle}>Change Password</Link>
+          <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
+        </div>
       </div>
 
+      {/* Chat Section */}
       <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-        <div style={{
-          padding: "1rem", background: "#000", borderBottom: "1px solid #222",
-          display: "flex", justifyContent: "space-between", alignItems: "center"
-        }}>
+        <div style={topBar}>
           <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>☰</button>
           <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
           <div style={{ width: "30px" }} />
         </div>
 
-        <div style={{
-          flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem",
-          display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#000"
-        }}>
+        <div style={chatWindow}>
           {messages.map((msg, i) => (
             <div key={i} style={{
               display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
@@ -263,20 +217,13 @@ function Chat() {
           <div ref={bottomRef} />
         </div>
 
-        <form onSubmit={handleSend} style={{
-          padding: "1rem", backgroundColor: "#000", display: "flex",
-          justifyContent: "center", borderTop: "1px solid #222"
-        }}>
+        <form onSubmit={handleSend} style={chatForm}>
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Ask your business question..."
             rows={2}
-            style={{
-              width: "70%", maxWidth: "800px", backgroundColor: "#111",
-              color: "#fff", border: "1px solid #444", borderRadius: "12px",
-              padding: "12px", fontSize: "1rem", resize: "none", marginRight: "10px"
-            }}
+            style={inputBox}
           />
           <button type="submit" style={mainBtn}>➤</button>
         </form>
@@ -288,24 +235,43 @@ function Chat() {
         )}
       </div>
 
-      {showModal && (
-        <SubscribeModal
-          onClose={() => setShowModal(false)}
-          onSubscribe={handleSubscribe}
-        />
-      )}
-
+      {showModal && <SubscribeModal onClose={() => setShowModal(false)} onSubscribe={handleSubscribe} />}
       {showIntro && (
-        <IntroModal
-          onContinue={() => {
-            localStorage.setItem("seen_intro", "true");
-            setShowIntro(false);
-          }}
-        />
+        <IntroModal onContinue={() => {
+          localStorage.setItem("seen_intro", "true");
+          setShowIntro(false);
+        }} />
       )}
     </div>
   );
 }
+
+// Styles
+const layout = {
+  height: "100vh", width: "100vw", display: "flex", flexDirection: "row",
+  backgroundColor: "#000", color: "#eee", fontFamily: "Segoe UI, sans-serif"
+};
+
+const topBar = {
+  padding: "1rem", background: "#000", borderBottom: "1px solid #222",
+  display: "flex", justifyContent: "space-between", alignItems: "center"
+};
+
+const chatWindow = {
+  flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem",
+  display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#000"
+};
+
+const chatForm = {
+  padding: "1rem", backgroundColor: "#000", display: "flex",
+  justifyContent: "center", borderTop: "1px solid #222"
+};
+
+const inputBox = {
+  width: "70%", maxWidth: "800px", backgroundColor: "#111",
+  color: "#fff", border: "1px solid #444", borderRadius: "12px",
+  padding: "12px", fontSize: "1rem", resize: "none", marginRight: "10px"
+};
 
 const mainBtn = {
   backgroundColor: "#8b0000",
@@ -335,6 +301,38 @@ const linkStyle = {
   color: "#ccc",
   textDecoration: "underline",
   fontSize: "0.95rem"
+};
+
+const closeBtn = {
+  backgroundColor: "#222", border: "none", borderRadius: "50%",
+  width: "32px", height: "32px", color: "#fff", fontSize: "1.2rem",
+  fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
+};
+
+const modalOverlay = {
+  position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
+  backgroundColor: "rgba(0, 0, 0, 0.85)", display: "flex",
+  justifyContent: "center", alignItems: "center", zIndex: 10002
+};
+
+const modalContent = {
+  background: "#111", borderRadius: "1.5rem", padding: "3rem",
+  width: "95%", maxWidth: "650px", color: "#fff", boxShadow: "0 0 50px rgba(0,0,0,0.8)",
+  textAlign: "center"
+};
+
+const modalTitle = { marginBottom: "1.5rem", fontSize: "2rem" };
+const modalDescription = { fontSize: "1.1rem", color: "#ccc", marginBottom: "2rem" };
+const modalList = { paddingLeft: "1.8rem", lineHeight: "1.8", fontSize: "1rem", color: "#ddd", textAlign: "left" };
+const subscribeButton = {
+  background: "#8b0000", color: "#fff", padding: "14px 28px",
+  borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1.1rem",
+  width: "100%", fontWeight: "bold"
+};
+const cancelButton = {
+  background: "none", border: "none", color: "#aaa",
+  textDecoration: "underline", cursor: "pointer", display: "block",
+  margin: "1rem auto 0", fontSize: "0.95rem"
 };
 
 export default Chat;
