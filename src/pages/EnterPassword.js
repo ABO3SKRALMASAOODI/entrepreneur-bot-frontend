@@ -13,7 +13,7 @@ function EnterPassword() {
     const params = new URLSearchParams(location.search);
     const emailFromURL = params.get("email");
     if (emailFromURL) setEmail(emailFromURL);
-    else navigate("/login"); // if no email, send back
+    else navigate("/login");
   }, [location, navigate]);
 
   const handleLogin = async (e) => {
@@ -21,6 +21,7 @@ function EnterPassword() {
     try {
       const response = await API.post("/auth/login", { email, password });
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user_email", email); // ✅ FIX: Store email for Account page
       setMessage("✅ Login successful!");
       setTimeout(() => navigate("/chat"), 500);
     } catch (error) {
@@ -29,26 +30,12 @@ function EnterPassword() {
   };
 
   return (
-    <div style={{ height: "100vh", backgroundColor: "#000", color: "#fff", fontFamily: "Segoe UI, sans-serif" }}>
-      <div style={{
-        padding: "1rem",
-        background: "#000",
-        borderBottom: "1px solid #222",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-      }}>
+    <div style={pageStyle}>
+      <div style={headerStyle}>
         <h2 style={{ margin: 0, fontSize: "1.5rem", color: "#fff" }}>The Hustler Bot</h2>
       </div>
 
-      <div style={{
-        maxWidth: "400px",
-        margin: "2rem auto",
-        padding: "2rem",
-        backgroundColor: "#111",
-        borderRadius: "16px",
-        boxShadow: "0 0 20px rgba(0,0,0,0.6)"
-      }}>
+      <div style={boxStyle}>
         <h3 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Enter Your Password</h3>
 
         <form onSubmit={handleLogin}>
@@ -64,16 +51,41 @@ function EnterPassword() {
         </form>
 
         {message && (
-          <p style={{ marginTop: "1rem", color: "#ccc", fontSize: "0.95rem", textAlign: "center" }}>{message}</p>
+          <p style={messageStyle}>{message}</p>
         )}
 
-        <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.9rem" }}>
+        <p style={forgotStyle}>
           <Link to="/change-password" style={linkStyle}>Forgot or Change Password?</Link>
         </p>
       </div>
     </div>
   );
 }
+
+const pageStyle = {
+  height: "100vh",
+  backgroundColor: "#000",
+  color: "#fff",
+  fontFamily: "Segoe UI, sans-serif"
+};
+
+const headerStyle = {
+  padding: "1rem",
+  background: "#000",
+  borderBottom: "1px solid #222",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center"
+};
+
+const boxStyle = {
+  maxWidth: "400px",
+  margin: "2rem auto",
+  padding: "2rem",
+  backgroundColor: "#111",
+  borderRadius: "16px",
+  boxShadow: "0 0 20px rgba(0,0,0,0.6)"
+};
 
 const inputStyle = {
   width: "100%",
@@ -95,6 +107,19 @@ const btnStyle = {
   borderRadius: "10px",
   fontSize: "1rem",
   cursor: "pointer"
+};
+
+const messageStyle = {
+  marginTop: "1rem",
+  color: "#ccc",
+  fontSize: "0.95rem",
+  textAlign: "center"
+};
+
+const forgotStyle = {
+  textAlign: "center",
+  marginTop: "1.5rem",
+  fontSize: "0.9rem"
 };
 
 const linkStyle = {
