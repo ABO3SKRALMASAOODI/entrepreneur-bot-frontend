@@ -109,7 +109,7 @@ function Chat() {
 
       const reply = await sendMessageToSession(sessionId, prompt);
 
-      if (messages.length === 5) {
+      if (messages.length === 3) {
         await loadSessions();
       }
 
