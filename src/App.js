@@ -8,6 +8,7 @@ import Chat from "./pages/Chat";
 import EnterPassword from "./pages/EnterPassword"; // ✅ Add this
 import ChangePassword from "./pages/ChangePassword";
 import ResetPassword from "./pages/ResetPassword";
+import Account from "./pages/Account";
 
 
 function PrivateRoute({ children }) {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/verify" element={<VerifyCode />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/account" element={<PrivateRoute><Account /></PrivateRoute>} />
 
         <Route path="/legal" element={<Legal />} />
         <Route
