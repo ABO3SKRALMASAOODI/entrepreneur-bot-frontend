@@ -38,8 +38,21 @@ function VerifyCode() {
         setTimeout(() => navigate("/login"), 1000);
       }
     } catch (err) {
-      setMessage(err.response?.data?.error || "Verification failed");
+      const error = err.response?.data?.error;
+    
+      if (error === "Code has expired") {
+        setMessage("❌ This code has expired. Please request a new one.");
+      } else if (error === "Invalid code") {
+        setMessage("❌ The code you entered is incorrect.");
+      } else if (error === "No code found for this email") {
+        setMessage("❌ No code found. Please try registering again.");
+      } else if (error === "You have reached the maximum of 5 codes today") {
+        setMessage("⚠️ You've hit the daily limit for code requests. Try again tomorrow.");
+      } else {
+        setMessage("❌ Verification failed. Please try again.");
+      }
     }
+    
   };
 
   return (
