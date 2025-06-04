@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import API from "../api/api";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -8,8 +8,10 @@ function VerifyCode() {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+  const inputRef = useRef(null);
 
-  // Determine if we're in password reset mode
   const isResetMode = new URLSearchParams(location.search).get("mode") === "reset";
 
   useEffect(() => {
@@ -19,11 +21,21 @@ function VerifyCode() {
     } else {
       navigate("/login");
     }
+
+    inputRef.current?.focus();
   }, [isResetMode, navigate]);
+
+  useEffect(() => {
+    if (cooldown > 0) {
+      const timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [cooldown]);
 
   const handleVerify = async (e) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true);
 
     try {
       const endpoint = isResetMode ? "/auth/verify-reset-code" : "/verify/verify-code";
@@ -31,17 +43,19 @@ function VerifyCode() {
 
       setMessage("✅ Code verified");
 
-      if (isResetMode) {
-        setTimeout(() => navigate("/reset-password"), 1000);
-      } else {
-        localStorage.removeItem("verify_email");
-        setTimeout(() => navigate("/login"), 1000);
-      }
+      setTimeout(() => {
+        if (isResetMode) {
+          navigate("/reset-password");
+        } else {
+          localStorage.removeItem("verify_email");
+          navigate("/login");
+        }
+      }, 1000);
     } catch (err) {
       const error = err.response?.data?.error;
-    
+
       if (error === "Code has expired") {
-        setMessage("❌ This code has expired. Please request a new one.");
+        setMessage("❌ This code has expired. You can request a new one below.");
       } else if (error === "Invalid code") {
         setMessage("❌ The code you entered is incorrect.");
       } else if (error === "No code found for this email") {
@@ -51,8 +65,21 @@ function VerifyCode() {
       } else {
         setMessage("❌ Verification failed. Please try again.");
       }
+    } finally {
+      setLoading(false);
     }
-    
+  };
+
+  const handleResendCode = async () => {
+    setMessage("");
+    setCooldown(30); // 30s cooldown
+    try {
+      await API.post("/verify/send-code", { email });
+      setMessage("📨 A new code has been sent to your email.");
+    } catch (err) {
+      setMessage("❌ Failed to resend code. Try again shortly.");
+      setCooldown(0);
+    }
   };
 
   return (
@@ -76,6 +103,7 @@ function VerifyCode() {
 
         <form onSubmit={handleVerify}>
           <input
+            ref={inputRef}
             type="text"
             placeholder="Enter 6-digit code"
             value={code}
@@ -83,10 +111,28 @@ function VerifyCode() {
             onChange={(e) => setCode(e.target.value)}
             style={inputStyle}
           />
-          <button type="submit" style={btnStyle}>Verify</button>
+          <button type="submit" style={btnStyle} disabled={loading}>
+            {loading ? "Verifying..." : "Verify"}
+          </button>
         </form>
 
         {message && <p style={{ marginTop: "1rem", color: "#ccc", fontSize: "0.95rem" }}>{message}</p>}
+
+        {/* Resend code */}
+        {!isResetMode && (
+          <button
+            onClick={handleResendCode}
+            disabled={cooldown > 0}
+            style={{
+              ...btnStyle,
+              marginTop: "1rem",
+              backgroundColor: "#444",
+              opacity: cooldown > 0 ? 0.6 : 1
+            }}
+          >
+            {cooldown > 0 ? `Resend available in ${cooldown}s` : "Resend Code"}
+          </button>
+        )}
       </div>
     </div>
   );
