@@ -100,35 +100,36 @@ function Chat() {
       setMessages([]);
     }
   };
-
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-
+  
     try {
       let sessionId = currentSessionId;
+  
       if (!sessionId) {
-        sessionId = await startSession();
+        const session = await startSession(); // ✅ FIXED
+        sessionId = session.session_id;
         setCurrentSessionId(sessionId);
         loadSessions();
       }
-
+  
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-
+  
       const reply = await sendMessageToSession(sessionId, prompt);
-
+  
       if (messages.length === 3) {
         await loadSessions();
       }
-
+  
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
     }
   };
-
+  
   const handleNewSession = () => {
     setMessages([]);
     setPrompt("");
