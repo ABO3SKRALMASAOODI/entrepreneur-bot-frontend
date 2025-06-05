@@ -97,6 +97,11 @@
     z-index: 5;
   }
   
+  @keyframes eyeFloat {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-4px); } /* ⬆ float up a bit */
+    100% { transform: translateY(0); }
+  }
   
   .eye-socket {
     width: 40px;
@@ -108,7 +113,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  
+    animation: eyeFloat 2.4s ease-in-out infinite; /* ✅ Apply idle float */
   }
+  
   
   .left-eye,
   .right-eye {
