@@ -1,74 +1,147 @@
-/* src/pages/landing.css */
+/* General Styles */
 .landing-container {
     font-family: 'Segoe UI', sans-serif;
-    color: #fff;
-    background: radial-gradient(circle at top, #111, #000);
-    min-height: 100vh;
+    color: #ffffff;
+    background-color: #000000;
     overflow-x: hidden;
     scroll-behavior: smooth;
   }
   
+  /* Hero Section */
   .hero {
-    text-align: center;
-    padding: 100px 20px 80px;
-    background: linear-gradient(180deg, #000, #111);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 20px;
+    background: linear-gradient(180deg, #000000, #111111);
+  }
+  
+  .hero-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    width: 100%;
+  }
+  
+  .hero-text {
+    flex: 1;
+    padding-right: 50px;
   }
   
   .glow-text {
     font-size: 3.5rem;
     font-weight: bold;
-    color: #fff;
-    text-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff, 0 0 30px #00f0ff;
+    color: #ffffff;
+    text-shadow: 0 0 10px #8b0000, 0 0 20px #8b0000, 0 0 30px #8b0000;
   }
   
-  .sub-text {
+  .typing-text {
     font-size: 1.5rem;
     margin-top: 1rem;
     opacity: 0.8;
   }
   
+  .cta-buttons {
+    margin-top: 2rem;
+  }
+  
   .cta-buttons button {
-    background: #00f0ff;
-    color: #000;
+    background-color: #8b0000;
+    color: #ffffff;
     border: none;
     padding: 15px 30px;
-    margin: 1rem;
+    margin-right: 1rem;
     font-size: 1rem;
     font-weight: bold;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
+    transition: background-color 0.3s ease;
   }
   
   .cta-buttons button:hover {
-    background: #00d4e0;
+    background-color: #660000;
   }
   
-  .feature {
+  .hero-animation {
+    flex: 1;
+    max-width: 500px;
+  }
+  
+  /* Roadmap Section */
+  .roadmap {
     padding: 80px 20px;
-    text-align: center;
-    max-width: 800px;
-    margin: auto;
-    animation: fadeIn 2s ease forwards;
+    background-color: #111111;
   }
   
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 60px;
+  }
+  
+  .roadmap-container {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .roadmap-line {
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #8b0000;
+    margin-left: -2px;
+  }
+  
+  .roadmap-item {
+    position: relative;
+    margin-left: 60px;
+    margin-bottom: 60px;
+  }
+  
+  .roadmap-dot {
+    position: absolute;
+    left: -40px;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background-color: #8b0000;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #8b0000;
+  }
+  
+  .roadmap-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .roadmap-content p {
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+  
+  /* Bottom CTA Section */
+  .bottom-cta {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #000000;
+  }
+  
+  .bottom-cta h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  /* Footer */
   .footer {
     text-align: center;
     padding: 30px;
     font-size: 0.9rem;
-    background: #111;
+    background-color: #111111;
     opacity: 0.5;
-  }
-  
-  /* Scroll animation placeholder if not using AOS */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(40px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
   
