@@ -4,7 +4,8 @@ import "./landing.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Lottie from "lottie-react";
-import { Typewriter } from "react-simple-typewriter"; // ✅ NEW
+import { Typewriter } from "react-simple-typewriter";
+import { motion } from "framer-motion";
 import robotAnimation from "../assets/robot.json";
 
 function LandingPage() {
@@ -44,74 +45,79 @@ function LandingPage() {
             </div>
           </div>
           <div className="hero-animation">
-            <Lottie animationData={robotAnimation} loop={true} />
+            <Lottie animationData={robotAnimation} loop />
           </div>
         </div>
       </section>
 
-      {/* Vertical Roadmap Section */}
+      {/* Turning Roadmap Section */}
       <section className="roadmap">
-        <h2 className="section-title">Why Choose The Hustler Bot?</h2>
-        <div className="roadmap-container">
-          <div className="roadmap-line"></div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>💡 Validate Business Ideas Instantly</h3>
-              <p>Receive immediate feedback on your startup concepts.</p>
-            </div>
-          </div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>📈 Personalized Growth Strategies</h3>
-              <p>Tailored plans to accelerate your business growth.</p>
-            </div>
-          </div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>🧠 24/7 Business Mentoring</h3>
-              <p>Access expert advice anytime, anywhere.</p>
-            </div>
-          </div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>🚀 Step-by-Step Launch Guidance</h3>
-              <p>Navigate your startup journey with confidence.</p>
-            </div>
-          </div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>🔒 Data Privacy Assurance</h3>
-              <p>Your information is secure and confidential.</p>
-            </div>
-          </div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>💳 Try Free for 7 Days</h3>
-              <p>Experience the benefits risk-free.</p>
-            </div>
-          </div>
+        <h2 className="section-title">How The Hustler Bot Empowers You</h2>
+        <div className="roadmap-turning-container">
+          {[
+            {
+              icon: "💡",
+              title: "Validate Business Ideas",
+              desc: "Test and refine your ideas instantly with AI support.",
+            },
+            {
+              icon: "📈",
+              title: "Tailored Growth Plans",
+              desc: "Your success path, built for your niche.",
+            },
+            {
+              icon: "🧠",
+              title: "Mentoring 24/7",
+              desc: "Real answers from AI mentors—anytime.",
+            },
+            {
+              icon: "🚀",
+              title: "Launch Support",
+              desc: "From zero to go—step-by-step with Hustler Bot.",
+            },
+            {
+              icon: "🔒",
+              title: "Privacy Focused",
+              desc: "Your data, encrypted and safe.",
+            },
+            {
+              icon: "💳",
+              title: "Free 7-Day Trial",
+              desc: "No risk. High reward. Try it now.",
+            },
+          ].map((item, i) => (
+            <motion.div
+              className="roadmap-turning-item"
+              key={i}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: i * 0.2 }}
+              viewport={{ once: true }}
+            >
+              <div className="turning-dot" />
+              <div className="turning-content">
+                <h3>{item.icon} {item.title}</h3>
+                <p>{item.desc}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* Bottom CTA Section */}
+      {/* Final CTA */}
       <section className="bottom-cta">
-        <h2>Ready to Transform Your Business?</h2>
+        <motion.h2
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
+          Ready to Build the Business You Dream Of?
+        </motion.h2>
         <div className="cta-buttons">
           <button onClick={handleRegister}>Start Free Trial</button>
           <button onClick={handleLogin}>Login</button>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="footer">
-        <p>Made with ❤️ by DIYAR TAREQ TRADING L.L.C</p>
-      </footer>
     </div>
   );
 }

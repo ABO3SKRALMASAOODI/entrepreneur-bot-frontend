@@ -5,142 +5,150 @@
     background-color: #000000;
     overflow-x: hidden;
     scroll-behavior: smooth;
-}
-
-/* Hero Section */
-.hero {
+  }
+  
+  /* Hero Section */
+  .hero {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 100px 20px;
+    padding: 120px 20px;
     background: linear-gradient(180deg, #000000, #111111);
-}
-
-.hero-content {
+  }
+  
+  .hero-content {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    max-width: 1200px;
+    max-width: 1300px;
     width: 100%;
-}
-
-.hero-text {
+    flex-wrap: wrap;
+  }
+  
+  .hero-text {
     flex: 1;
     padding-right: 50px;
-}
-
-.glow-text {
-    font-size: 3.5rem;
+    min-width: 320px;
+  }
+  
+  .glow-text {
+    font-size: 4rem;
     font-weight: bold;
     color: #ffffff;
-    text-shadow: 0 0 10px #8b0000, 0 0 20px #8b0000, 0 0 30px #8b0000;
-}
-
-.typing-text {
+    text-shadow: 0 0 20px #ff1a1a, 0 0 40px #ff1a1a, 0 0 60px #ff1a1a;
+  }
+  
+  .typing-text {
     font-size: 1.5rem;
     margin-top: 1rem;
-    opacity: 0.8;
-}
-
-.cta-buttons {
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+  
+  .cta-buttons {
     margin-top: 2rem;
-}
-
-.cta-buttons button {
-    background-color: #8b0000;
+  }
+  
+  .cta-buttons button {
+    background: linear-gradient(90deg, #ff1a1a, #990000);
     color: #ffffff;
     border: none;
-    padding: 15px 30px;
+    padding: 15px 32px;
     margin-right: 1rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.cta-buttons button:hover {
-    background-color: #660000;
-}
-
-.hero-animation {
+    box-shadow: 0 0 12px #ff1a1a88;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .cta-buttons button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #ff1a1a;
+  }
+  
+  .hero-animation {
     flex: 1;
     max-width: 500px;
-}
-
-/* Roadmap Section */
-.roadmap {
-    padding: 80px 20px;
-    background-color: #111111;
-}
-
-.section-title {
+    min-width: 300px;
+  }
+  
+  /* Turning Roadmap Section */
+  .roadmap {
+    background: linear-gradient(180deg, #111111, #000000);
+    padding: 100px 20px;
+    position: relative;
+  }
+  
+  .section-title {
     text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 60px;
-}
-
-.roadmap-container {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 80px;
+    color: #ffffff;
+    text-shadow: 0 0 12px #ff1a1a;
+  }
+  
+  /* New turning roadmap layout */
+  .roadmap-turning-container {
     position: relative;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
-}
-
-.roadmap-line {
-    position: absolute;
-    left: 20px;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background-color: #8b0000;
-    margin-left: -2px;
-}
-
-.roadmap-item {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+  }
+  
+  .roadmap-turning-item {
+    display: flex;
+    align-items: flex-start;
     position: relative;
-    margin-left: 60px;
-    margin-bottom: 60px;
-}
-
-.roadmap-dot {
+    padding-left: 60px;
+  }
+  
+  .turning-dot {
     position: absolute;
-    left: -40px;
-    top: 0;
+    top: 5px;
+    left: 0;
     width: 20px;
     height: 20px;
-    background-color: #8b0000;
+    background-color: #ff1a1a;
     border-radius: 50%;
-    box-shadow: 0 0 10px #8b0000;
-}
-
-.roadmap-content h3 {
-    font-size: 1.5rem;
+    box-shadow: 0 0 15px #ff1a1a, 0 0 30px #ff1a1a;
+    z-index: 10;
+  }
+  
+  .turning-content h3 {
+    font-size: 1.6rem;
     margin-bottom: 10px;
-}
-
-.roadmap-content p {
+    color: #ffffff;
+  }
+  
+  .turning-content p {
     font-size: 1rem;
-    opacity: 0.8;
-}
-
-/* Bottom CTA Section */
-.bottom-cta {
+    color: #cccccc;
+    opacity: 0.85;
+    max-width: 600px;
+  }
+  
+  /* Bottom CTA Section */
+  .bottom-cta {
     text-align: center;
-    padding: 60px 20px;
+    padding: 100px 20px;
     background-color: #000000;
-}
-
-.bottom-cta h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-/* Footer */
-.footer {
-    text-align: center;
-    padding: 30px;
-    font-size: 0.9rem;
-    background-color: #111111;
-    opacity: 0.5;
-}
+  }
+  
+  .bottom-cta h2 {
+    font-size: 2.4rem;
+    margin-bottom: 30px;
+    color: #ffffff;
+    text-shadow: 0 0 8px #ff1a1a;
+  }
+  
+  /* Remove the old footer */
+  .footer {
+    display: none;
+  }
+  
