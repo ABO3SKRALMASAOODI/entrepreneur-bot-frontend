@@ -76,7 +76,7 @@
     flex: 1;
     max-width: 500px;
     min-width: 300px;
-    height: 350px; /* ✅ fix height to prevent layout jump */
+    height: 500px; /* updated for full Rive robot */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -85,51 +85,6 @@
     overflow: hidden;
   }
   
-  .eye-overlay {
-    position: absolute;
-    top: 68%;              /* ✅ moved eyes further down */
-    left: 45%;           /* ✅ nudged eyes a bit to the left */
-    transform: translate(-50%, -50%);
-    width: 120px;
-    display: flex;
-    justify-content: space-between;
-    pointer-events: none;
-    z-index: 5;
-  }
-  
-  @keyframes eyeFloat {
-    0%   { transform: translateY(0); }
-    50%  { transform: translateY(-4px); } /* ⬆ float up a bit */
-    100% { transform: translateY(0); }
-  }
-  .eye-wrapper {
-    animation: eyeFloat 2.4s ease-in-out infinite;
-  }
-  
-  .eye-socket {
-    width: 40px;
-    height: 40px;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 50%;
-    overflow: hidden;
-    margin: 0 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  
-   
-  }
-  
-  .left-eye,
-.right-eye {
-  width: 16px;
-  height: 16px;
-  background: #ff1a1a;
-  border-radius: 50%;
-  transition: transform 0.1s ease;
-  animation: eyeFloat 2.4s ease-in-out infinite; /* ✅ This line adds the vertical float */
-}
-
   /* Roadmap Section */
   .roadmap {
     background: linear-gradient(180deg, #111111, #000000);
@@ -246,5 +201,18 @@
   /* Footer Removed */
   .footer {
     display: none;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero-content {
+      flex-direction: column;
+    }
+  
+    .hero-animation-container {
+      margin-top: 40px;
+      max-width: 100%;
+      height: 400px;
+    }
   }
   
