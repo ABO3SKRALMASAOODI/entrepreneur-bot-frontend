@@ -14,27 +14,26 @@ function LandingPage() {
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
-
+  
+    const leftEye = document.querySelector(".left-eye");
+    const rightEye = document.querySelector(".right-eye");
+  
     const handleMouseMove = (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = (e.clientY / window.innerHeight - 0.5) * 2;
       const offsetX = x * 10;
-      const offsetY = y * 10;
-
-      const leftEye = document.querySelector(".left-eye");
-      const rightEye = document.querySelector(".right-eye");
-
-      if (leftEye) leftEye.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      if (rightEye) rightEye.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-
+  
+      if (leftEye) leftEye.style.transform = `translateX(${offsetX}px)`;
+      if (rightEye) rightEye.style.transform = `translateX(${offsetX}px)`;
+  
       if (robotRef.current) {
-        robotRef.current.style.transform = `translate(${offsetX / 1.5}px, ${offsetY / 1.5}px)`;
+        robotRef.current.style.transform = `translateX(${offsetX / 1.5}px)`;
       }
     };
-
+  
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
+  
 
   const handleRegister = () => navigate("/register");
   const handleLogin = () => navigate("/login");
