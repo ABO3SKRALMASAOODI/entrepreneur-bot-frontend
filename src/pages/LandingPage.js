@@ -120,7 +120,10 @@ function LandingPage() {
                 <div className="right-eye"></div>
               </div>
             </div>
-            <div style={{ width: "100%", height: "100%" }}>
+            <div
+            style={{ width: "100%", height: "100%" }}
+             ref={lottieRef}
+            >
            <Lottie animationData={robotAnimation} loop />
            </div>
           </motion.div>
