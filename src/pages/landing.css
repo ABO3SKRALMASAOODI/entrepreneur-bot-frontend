@@ -102,6 +102,9 @@
     50%  { transform: translateY(-4px); } /* ⬆ float up a bit */
     100% { transform: translateY(0); }
   }
+  .eye-wrapper {
+    animation: eyeFloat 2.4s ease-in-out infinite;
+  }
   
   .eye-socket {
     width: 40px;
@@ -114,7 +117,7 @@
     justify-content: center;
     align-items: center;
   
-    animation: eyeFloat 2.4s ease-in-out infinite; /* ✅ Apply idle float */
+   
   }
   
   
