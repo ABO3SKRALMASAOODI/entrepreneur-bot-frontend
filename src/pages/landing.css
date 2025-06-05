@@ -120,16 +120,16 @@
    
   }
   
-  
   .left-eye,
-  .right-eye {
-    width: 16px;
-    height: 16px;
-    background: #ff1a1a;
-    border-radius: 50%;
-    transition: transform 0.1s ease;
-  }
-  
+.right-eye {
+  width: 16px;
+  height: 16px;
+  background: #ff1a1a;
+  border-radius: 50%;
+  transition: transform 0.1s ease;
+  animation: eyeFloat 2.4s ease-in-out infinite; /* ✅ This line adds the vertical float */
+}
+
   /* Roadmap Section */
   .roadmap {
     background: linear-gradient(180deg, #111111, #000000);

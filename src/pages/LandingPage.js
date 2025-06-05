@@ -112,27 +112,23 @@ function LandingPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
           >
-            <div className="eye-overlay">
-            <div className="eye-socket">
-            <div className="eye-wrapper">
-            <div className="left-eye"></div>
-            </div>
-            </div>
+           <div className="eye-overlay">
+        <div className="eye-socket">
+        <div className="left-eye"></div>
+        </div>
+        <div className="eye-socket">
+        <div className="right-eye"></div>
+        </div>
+        </div>
 
-            <div className="eye-socket">
-            <div className="eye-wrapper">
-            <div className="right-eye"></div>
-            </div>
-            </div>
+        <div
+         style={{ width: "100%", height: "100%", marginTop: "85px" }}
+         ref={lottieRef}
+         >
+         <Lottie animationData={robotAnimation} loop />
+         </div>
+         </motion.div> {/* This closes hero-animation-container properly */}
 
-            </div>
-            <div
-            style={{ width: "100%", height: "100%", marginTop: "85px" }}
-             ref={lottieRef}
-            >
-           <Lottie animationData={robotAnimation} loop />
-           </div>
-          </motion.div>
         </div>
       </section>
 
