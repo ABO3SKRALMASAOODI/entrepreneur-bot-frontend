@@ -121,7 +121,7 @@ function LandingPage() {
               </div>
             </div>
             <div
-            style={{ width: "100%", height: "100%", marginTop: "50px" }}
+            style={{ width: "100%", height: "100%", marginTop: "70px" }}
              ref={lottieRef}
             >
            <Lottie animationData={robotAnimation} loop />
