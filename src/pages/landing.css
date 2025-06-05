@@ -87,7 +87,7 @@
   
   .eye-overlay {
     position: absolute;
-    top: 65%;              /* ✅ moved eyes further down */
+    top: 68%;              /* ✅ moved eyes further down */
     left: 45%;           /* ✅ nudged eyes a bit to the left */
     transform: translate(-50%, -50%);
     width: 120px;
