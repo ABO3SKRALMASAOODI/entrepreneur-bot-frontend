@@ -108,16 +108,17 @@ function Chat() {
       let sessionId = currentSessionId;
   
       if (!sessionId) {
-        const session = await startSession(); // ✅ FIXED
-        sessionId = session.session_id;
+        sessionId = await startSession();  // ✅ Now returns the number directly
         setCurrentSessionId(sessionId);
-        loadSessions();
+        await loadSessions();
       }
+      
   
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-  
+      
+      console.log("Sending:", { sessionId, prompt });
       const reply = await sendMessageToSession(sessionId, prompt);
   
       if (messages.length === 3) {
