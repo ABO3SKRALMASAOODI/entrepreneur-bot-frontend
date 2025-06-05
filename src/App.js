@@ -9,7 +9,7 @@ import EnterPassword from "./pages/EnterPassword"; // ✅ Add this
 import ChangePassword from "./pages/ChangePassword";
 import ResetPassword from "./pages/ResetPassword";
 import Account from "./pages/Account";
-
+import LandingPage from "./pages/LandingPage";
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -20,7 +20,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/enter-password" element={<EnterPassword />} /> {/* ✅ NEW */}
         <Route path="/register" element={<Register />} />
