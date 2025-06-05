@@ -1,127 +1,116 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./landing.css";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import Lottie from "lottie-react";
-import { Typewriter } from "react-simple-typewriter";
+import { Typewriter } from "react-simple-typewriter"; // ✅ NEW
 import robotAnimation from "../assets/robot.json";
 
 function LandingPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("animate-fadeInUp");
-        }
-      });
-    });
-
-    const items = document.querySelectorAll(".fade-in-section");
-    items.forEach((item) => observer.observe(item));
+    AOS.init({ duration: 1000 });
   }, []);
 
+  const handleRegister = () => navigate("/register");
+  const handleLogin = () => navigate("/login");
+
   return (
-    <div className="bg-black text-white font-sans overflow-x-hidden">
+    <div className="landing-container">
       {/* Hero Section */}
-      <section className="min-h-screen flex flex-col-reverse md:flex-row items-center justify-center px-6 md:px-20 gap-12 relative">
-        <div className="flex-1 z-10">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-red-600 drop-shadow-lg">
-            The Hustler Bot
-          </h1>
-          <p className="text-xl text-white/80 mb-6">
-            <Typewriter
-              words={["Helping you grow a real business...", "Get marketing advice, startup plans, and more..."]}
-              loop={0}
-              cursor
-              cursorStyle="|"
-              typeSpeed={50}
-              deleteSpeed={40}
-              delaySpeed={2000}
-            />
-          </p>
-          <div className="flex gap-4">
-            <button
-              className="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white py-3 px-6 rounded-xl font-semibold shadow-lg"
-              onClick={() => navigate("/register")}
-            >
-              Start Free Trial
-            </button>
-            <button
-              className="border border-white hover:border-red-600 hover:text-red-600 py-3 px-6 rounded-xl font-semibold"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </button>
+      <section className="hero">
+        <div className="hero-content">
+          <div className="hero-text">
+            <h1 className="glow-text">The Hustler Bot</h1>
+            <p className="typing-text">
+              <Typewriter
+                words={[
+                  "Helping you grow a real business...",
+                  "Get marketing advice, startup plans, and more...",
+                ]}
+                loop={0}
+                cursor
+                cursorStyle="|"
+                typeSpeed={50}
+                deleteSpeed={40}
+                delaySpeed={2000}
+              />
+            </p>
+            <div className="cta-buttons">
+              <button onClick={handleRegister}>Start Free Trial</button>
+              <button onClick={handleLogin}>Login</button>
+            </div>
+          </div>
+          <div className="hero-animation">
+            <Lottie animationData={robotAnimation} loop={true} />
           </div>
         </div>
-        <div className="flex-1 max-w-md">
-          <Lottie animationData={robotAnimation} loop autoplay />
-        </div>
       </section>
 
-      {/* SVG Curved Roadmap */}
-      <section className="py-24 bg-zinc-900 relative">
-        <h2 className="text-center text-4xl font-bold mb-16 text-white">
-          Why Choose The Hustler Bot?
-        </h2>
-        <svg viewBox="0 0 800 600" className="w-full max-w-6xl mx-auto block">
-          <path
-            d="M 100 550 C 200 300, 600 300, 700 50"
-            stroke="#dc2626"
-            strokeWidth="6"
-            fill="none"
-          />
-          {[100, 250, 400, 550, 650, 700].map((x, i) => (
-            <circle
-              key={i}
-              cx={x}
-              cy={i % 2 === 0 ? 550 - i * 80 : 550 - i * 100}
-              r="10"
-              fill="#dc2626"
-            />
-          ))}
-        </svg>
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6 mt-16">
-          {[
-            ["💡", "Validate Business Ideas Instantly", "Get feedback fast on your startup concepts."],
-            ["📈", "Personalized Growth Strategies", "Tailored plans for your business."],
-            ["🧠", "24/7 Mentorship", "Real advice anytime, anywhere."],
-            ["🚀", "Step-by-Step Launch Help", "Navigate your journey with confidence."],
-            ["🔒", "Private & Secure", "We protect your business data."],
-            ["💳", "7-Day Free Trial", "Try before you commit."],
-          ].map(([icon, title, desc], i) => (
-            <div key={i} className="fade-in-section opacity-0">
-              <h3 className="text-xl font-bold mb-1">{icon} {title}</h3>
-              <p className="text-white/80">{desc}</p>
+      {/* Vertical Roadmap Section */}
+      <section className="roadmap">
+        <h2 className="section-title">Why Choose The Hustler Bot?</h2>
+        <div className="roadmap-container">
+          <div className="roadmap-line"></div>
+          <div className="roadmap-item" data-aos="fade-up">
+            <div className="roadmap-dot"></div>
+            <div className="roadmap-content">
+              <h3>💡 Validate Business Ideas Instantly</h3>
+              <p>Receive immediate feedback on your startup concepts.</p>
             </div>
-          ))}
+          </div>
+          <div className="roadmap-item" data-aos="fade-up">
+            <div className="roadmap-dot"></div>
+            <div className="roadmap-content">
+              <h3>📈 Personalized Growth Strategies</h3>
+              <p>Tailored plans to accelerate your business growth.</p>
+            </div>
+          </div>
+          <div className="roadmap-item" data-aos="fade-up">
+            <div className="roadmap-dot"></div>
+            <div className="roadmap-content">
+              <h3>🧠 24/7 Business Mentoring</h3>
+              <p>Access expert advice anytime, anywhere.</p>
+            </div>
+          </div>
+          <div className="roadmap-item" data-aos="fade-up">
+            <div className="roadmap-dot"></div>
+            <div className="roadmap-content">
+              <h3>🚀 Step-by-Step Launch Guidance</h3>
+              <p>Navigate your startup journey with confidence.</p>
+            </div>
+          </div>
+          <div className="roadmap-item" data-aos="fade-up">
+            <div className="roadmap-dot"></div>
+            <div className="roadmap-content">
+              <h3>🔒 Data Privacy Assurance</h3>
+              <p>Your information is secure and confidential.</p>
+            </div>
+          </div>
+          <div className="roadmap-item" data-aos="fade-up">
+            <div className="roadmap-dot"></div>
+            <div className="roadmap-content">
+              <h3>💳 Try Free for 7 Days</h3>
+              <p>Experience the benefits risk-free.</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 bg-black text-center">
-        <h2 className="text-3xl font-bold mb-6">
-          Ready to Transform Your Business?
-        </h2>
-        <div className="flex justify-center gap-4">
-          <button
-            className="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white py-3 px-6 rounded-xl font-semibold shadow-lg"
-            onClick={() => navigate("/register")}
-          >
-            Start Free Trial
-          </button>
-          <button
-            className="border border-white hover:border-red-600 hover:text-red-600 py-3 px-6 rounded-xl font-semibold"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </button>
+      {/* Bottom CTA Section */}
+      <section className="bottom-cta">
+        <h2>Ready to Transform Your Business?</h2>
+        <div className="cta-buttons">
+          <button onClick={handleRegister}>Start Free Trial</button>
+          <button onClick={handleLogin}>Login</button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="text-center text-sm text-white/50 py-6 bg-zinc-900 border-t border-white/10">
-        © 2025 The Hustler Bot. All rights reserved. | <a href="/legal" className="underline">Legal</a>
+      <footer className="footer">
+        <p>Made with ❤️ by DIYAR TAREQ TRADING L.L.C</p>
       </footer>
     </div>
   );
