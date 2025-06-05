@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./landing.css";
 import AOS from "aos";
@@ -10,26 +10,85 @@ import robotAnimation from "../assets/robot.json";
 
 function LandingPage() {
   const navigate = useNavigate();
+  const robotRef = useRef(null);
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
+
+    const handleMouseMove = (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      const offsetX = x * 10;
+      const offsetY = y * 10;
+
+      const leftEye = document.querySelector(".left-eye");
+      const rightEye = document.querySelector(".right-eye");
+
+      if (leftEye) leftEye.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      if (rightEye) rightEye.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+
+      if (robotRef.current) {
+        robotRef.current.style.transform = `translate(${offsetX / 1.5}px, ${offsetY / 1.5}px)`;
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   const handleRegister = () => navigate("/register");
   const handleLogin = () => navigate("/login");
+
+  const features = [
+    {
+      icon: "💡",
+      title: "Validate Business Ideas",
+      desc: "Quickly assess and refine your startup ideas with instant AI feedback, saving you months of trial and error.",
+    },
+    {
+      icon: "📈",
+      title: "Tailored Growth Plans",
+      desc: "Receive a personalized roadmap with milestones, actions, and KPIs based on your business type.",
+    },
+    {
+      icon: "🧠",
+      title: "24/7 AI Mentorship",
+      desc: "Get guidance anytime from an intelligent assistant trained on successful startup strategies.",
+    },
+    {
+      icon: "🚀",
+      title: "Product & Marketing Help",
+      desc: "From building MVPs to writing ad copy, Hustler Bot supports you with actionable suggestions.",
+    },
+    {
+      icon: "🔒",
+      title: "Data Security First",
+      desc: "Your ideas and progress are encrypted and never shared. 100% private.",
+    },
+    {
+      icon: "💳",
+      title: "7-Day Free Trial",
+      desc: "No payment needed upfront. Try the bot, build something real, and only pay if it works.",
+    },
+  ];
 
   return (
     <div className="landing-container">
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
-          <div className="hero-text">
+          <motion.div
+            className="hero-text"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
             <h1 className="glow-text">The Hustler Bot</h1>
             <p className="typing-text">
               <Typewriter
                 words={[
-                  "Helping you grow a real business...",
-                  "Get marketing advice, startup plans, and more...",
+                  "Helping you build real businesses...",
+                  "Get strategies, insights, and mentorship...",
                 ]}
                 loop={0}
                 cursor
@@ -43,58 +102,45 @@ function LandingPage() {
               <button onClick={handleRegister}>Start Free Trial</button>
               <button onClick={handleLogin}>Login</button>
             </div>
-          </div>
-          <div className="hero-animation">
+          </motion.div>
+
+          <motion.div
+            className="hero-animation-container"
+            ref={robotRef}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1 }}
+          >
+            <div className="eye-overlay">
+              <div className="eye-socket">
+                <div className="left-eye"></div>
+              </div>
+              <div className="eye-socket">
+                <div className="right-eye"></div>
+              </div>
+            </div>
             <Lottie animationData={robotAnimation} loop />
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Turning Roadmap Section */}
+      {/* Roadmap */}
       <section className="roadmap">
-        <h2 className="section-title">How The Hustler Bot Empowers You</h2>
+        <h2 className="section-title">Your Journey with The Hustler Bot</h2>
         <div className="roadmap-turning-container">
-          {[
-            {
-              icon: "💡",
-              title: "Validate Business Ideas",
-              desc: "Test and refine your ideas instantly with AI support.",
-            },
-            {
-              icon: "📈",
-              title: "Tailored Growth Plans",
-              desc: "Your success path, built for your niche.",
-            },
-            {
-              icon: "🧠",
-              title: "Mentoring 24/7",
-              desc: "Real answers from AI mentors—anytime.",
-            },
-            {
-              icon: "🚀",
-              title: "Launch Support",
-              desc: "From zero to go—step-by-step with Hustler Bot.",
-            },
-            {
-              icon: "🔒",
-              title: "Privacy Focused",
-              desc: "Your data, encrypted and safe.",
-            },
-            {
-              icon: "💳",
-              title: "Free 7-Day Trial",
-              desc: "No risk. High reward. Try it now.",
-            },
-          ].map((item, i) => (
+          {features.map((item, index) => (
             <motion.div
-              className="roadmap-turning-item"
-              key={i}
-              initial={{ opacity: 0, y: 50 }}
+              key={index}
+              className={`roadmap-turning-item ${
+                index % 2 === 0 ? "left" : "right"
+              }`}
+              initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: i * 0.2 }}
+              transition={{ duration: 0.8, delay: index * 0.2 }}
               viewport={{ once: true }}
             >
               <div className="turning-dot" />
+              <div className="circuit-line" />
               <div className="turning-content">
                 <h3>{item.icon} {item.title}</h3>
                 <p>{item.desc}</p>
@@ -111,7 +157,7 @@ function LandingPage() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          Ready to Build the Business You Dream Of?
+          Are You Ready To Build Your Empire?
         </motion.h2>
         <div className="cta-buttons">
           <button onClick={handleRegister}>Start Free Trial</button>
