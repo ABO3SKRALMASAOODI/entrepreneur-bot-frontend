@@ -4,7 +4,7 @@ import "./landing.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Lottie from "lottie-react";
-import { Typewriter } from "react-simple-typewriter"; // ✅ NEW
+import { Typewriter } from "react-simple-typewriter";
 import robotAnimation from "../assets/robot.json";
 
 function LandingPage() {
@@ -19,7 +19,7 @@ function LandingPage() {
 
   return (
     <div className="landing-container">
-      {/* Hero Section */}
+      {/* Hero */}
       <section className="hero">
         <div className="hero-content">
           <div className="hero-text">
@@ -29,6 +29,7 @@ function LandingPage() {
                 words={[
                   "Helping you grow a real business...",
                   "Get marketing advice, startup plans, and more...",
+                  "Join thousands of entrepreneurs right now.",
                 ]}
                 loop={0}
                 cursor
@@ -49,69 +50,59 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* Vertical Roadmap Section */}
-      <section className="roadmap">
-        <h2 className="section-title">Why Choose The Hustler Bot?</h2>
-        <div className="roadmap-container">
-          <div className="roadmap-line"></div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>💡 Validate Business Ideas Instantly</h3>
-              <p>Receive immediate feedback on your startup concepts.</p>
+      {/* Scroll-based Animated Roadmap */}
+      <section className="roadmap roadmap-animated">
+        <h2 className="section-title">Your Path to Success</h2>
+        <div className="roadmap-curve">
+          <div className="curve-line"></div>
+          {[
+            {
+              title: "💡 Validate Ideas Instantly",
+              desc: "Get real-time AI feedback on startup ideas.",
+            },
+            {
+              title: "📊 Growth Blueprints",
+              desc: "Custom strategies tailored to your business goals.",
+            },
+            {
+              title: "🤖 24/7 AI Mentorship",
+              desc: "On-demand advice and support whenever you need it.",
+            },
+            {
+              title: "🚀 Launch With Confidence",
+              desc: "Follow a step-by-step guided launch system.",
+            },
+            {
+              title: "🔐 Full Privacy Guaranteed",
+              desc: "We never share or sell your data. Period.",
+            },
+            {
+              title: "🎁 Free 7-Day Trial",
+              desc: "No credit card required to get started.",
+            },
+          ].map((item, idx) => (
+            <div key={idx} className="roadmap-point" data-aos="fade-up">
+              <div className="roadmap-bullet" />
+              <div className="roadmap-info">
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+              </div>
             </div>
-          </div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>📈 Personalized Growth Strategies</h3>
-              <p>Tailored plans to accelerate your business growth.</p>
-            </div>
-          </div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>🧠 24/7 Business Mentoring</h3>
-              <p>Access expert advice anytime, anywhere.</p>
-            </div>
-          </div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>🚀 Step-by-Step Launch Guidance</h3>
-              <p>Navigate your startup journey with confidence.</p>
-            </div>
-          </div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>🔒 Data Privacy Assurance</h3>
-              <p>Your information is secure and confidential.</p>
-            </div>
-          </div>
-          <div className="roadmap-item" data-aos="fade-up">
-            <div className="roadmap-dot"></div>
-            <div className="roadmap-content">
-              <h3>💳 Try Free for 7 Days</h3>
-              <p>Experience the benefits risk-free.</p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Bottom CTA Section */}
-      <section className="bottom-cta">
-        <h2>Ready to Transform Your Business?</h2>
+      {/* Animated CTA Section */}
+      <section className="bottom-cta pulse-highlight">
+        <h2>🚀 Ready to Build Your Business?</h2>
+        <p style={{ opacity: 0.8, marginBottom: "1rem" }}>
+          Don’t wait — start your free trial and launch smarter today.
+        </p>
         <div className="cta-buttons">
           <button onClick={handleRegister}>Start Free Trial</button>
           <button onClick={handleLogin}>Login</button>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="footer">
-        <p>Made with ❤️ by DIYAR TAREQ TRADING L.L.C</p>
-      </footer>
     </div>
   );
 }
