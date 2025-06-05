@@ -11,7 +11,8 @@ import robotAnimation from "../assets/robot.json";
 function LandingPage() {
   const navigate = useNavigate();
   const robotRef = useRef(null);
-
+  const lottieRef = useRef(null); 
+  
   useEffect(() => {
     AOS.init({ duration: 1000 });
   
@@ -19,17 +20,18 @@ function LandingPage() {
     const rightEye = document.querySelector(".right-eye");
   
     const handleMouseMove = (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const offsetX = x * 10;
-  
-      if (leftEye) leftEye.style.transform = `translateX(${offsetX}px)`;
-      if (rightEye) rightEye.style.transform = `translateX(${offsetX}px)`;
-  
-      if (robotRef.current) {
-        robotRef.current.style.transform = `translateX(${offsetX / 1.5}px)`;
-      }
-    };
-  
+        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+        const offsetX = x * 10;
+      
+        if (leftEye) leftEye.style.transform = `translateX(${offsetX}px)`;
+        if (rightEye) rightEye.style.transform = `translateX(${offsetX}px)`;
+      
+        // ✅ Only move the inner Lottie, not the outer wrapper
+        if (lottieRef.current) {
+          lottieRef.current.style.transform = `translateX(${offsetX / 1.5}px)`;
+        }
+      };
+      
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
@@ -118,7 +120,9 @@ function LandingPage() {
                 <div className="right-eye"></div>
               </div>
             </div>
-            <Lottie animationData={robotAnimation} loop />
+            <div style={{ width: "100%", height: "100%" }}>
+           <Lottie animationData={robotAnimation} loop />
+           </div>
           </motion.div>
         </div>
       </section>
