@@ -5,13 +5,12 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Typewriter } from "react-simple-typewriter";
 import { motion } from "framer-motion";
-import Rive from "rive-react";  // Import Rive library for animation
-import robotRev from "../assets/robot.rev";
+import Rive from "rive-react"; // still needed to use <Rive>
 
 function LandingPage() {
   const navigate = useNavigate();
   const robotRef = useRef(null);
-  const riveRef = useRef(null);  // Reference for the Rive animation
+  const riveRef = useRef(null);
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
@@ -20,7 +19,6 @@ function LandingPage() {
       const x = (e.clientX / window.innerWidth - 0.5) * 2;
       const offsetX = x * 10;
 
-      // Adjust robot movement based on mouse position
       if (riveRef.current) {
         riveRef.current.style.transform = `translateX(${offsetX / 1.5}px)`;
       }
@@ -113,23 +111,17 @@ function LandingPage() {
                 <div className="right-eye"></div>
               </div>
             </div>
-            {/* Rive animation component */}
+
+            {/* ✅ Rive animation from public folder */}
             <div
               style={{
                 width: "100%",
-                height: "100%", // Ensure this takes up full space
+                height: "100%",
                 position: "relative",
               }}
               ref={riveRef}
             >
-              {/* Log the reference to check if it's rendering */}
-              {console.log(riveRef.current)}
-
-              <Rive 
-                src={robotRev} 
-                ref={riveRef} 
-                style={{ width: "100%", height: "auto" }} // Ensures proper scaling
-              />
+              <Rive src="/robot.rev" style={{ width: "100%", height: "auto" }} />
             </div>
           </motion.div>
         </div>
