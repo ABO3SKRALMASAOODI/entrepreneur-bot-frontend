@@ -44,7 +44,8 @@ function LandingPage() {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("scroll", onScroll);
     };
-  }, [rive]);
+  }, [heroRive]);
+
 
   const features = [
     {
@@ -123,7 +124,7 @@ function LandingPage() {
           </motion.div>
 
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-10 w-[700px] h-[700px] z-0 pointer-events-none opacity-90">
-            <RiveComponent style={{ width: "100%", height: "100%" }} />
+          <HeroBot style={{ width: "100%", height: "100%" }} />
           </div>
         </section>
 
