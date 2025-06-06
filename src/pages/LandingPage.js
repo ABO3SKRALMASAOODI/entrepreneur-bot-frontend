@@ -11,7 +11,7 @@ function LandingPage() {
   const navigate = useNavigate();
 
   // Load Rive robot
-  const { RiveComponent: HeroBot } = useRive({
+  const { rive: heroRive, RiveComponent: HeroBot } = useRive({
     src: "/hustler-robot.riv",
     autoplay: true,
     stateMachines: ["State Machine 1"],
@@ -30,7 +30,7 @@ function LandingPage() {
   useEffect(() => {
     const handleMouse = (x) => {
       const mouseX = x / window.innerWidth;
-      const input = rive?.inputs?.find((i) => i.name === "mouseX");
+      const input = heroRive?.inputs?.find((i) => i.name === "mouseX");
       if (input) input.value = mouseX;
     };
 
