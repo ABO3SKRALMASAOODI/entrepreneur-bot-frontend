@@ -6,6 +6,7 @@ import "aos/dist/aos.css";
 import { Typewriter } from "react-simple-typewriter";
 import { motion } from "framer-motion";
 import Rive from "rive-react";  // Import Rive library for animation
+import robotRev from "../assets/robot.rev";
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -117,7 +118,7 @@ function LandingPage() {
               style={{ width: "100%", height: "100%" }}
               ref={riveRef}
             >
-             <Rive src={require("../assets/robot.rev")} />  {/* Correct path to the Rive file */}
+             <Rive src={robotRev} />
             </div>
           </motion.div>
         </div>
