@@ -115,10 +115,14 @@ function LandingPage() {
             </div>
             {/* Rive animation component */}
             <div
-              style={{ width: "100%", height: "100%" }}
+              style={{
+                width: "100%",
+                height: "100%", // Ensure this takes up full space
+                position: "relative",
+              }}
               ref={riveRef}
             >
-             <Rive src={robotRev} />
+              <Rive src={robotRev} style={{ width: "300px", height: "300px" }} />
             </div>
           </motion.div>
         </div>
