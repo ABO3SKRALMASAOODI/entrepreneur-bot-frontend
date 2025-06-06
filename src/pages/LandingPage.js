@@ -18,10 +18,11 @@ function LandingPage() {
   });
   
   const { rive: bubbleRive, RiveComponent: BubbleBot } = useRive({
-    src: "/hustler-robot.riv",
+    src: "/hustler-bubble-bot.riv",
     autoplay: true,
-    stateMachines: ["State Machine 1"],
+    stateMachines: ["State Machine 1"], 
   });
+  
   
   
 
