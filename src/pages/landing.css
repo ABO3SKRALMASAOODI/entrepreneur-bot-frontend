@@ -76,7 +76,7 @@
   flex: 1;
   max-width: 500px;
   min-width: 300px;
-  height: 350px; /* ✅ fix height to prevent layout jump */
+  height: 500px; /* ✅ fix height to prevent layout jump */
   display: flex;
   align-items: center;
   justify-content: center;
