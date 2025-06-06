@@ -127,7 +127,7 @@ function LandingPage() {
               }}
               ref={riveRef}
             >
-              <RiveComponent style={{ width: "100%", height: "auto" }} />
+              <RiveComponent style={{ width: "400px", height: "400px" }} />
             </div>
           </motion.div>
         </div>
