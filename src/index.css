@@ -1,13 +1,40 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  @keyframes pulseLine {
+    0% {
+      box-shadow: 0 0 6px #ff1a1a;
+    }
+    50% {
+      box-shadow: 0 0 20px #ff1a1a;
+    }
+    100% {
+      box-shadow: 0 0 6px #ff1a1a;
+    }
+  }
+
+  .animate-pulse {
+    animation: pulseLine 2s infinite;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #ff1a1a;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #000;
+  }
 }
