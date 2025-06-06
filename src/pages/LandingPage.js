@@ -1,4 +1,3 @@
-// src/pages/LandingPage.js
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./landing.css";
@@ -10,7 +9,6 @@ import { useRive } from "rive-react";
 
 function LandingPage() {
   const navigate = useNavigate();
-
   const { rive, RiveComponent } = useRive({
     src: "/hustler-robot.riv",
     autoplay: true,
@@ -18,6 +16,8 @@ function LandingPage() {
   });
 
   useEffect(() => {
+    AOS.init({ duration: 1000 });
+
     const handleMouse = (x) => {
       const mouseX = x / window.innerWidth;
       const input = rive?.inputs?.find((i) => i.name === "mouseX");
@@ -39,7 +39,38 @@ function LandingPage() {
   const handleRegister = () => navigate("/register");
   const handleLogin = () => navigate("/login");
 
-  const features = [/* ... same features as before ... */];
+  const features = [
+    {
+      icon: "💡",
+      title: "Validate Business Ideas",
+      desc: "Quickly assess and refine your startup ideas with instant AI feedback, saving you months of trial and error.",
+    },
+    {
+      icon: "📈",
+      title: "Tailored Growth Plans",
+      desc: "Receive a personalized roadmap with milestones, actions, and KPIs based on your business type.",
+    },
+    {
+      icon: "🧠",
+      title: "24/7 AI Mentorship",
+      desc: "Get guidance anytime from an intelligent assistant trained on successful startup strategies.",
+    },
+    {
+      icon: "🚀",
+      title: "Product & Marketing Help",
+      desc: "From building MVPs to writing ad copy, Hustler Bot supports you with actionable suggestions.",
+    },
+    {
+      icon: "🔒",
+      title: "Data Security First",
+      desc: "Your ideas and progress are encrypted and never shared. 100% private.",
+    },
+    {
+      icon: "💳",
+      title: "7-Day Free Trial",
+      desc: "No payment needed upfront. Try the bot, build something real, and only pay if it works.",
+    },
+  ];
 
   return (
     <div className="landing-container">
@@ -74,7 +105,7 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* ✅ New Section for Enlarged Rive Bot */}
+      {/* ✅ Robot Section from v2 */}
       <section className="rive-bot-showcase">
         <RiveComponent className="rive-big-robot" />
       </section>
