@@ -3,31 +3,25 @@ import { useNavigate } from "react-router-dom";
 import "./landing.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Lottie from "lottie-react";
 import { Typewriter } from "react-simple-typewriter";
 import { motion } from "framer-motion";
-import robotAnimation from "../assets/robot.json";
+import Rive from "rive-react";  // Import Rive library for animation
 
 function LandingPage() {
   const navigate = useNavigate();
   const robotRef = useRef(null);
-  const lottieRef = useRef(null); 
+  const riveRef = useRef(null);  // Reference for the Rive animation
   
   useEffect(() => {
     AOS.init({ duration: 1000 });
-
-    const leftEye = document.querySelector(".left-eye");
-    const rightEye = document.querySelector(".right-eye");
 
     const handleMouseMove = (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 2;
       const offsetX = x * 10;
 
-      if (leftEye) leftEye.style.transform = `translateX(${offsetX}px)`;
-      if (rightEye) rightEye.style.transform = `translateX(${offsetX}px)`;
-
-      if (lottieRef.current) {
-        lottieRef.current.style.transform = `translateX(${offsetX / 1.5}px)`;
+      // Adjust robot movement based on mouse position
+      if (riveRef.current) {
+        riveRef.current.style.transform = `translateX(${offsetX / 1.5}px)`;
       }
     };
 
@@ -118,11 +112,12 @@ function LandingPage() {
                 <div className="right-eye"></div>
               </div>
             </div>
+            {/* Rive animation component */}
             <div
               style={{ width: "100%", height: "100%" }}
-              ref={lottieRef}
+              ref={riveRef}
             >
-              <Lottie animationData={robotAnimation} loop />
+              <Rive src="../assets/robot.riv" /> {/* Replace with your Rive file path */}
             </div>
           </motion.div>
         </div>
