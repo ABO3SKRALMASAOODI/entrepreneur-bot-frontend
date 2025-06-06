@@ -1,8 +1,7 @@
-// LandingPage.js (Part 1)
+// LandingPage.js (Complete + Correct)
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useInView } from "framer-motion";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRive } from "rive-react";
 
 function LandingPage() {
@@ -13,7 +12,6 @@ function LandingPage() {
     stateMachines: ["State Machine 1"],
   });
 
-  const robotRef = useRef(null);
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: false });
 
@@ -23,7 +21,6 @@ function LandingPage() {
       const input = rive?.inputs?.find((i) => i.name === "mouseX");
       if (input) input.value = mouseX;
     };
-
     const onMouseMove = (e) => handleMouse(e.clientX);
     const onScroll = () => handleMouse(window.scrollY % window.innerWidth);
 
@@ -68,33 +65,35 @@ function LandingPage() {
       desc: "No payment needed upfront. Try the bot, build something real, and only pay if it works.",
     },
   ];
+
   return (
-    <div className="bg-black text-white font-sans overflow-x-hidden">
-      {/* HERO SECTION */}
-      <section className="relative min-h-screen pt-24 flex flex-col justify-center items-center text-center px-6">
+    <div className="bg-black text-white overflow-x-hidden font-sans">
+
+      {/* HERO */}
+      <section className="relative min-h-screen flex flex-col justify-center items-center text-center px-6 pt-24">
         <motion.h1
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-5xl md:text-7xl font-bold text-white drop-shadow-[0_0_15px_#ff1a1a]"
+          className="text-6xl md:text-7xl font-bold drop-shadow-[0_0_20px_#ff1a1a]"
         >
           The Hustler Bot
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.3 }}
-          className="mt-6 text-lg md:text-2xl text-gray-300 max-w-2xl"
+          transition={{ duration: 1.2, delay: 0.2 }}
+          className="mt-6 text-lg md:text-2xl max-w-2xl text-gray-300"
         >
           Build your empire with smart strategies, instant advice, and AI mentorship.
         </motion.p>
 
         <motion.div
           className="mt-10 flex gap-6 justify-center"
-          initial={{ opacity: 0, y: 70 }}
+          initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.4, delay: 0.5 }}
+          transition={{ duration: 1.4, delay: 0.4 }}
         >
           <button
             onClick={() => navigate("/register")}
@@ -110,73 +109,112 @@ function LandingPage() {
           </button>
         </motion.div>
 
-        {/* 🧠 Debug Robot Visibility */}
-        <div style={{ width: '600px', height: '600px', background: '#111', marginTop: '50px', zIndex: 1000 }}>
-        <RiveComponent style={{ width: '100%', height: '100%' }} />
-        </div>
-
+        {/* Rive Robot */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="mt-20 w-full flex justify-center"
+        >
+          <div className="w-[600px] h-[600px] max-w-full">
+            <RiveComponent style={{ width: "100%", height: "100%" }} />
+          </div>
+        </motion.div>
       </section>
-      {/* ROADMAP SECTION */}
-      <section ref={sectionRef} className="py-28 bg-gradient-to-b from-[#111] to-black px-6">
-        <h2 className="text-4xl md:text-5xl font-bold text-center text-white drop-shadow-[0_0_10px_#ff1a1a] mb-20">
+
+      {/* ROADMAP */}
+      <section
+        ref={sectionRef}
+        className="py-32 bg-gradient-to-b from-[#111] to-black px-6 relative overflow-hidden"
+      >
+        <h2 className="text-5xl font-bold text-center mb-24 drop-shadow-[0_0_15px_#ff1a1a]">
           Your Journey with Hustler Bot
         </h2>
 
-        <div className="relative max-w-5xl mx-auto">
+        <svg
+          className="absolute left-1/2 top-0 -translate-x-1/2 z-0"
+          height="100%"
+          width="6"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="6" height="100%" fill="url(#glowLine)" />
+          <defs>
+            <linearGradient id="glowLine" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ff1a1a" />
+              <stop offset="100%" stopColor="transparent" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <div className="relative z-10 max-w-5xl mx-auto flex flex-col gap-20">
           {features.map((item, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
-              viewport={{ once: false }}
-              className={`flex flex-col md:flex-row items-center mb-20 ${
+              viewport={{ once: true }}
+              className={`flex flex-col md:flex-row items-center gap-10 ${
                 index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
               }`}
             >
-              {/* Glow Dot + Line */}
-              <div className="relative w-full md:w-1/5 flex justify-center mb-8 md:mb-0">
-                <div className="w-6 h-6 rounded-full bg-red-600 shadow-[0_0_25px_#ff1a1a] relative z-10" />
-                <div className="absolute top-6 w-1 h-full bg-gradient-to-b from-red-600 to-transparent animate-pulse z-0" />
+              <div className="relative w-12 h-12">
+                <div className="w-6 h-6 rounded-full bg-red-600 shadow-[0_0_25px_#ff1a1a] absolute top-3 left-3 z-10" />
               </div>
 
-              {/* Card Content */}
-              <div className="bg-[#111] border border-red-900 shadow-md text-white rounded-2xl p-6 max-w-lg md:w-4/5">
-                <h3 className="text-xl font-bold mb-2">
+              <div className="bg-[#111] border border-red-900 shadow-md rounded-2xl p-6 max-w-xl w-full">
+                <h3 className="text-2xl font-bold mb-2">
                   {item.icon} {item.title}
                 </h3>
-                <p className="text-gray-300 text-sm">{item.desc}</p>
+                <p className="text-gray-300 text-base leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* BOTTOM CTA */}
-      <section className="py-28 text-center bg-black">
+      {/* CTA */}
+      <section className="py-32 px-6 bg-black text-center">
         <motion.h2
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-4xl font-bold text-white mb-10 drop-shadow-[0_0_12px_#ff1a1a]"
+          transition={{ duration: 1 }}
+          className="text-4xl md:text-5xl font-bold mb-10 drop-shadow-[0_0_20px_#ff1a1a]"
         >
           Ready to Build Your Empire?
         </motion.h2>
 
-        <div className="flex justify-center gap-6">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.2 }}
+          className="text-lg md:text-xl text-gray-300 mb-12 max-w-3xl mx-auto"
+        >
+          Start your journey today — access 24/7 mentorship, instant strategy, and an AI
+          partner that helps you win. No card required.
+        </motion.p>
+
+        <motion.div
+          className="flex flex-col md:flex-row gap-6 justify-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.4, delay: 0.4 }}
+        >
           <button
             onClick={() => navigate("/register")}
-            className="bg-gradient-to-r from-red-600 to-red-800 px-8 py-3 rounded-xl font-bold text-white shadow-lg hover:scale-105 transition"
+            className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-900 rounded-xl text-white font-bold text-lg shadow-xl hover:scale-105 hover:shadow-[0_0_30px_#ff1a1a] transition"
           >
             Start Free Trial
           </button>
           <button
             onClick={() => navigate("/login")}
-            className="bg-gray-800 border border-red-600 px-8 py-3 rounded-xl font-bold text-white hover:bg-gray-700 hover:border-red-400 transition"
+            className="px-8 py-4 bg-gray-800 border border-red-600 rounded-xl text-white font-bold text-lg hover:bg-gray-700 hover:border-red-400 transition"
           >
             Login
           </button>
-        </div>
+        </motion.div>
       </section>
     </div>
   );
