@@ -11,37 +11,34 @@ function LandingPage() {
   const navigate = useNavigate();
   const robotRef = useRef(null);
 
-  // ✅ Load Rive animation with state machine
   const { rive, RiveComponent } = useRive({
     src: "/hustler-robot.riv",
     autoplay: true,
-    stateMachines: ["State Machine 1"], // Use exact name from Rive
+    stateMachines: ["State Machine 1"],
   });
 
-  // ✅ Connect mouseX input from Rive
   useEffect(() => {
     const handleInteraction = (clientX) => {
       const mouseX = clientX / window.innerWidth;
       const input = rive?.inputs?.find((i) => i.name === "mouseX");
       if (input) input.value = mouseX;
     };
-  
+
     const updateMouseX = (e) => handleInteraction(e.clientX);
-  
     const updateOnScroll = () => {
       const fakeX = (window.scrollY % window.innerWidth);
       handleInteraction(fakeX);
     };
-  
+
     window.addEventListener("mousemove", updateMouseX);
     window.addEventListener("scroll", updateOnScroll);
-  
+
     return () => {
       window.removeEventListener("mousemove", updateMouseX);
       window.removeEventListener("scroll", updateOnScroll);
     };
   }, [rive]);
-  
+
   const handleRegister = () => navigate("/register");
   const handleLogin = () => navigate("/login");
 
@@ -109,27 +106,11 @@ function LandingPage() {
               <button onClick={handleLogin}>Login</button>
             </div>
           </motion.div>
+        </div>
 
-          <motion.div
-            className="hero-animation-container"
-            ref={robotRef}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 1 }}
-          >
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                position: "relative",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <RiveComponent style={{ width: "400px", height: "400px" }} />
-            </div>
-          </motion.div>
+        {/* ✅ Moved robot below text/buttons */}
+        <div className="hero-bot-container">
+          <RiveComponent style={{ width: "600px", height: "600px" }} />
         </div>
       </section>
 
@@ -151,7 +132,9 @@ function LandingPage() {
               <div className="turning-dot" />
               <div className="circuit-line" />
               <div className="turning-content">
-                <h3>{item.icon} {item.title}</h3>
+                <h3>
+                  {item.icon} {item.title}
+                </h3>
                 <p>{item.desc}</p>
               </div>
             </motion.div>
