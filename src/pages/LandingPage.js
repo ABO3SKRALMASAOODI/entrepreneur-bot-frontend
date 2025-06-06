@@ -3,16 +3,36 @@ import { useNavigate } from "react-router-dom";
 import "./landing.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Lottie from "lottie-react";
 import { Typewriter } from "react-simple-typewriter";
 import { motion } from "framer-motion";
-import Robot from "./Robot";
+import robotAnimation from "../assets/robot.json";
 
 function LandingPage() {
   const navigate = useNavigate();
   const robotRef = useRef(null);
-
+  const lottieRef = useRef(null); 
+  
   useEffect(() => {
     AOS.init({ duration: 1000 });
+
+    const leftEye = document.querySelector(".left-eye");
+    const rightEye = document.querySelector(".right-eye");
+
+    const handleMouseMove = (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const offsetX = x * 10;
+
+      if (leftEye) leftEye.style.transform = `translateX(${offsetX}px)`;
+      if (rightEye) rightEye.style.transform = `translateX(${offsetX}px)`;
+
+      if (lottieRef.current) {
+        lottieRef.current.style.transform = `translateX(${offsetX / 1.5}px)`;
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   const handleRegister = () => navigate("/register");
@@ -90,7 +110,20 @@ function LandingPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
           >
-            <Robot />
+            <div className="eye-overlay">
+              <div className="eye-socket">
+                <div className="left-eye"></div>
+              </div>
+              <div className="eye-socket">
+                <div className="right-eye"></div>
+              </div>
+            </div>
+            <div
+              style={{ width: "100%", height: "100%" }}
+              ref={lottieRef}
+            >
+              <Lottie animationData={robotAnimation} loop />
+            </div>
           </motion.div>
         </div>
       </section>

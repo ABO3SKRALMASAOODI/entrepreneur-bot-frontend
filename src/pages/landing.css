@@ -1,218 +1,237 @@
 /* General Styles */
 .landing-container {
-    font-family: 'Segoe UI', sans-serif;
-    color: #ffffff;
-    background-color: #000000;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
+  font-family: 'Segoe UI', sans-serif;
+  color: #ffffff;
+  background-color: #000000;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 20px;
+  background: radial-gradient(circle at top left, #1a0000 10%, #000 80%);
+  overflow: hidden;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1300px;
+  width: 100%;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-text {
+  flex: 1;
+  padding-right: 50px;
+  min-width: 320px;
+}
+
+.glow-text {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 0 20px #ff1a1a, 0 0 40px #ff1a1a, 0 0 60px #ff1a1a;
+}
+
+.typing-text {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.cta-buttons {
+  margin-top: 2rem;
+}
+
+.cta-buttons button {
+  background: linear-gradient(90deg, #ff1a1a, #990000);
+  color: #ffffff;
+  border: none;
+  padding: 15px 32px;
+  margin-right: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 0 12px #ff1a1a88;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-buttons button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #ff1a1a;
+}
+
+.hero-animation-container {
+  flex: 1;
+  max-width: 500px;
+  min-width: 300px;
+  height: 350px; /* ✅ fix height to prevent layout jump */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.2s ease;
+  overflow: hidden;
+}
+
+.eye-overlay {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.eye-socket {
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-eye,
+.right-eye {
+  width: 16px;
+  height: 16px;
+  background: #ff1a1a;
+  border-radius: 50%;
+  transition: transform 0.1s ease;
+}
+
+/* Roadmap Section */
+.roadmap {
+  background: linear-gradient(180deg, #111111, #000000);
+  padding: 120px 20px;
+  position: relative;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 80px;
+  color: #ffffff;
+  text-shadow: 0 0 15px #ff1a1a;
+}
+
+.roadmap-turning-container {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 90px;
+}
+
+.roadmap-turning-item {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  padding-left: 70px;
+  padding-right: 70px;
+  transition: all 0.4s ease;
+}
+
+.roadmap-turning-item.left {
+  flex-direction: row;
+}
+
+.roadmap-turning-item.right {
+  flex-direction: row-reverse;
+}
+
+.turning-dot {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 22px;
+  background-color: #ff1a1a;
+  border-radius: 50%;
+  box-shadow: 0 0 20px #ff1a1a, 0 0 40px #ff1a1a;
+  z-index: 2;
+}
+
+.circuit-line {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(#ff1a1a, transparent);
+  transform: translateX(-50%);
+  z-index: 1;
+  animation: pulseLine 3s infinite;
+}
+
+@keyframes pulseLine {
+  0% {
+    box-shadow: 0 0 5px #ff1a1a;
   }
-  
-  /* Hero Section */
-  .hero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 120px 20px;
-    background: radial-gradient(circle at top left, #1a0000 10%, #000 80%);
-    overflow: hidden;
-  }
-  
-  .hero-content {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1300px;
-    width: 100%;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
-  }
-  
-  .hero-text {
-    flex: 1;
-    padding-right: 50px;
-    min-width: 320px;
-  }
-  
-  .glow-text {
-    font-size: 4rem;
-    font-weight: bold;
-    color: #ffffff;
-    text-shadow: 0 0 20px #ff1a1a, 0 0 40px #ff1a1a, 0 0 60px #ff1a1a;
-  }
-  
-  .typing-text {
-    font-size: 1.5rem;
-    margin-top: 1rem;
-    opacity: 0.85;
-    line-height: 1.5;
-  }
-  
-  .cta-buttons {
-    margin-top: 2rem;
-  }
-  
-  .cta-buttons button {
-    background: linear-gradient(90deg, #ff1a1a, #990000);
-    color: #ffffff;
-    border: none;
-    padding: 15px 32px;
-    margin-right: 1rem;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border-radius: 12px;
-    cursor: pointer;
-    box-shadow: 0 0 12px #ff1a1a88;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .cta-buttons button:hover {
-    transform: scale(1.05);
+  50% {
     box-shadow: 0 0 20px #ff1a1a;
   }
-  
-  .hero-animation-container {
-    flex: 1;
-    max-width: 500px;
-    min-width: 300px;
-    height: 500px; /* updated for full Rive robot */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    transition: transform 0.2s ease;
-    overflow: hidden;
+  100% {
+    box-shadow: 0 0 5px #ff1a1a;
   }
-  
-  /* Roadmap Section */
-  .roadmap {
-    background: linear-gradient(180deg, #111111, #000000);
-    padding: 120px 20px;
-    position: relative;
-  }
-  
-  .section-title {
-    text-align: center;
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 80px;
-    color: #ffffff;
-    text-shadow: 0 0 15px #ff1a1a;
-  }
-  
-  .roadmap-turning-container {
-    position: relative;
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 90px;
-  }
-  
-  .roadmap-turning-item {
-    display: flex;
-    align-items: flex-start;
-    position: relative;
-    padding-left: 70px;
-    padding-right: 70px;
-    transition: all 0.4s ease;
-  }
-  
-  .roadmap-turning-item.left {
-    flex-direction: row;
-  }
-  
-  .roadmap-turning-item.right {
-    flex-direction: row-reverse;
-  }
-  
-  .turning-dot {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 22px;
-    height: 22px;
-    background-color: #ff1a1a;
-    border-radius: 50%;
-    box-shadow: 0 0 20px #ff1a1a, 0 0 40px #ff1a1a;
-    z-index: 2;
-  }
-  
-  .circuit-line {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(#ff1a1a, transparent);
-    transform: translateX(-50%);
-    z-index: 1;
-    animation: pulseLine 3s infinite;
-  }
-  
-  @keyframes pulseLine {
-    0% {
-      box-shadow: 0 0 5px #ff1a1a;
-    }
-    50% {
-      box-shadow: 0 0 20px #ff1a1a;
-    }
-    100% {
-      box-shadow: 0 0 5px #ff1a1a;
-    }
-  }
-  
-  .turning-content {
-    background: #111111;
-    padding: 20px 30px;
-    border-radius: 12px;
-    box-shadow: 0 0 25px rgba(255, 26, 26, 0.3);
-    max-width: 600px;
-  }
-  
-  .turning-content h3 {
-    font-size: 1.7rem;
-    margin-bottom: 10px;
-    color: #ffffff;
-  }
-  
-  .turning-content p {
-    font-size: 1.05rem;
-    color: #cccccc;
-    opacity: 0.9;
-  }
-  
-  /* Bottom CTA Section */
-  .bottom-cta {
-    text-align: center;
-    padding: 100px 20px;
-    background-color: #000000;
-  }
-  
-  .bottom-cta h2 {
-    font-size: 2.6rem;
-    margin-bottom: 30px;
-    color: #ffffff;
-    text-shadow: 0 0 10px #ff1a1a;
-  }
-  
-  /* Footer Removed */
-  .footer {
-    display: none;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .hero-content {
-      flex-direction: column;
-    }
-  
-    .hero-animation-container {
-      margin-top: 40px;
-      max-width: 100%;
-      height: 400px;
-    }
-  }
-  
+}
+
+.turning-content {
+  background: #111111;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(255, 26, 26, 0.3);
+  max-width: 600px;
+}
+
+.turning-content h3 {
+  font-size: 1.7rem;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.turning-content p {
+  font-size: 1.05rem;
+  color: #cccccc;
+  opacity: 0.9;
+}
+
+/* Bottom CTA Section */
+.bottom-cta {
+  text-align: center;
+  padding: 100px 20px;
+  background-color: #000000;
+}
+
+.bottom-cta h2 {
+  font-size: 2.6rem;
+  margin-bottom: 30px;
+  color: #ffffff;
+  text-shadow: 0 0 10px #ff1a1a;
+}
+
+/* Footer Removed */
+.footer {
+  display: none;
+}
