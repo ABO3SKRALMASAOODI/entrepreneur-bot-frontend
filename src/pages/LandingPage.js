@@ -5,12 +5,18 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Typewriter } from "react-simple-typewriter";
 import { motion } from "framer-motion";
-import Rive from "rive-react"; // still needed to use <Rive>
+import { useRive } from "rive-react"; // ✅ useRive hook
 
 function LandingPage() {
   const navigate = useNavigate();
   const robotRef = useRef(null);
   const riveRef = useRef(null);
+
+  // ✅ Load Rive animation with hook
+  const { RiveComponent } = useRive({
+    src: "/hustler-robot.rev",
+    autoplay: true,
+  });
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
@@ -112,7 +118,7 @@ function LandingPage() {
               </div>
             </div>
 
-            {/* ✅ Rive animation from public folder */}
+            {/* ✅ Rive animation with useRive hook */}
             <div
               style={{
                 width: "100%",
@@ -121,7 +127,7 @@ function LandingPage() {
               }}
               ref={riveRef}
             >
-              <Rive src="/hustler-robot.rev" style={{ width: "100%", height: "auto" }} />
+              <RiveComponent style={{ width: "100%", height: "auto" }} />
             </div>
           </motion.div>
         </div>
