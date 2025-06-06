@@ -17,16 +17,35 @@ function LandingPage() {
     stateMachines: ["State Machine 1"],
   });
   
-  const { RiveComponent: BubbleBot } = useRive({
+  const { rive: bubbleRive, RiveComponent: BubbleBot } = useRive({
     src: "/hustler-robot.riv",
     autoplay: true,
     stateMachines: ["State Machine 1"],
   });
   
+  
 
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: false });
-
+  useEffect(() => {
+    const handleMouse = (x) => {
+      const mouseX = x / window.innerWidth;
+      const input = bubbleRive?.inputs?.find((i) => i.name === "mouseX");
+      if (input) input.value = mouseX;
+    };
+  
+    const onMouseMove = (e) => handleMouse(e.clientX);
+    const onScroll = () => handleMouse(window.scrollY % window.innerWidth);
+  
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("scroll", onScroll);
+  
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [bubbleRive]);
+  
   useEffect(() => {
     const handleMouse = (x) => {
       const mouseX = x / window.innerWidth;
