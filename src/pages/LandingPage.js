@@ -71,7 +71,7 @@ function LandingPage() {
   return (
     <div className="bg-black text-white font-sans overflow-x-hidden">
       {/* HERO SECTION */}
-      <section className="relative h-screen flex flex-col justify-center items-center text-center px-6">
+      <section className="relative min-h-screen pt-24 flex flex-col justify-center items-center text-center px-6">
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
