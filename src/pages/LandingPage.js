@@ -12,7 +12,7 @@ function LandingPage() {
   const navigate = useNavigate();
   const robotRef = useRef(null);
   const riveRef = useRef(null);  // Reference for the Rive animation
-  
+
   useEffect(() => {
     AOS.init({ duration: 1000 });
 
@@ -122,7 +122,14 @@ function LandingPage() {
               }}
               ref={riveRef}
             >
-              <Rive src={robotRev} style={{ width: "300px", height: "300px" }} />
+              {/* Log the reference to check if it's rendering */}
+              {console.log(riveRef.current)}
+
+              <Rive 
+                src={robotRev} 
+                ref={riveRef} 
+                style={{ width: "100%", height: "auto" }} // Ensures proper scaling
+              />
             </div>
           </motion.div>
         </div>

@@ -71,12 +71,11 @@
   transform: scale(1.05);
   box-shadow: 0 0 20px #ff1a1a;
 }
-
 .hero-animation-container {
   flex: 1;
   max-width: 500px;
   min-width: 300px;
-  height: 500px; /* Set this to an appropriate value */
+  height: 1000px; /* Adjust this to your desired size */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,6 +83,7 @@
   transition: transform 0.2s ease;
   overflow: hidden;
 }
+
 
 .eye-overlay {
   position: absolute;
