@@ -20,16 +20,26 @@ function LandingPage() {
 
   // ✅ Connect mouseX input from Rive
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const updateMouseX = (e) => {
       const mouseX = e.clientX / window.innerWidth;
       const input = rive?.inputs?.find((i) => i.name === "mouseX");
       if (input) input.value = mouseX;
     };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+  
+    window.addEventListener("mousemove", updateMouseX);
+    window.addEventListener("scroll", () => {
+      // Trigger small movement to wake up the bot during scroll
+      const fakeX = (window.scrollY % window.innerWidth) / window.innerWidth;
+      const input = rive?.inputs?.find((i) => i.name === "mouseX");
+      if (input) input.value = fakeX;
+    });
+  
+    return () => {
+      window.removeEventListener("mousemove", updateMouseX);
+      window.removeEventListener("scroll", updateMouseX);
+    };
   }, [rive]);
-
+  
   const handleRegister = () => navigate("/register");
   const handleLogin = () => navigate("/login");
 
