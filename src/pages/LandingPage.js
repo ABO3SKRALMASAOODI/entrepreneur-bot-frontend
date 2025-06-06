@@ -11,11 +11,18 @@ function LandingPage() {
   const navigate = useNavigate();
 
   // Load Rive robot
-  const { rive, RiveComponent } = useRive({
+  const { RiveComponent: HeroBot } = useRive({
     src: "/hustler-robot.riv",
     autoplay: true,
     stateMachines: ["State Machine 1"],
   });
+  
+  const { RiveComponent: BubbleBot } = useRive({
+    src: "/hustler-robot.riv",
+    autoplay: true,
+    stateMachines: ["State Machine 1"],
+  });
+  
 
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: false });
@@ -214,7 +221,7 @@ function LandingPage() {
         onClick={() => navigate("/register")}
       >
         <div className="w-12 h-12 rounded-full overflow-hidden">
-          <RiveComponent style={{ width: '100%', height: '100%' }} />
+        <BubbleBot style={{ width: '100%', height: '100%' }} />
         </div>
         <span className="text-sm text-white opacity-90 whitespace-nowrap">
           Hello, how can I help you with your business today?
