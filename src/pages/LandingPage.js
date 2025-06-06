@@ -10,29 +10,25 @@ import { useRive } from "rive-react"; // ✅ useRive hook
 function LandingPage() {
   const navigate = useNavigate();
   const robotRef = useRef(null);
-  const riveRef = useRef(null);
 
-  // ✅ Load Rive animation with hook
-  const { RiveComponent } = useRive({
+  // ✅ Load Rive animation with state machine
+  const { rive, RiveComponent } = useRive({
     src: "/hustler-robot.riv",
     autoplay: true,
+    stateMachines: ["State Machine 1"], // Use exact name from Rive
   });
 
+  // ✅ Connect mouseX input from Rive
   useEffect(() => {
-    AOS.init({ duration: 1000 });
-
     const handleMouseMove = (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const offsetX = x * 10;
-
-      if (riveRef.current) {
-        riveRef.current.style.transform = `translateX(${offsetX / 1.5}px)`;
-      }
+      const mouseX = e.clientX / window.innerWidth;
+      const input = rive?.inputs?.find((i) => i.name === "mouseX");
+      if (input) input.value = mouseX;
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [rive]);
 
   const handleRegister = () => navigate("/register");
   const handleLogin = () => navigate("/login");
@@ -109,23 +105,15 @@ function LandingPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
           >
-            <div className="eye-overlay">
-              <div className="eye-socket">
-                <div className="left-eye"></div>
-              </div>
-              <div className="eye-socket">
-                <div className="right-eye"></div>
-              </div>
-            </div>
-
-            {/* ✅ Rive animation with useRive hook */}
             <div
               style={{
                 width: "100%",
                 height: "100%",
                 position: "relative",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-              ref={riveRef}
             >
               <RiveComponent style={{ width: "400px", height: "400px" }} />
             </div>
