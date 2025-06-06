@@ -197,21 +197,31 @@ function LandingPage() {
               onClick={() => navigate("/register")}
               className="bg-gradient-to-r from-red-600 to-red-900 px-8 py-4 rounded-xl font-bold text-white shadow-[0_0_20px_#ff1a1a] hover:scale-105 transition"
             >
-              Start Free Trial
-            </button>
-            <button
-              onClick={() => navigate("/login")}
-              className="bg-gray-800 border border-red-600 px-8 py-4 rounded-xl font-bold text-white hover:bg-gray-700 hover:border-red-400 transition"
-            >
-              Login
-            </button>
-          </motion.div>
-        </section>
+                          Start Free Trial
+          </button>
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-gray-800 border border-red-600 px-8 py-4 rounded-xl font-bold text-white hover:bg-gray-700 hover:border-red-400 transition"
+          >
+            Login
+          </button>
+        </motion.div>
+      </section>
 
-        {/* Floating Chat Bot */}
-        <RobotBubble />
+      {/* Floating Chat Bot */}
+      <div
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-[#111] border border-red-700 rounded-full px-4 py-2 shadow-[0_0_25px_#ff1a1a] hover:scale-105 transition cursor-pointer"
+        onClick={() => navigate("/register")}
+      >
+        <div className="w-12 h-12 rounded-full overflow-hidden">
+          <RiveComponent style={{ width: '100%', height: '100%' }} />
+        </div>
+        <span className="text-sm text-white opacity-90 whitespace-nowrap">
+          Hello, how can I help you with your business today?
+        </span>
       </div>
-    </>
+    </div>
+  </>
   );
 }
 
