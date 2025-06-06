@@ -121,7 +121,7 @@ function LandingPage() {
               }}
               ref={riveRef}
             >
-              <Rive src="/robot.rev" style={{ width: "100%", height: "auto" }} />
+              <Rive src="/hustler-robot.rev" style={{ width: "100%", height: "auto" }} />
             </div>
           </motion.div>
         </div>
