@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 120px 20px;
+  padding: 120px 20px 0;
   background: radial-gradient(circle at top left, #1a0000 10%, #000 80%);
   overflow: hidden;
 }
@@ -71,47 +71,21 @@
   transform: scale(1.05);
   box-shadow: 0 0 20px #ff1a1a;
 }
-.hero-bot-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 60px;
-  margin-bottom: 60px;
-  z-index: 2;
-}
 
-
-.eye-overlay {
-  position: absolute;
-  top: 38%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120px;
-  display: flex;
-  justify-content: space-between;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.eye-socket {
-  width: 40px;
-  height: 40px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 0 5px;
+/* ✅ Rive Bot Section */
+.rive-bot-showcase {
+  background: #000000;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 60px 0 100px;
+  overflow: hidden;
 }
 
-.left-eye,
-.right-eye {
-  width: 16px;
-  height: 16px;
-  background: #ff1a1a;
-  border-radius: 50%;
-  transition: transform 0.1s ease;
+.rive-big-robot {
+  width: 700px;
+  height: 700px;
+  max-width: 90vw;
 }
 
 /* Roadmap Section */

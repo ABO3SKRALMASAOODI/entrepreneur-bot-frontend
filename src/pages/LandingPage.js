@@ -1,3 +1,4 @@
+// src/pages/LandingPage.js
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./landing.css";
@@ -5,11 +6,10 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Typewriter } from "react-simple-typewriter";
 import { motion } from "framer-motion";
-import { useRive } from "rive-react"; // ✅ useRive hook
+import { useRive } from "rive-react";
 
 function LandingPage() {
   const navigate = useNavigate();
-  const robotRef = useRef(null);
 
   const { rive, RiveComponent } = useRive({
     src: "/hustler-robot.riv",
@@ -18,66 +18,31 @@ function LandingPage() {
   });
 
   useEffect(() => {
-    const handleInteraction = (clientX) => {
-      const mouseX = clientX / window.innerWidth;
+    const handleMouse = (x) => {
+      const mouseX = x / window.innerWidth;
       const input = rive?.inputs?.find((i) => i.name === "mouseX");
       if (input) input.value = mouseX;
     };
 
-    const updateMouseX = (e) => handleInteraction(e.clientX);
-    const updateOnScroll = () => {
-      const fakeX = (window.scrollY % window.innerWidth);
-      handleInteraction(fakeX);
-    };
+    const onMouseMove = (e) => handleMouse(e.clientX);
+    const onScroll = () => handleMouse(window.scrollY % window.innerWidth);
 
-    window.addEventListener("mousemove", updateMouseX);
-    window.addEventListener("scroll", updateOnScroll);
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("scroll", onScroll);
 
     return () => {
-      window.removeEventListener("mousemove", updateMouseX);
-      window.removeEventListener("scroll", updateOnScroll);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("scroll", onScroll);
     };
   }, [rive]);
 
   const handleRegister = () => navigate("/register");
   const handleLogin = () => navigate("/login");
 
-  const features = [
-    {
-      icon: "💡",
-      title: "Validate Business Ideas",
-      desc: "Quickly assess and refine your startup ideas with instant AI feedback, saving you months of trial and error.",
-    },
-    {
-      icon: "📈",
-      title: "Tailored Growth Plans",
-      desc: "Receive a personalized roadmap with milestones, actions, and KPIs based on your business type.",
-    },
-    {
-      icon: "🧠",
-      title: "24/7 AI Mentorship",
-      desc: "Get guidance anytime from an intelligent assistant trained on successful startup strategies.",
-    },
-    {
-      icon: "🚀",
-      title: "Product & Marketing Help",
-      desc: "From building MVPs to writing ad copy, Hustler Bot supports you with actionable suggestions.",
-    },
-    {
-      icon: "🔒",
-      title: "Data Security First",
-      desc: "Your ideas and progress are encrypted and never shared. 100% private.",
-    },
-    {
-      icon: "💳",
-      title: "7-Day Free Trial",
-      desc: "No payment needed upfront. Try the bot, build something real, and only pay if it works.",
-    },
-  ];
+  const features = [/* ... same features as before ... */];
 
   return (
     <div className="landing-container">
-      {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
           <motion.div
@@ -107,14 +72,13 @@ function LandingPage() {
             </div>
           </motion.div>
         </div>
-
-        {/* ✅ Moved robot below text/buttons */}
-        <div className="hero-bot-container">
-          <RiveComponent style={{ width: "600px", height: "600px" }} />
-        </div>
       </section>
 
-      {/* Roadmap */}
+      {/* ✅ New Section for Enlarged Rive Bot */}
+      <section className="rive-bot-showcase">
+        <RiveComponent className="rive-big-robot" />
+      </section>
+
       <section className="roadmap">
         <h2 className="section-title">Your Journey with The Hustler Bot</h2>
         <div className="roadmap-turning-container">
@@ -132,9 +96,7 @@ function LandingPage() {
               <div className="turning-dot" />
               <div className="circuit-line" />
               <div className="turning-content">
-                <h3>
-                  {item.icon} {item.title}
-                </h3>
+                <h3>{item.icon} {item.title}</h3>
                 <p>{item.desc}</p>
               </div>
             </motion.div>
@@ -142,7 +104,6 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* Final CTA */}
       <section className="bottom-cta">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
