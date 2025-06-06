@@ -142,10 +142,10 @@ function LandingPage() {
             </div>
           </motion.div>
 
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-10 w-[700px] h-[700px] z-0 pointer-events-none opacity-90">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-10 w-[700px] h-[700px] z-0 opacity-90">
           <HeroBot style={{ width: "100%", height: "100%" }} />
           </div>
-        </section>
+         </section>
 
         {/* ROADMAP SECTION */}
         <section ref={sectionRef} className="py-36 bg-black relative z-10 overflow-hidden px-4 md:px-12">
