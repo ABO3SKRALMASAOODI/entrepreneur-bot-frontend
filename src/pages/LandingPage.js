@@ -110,10 +110,11 @@ function LandingPage() {
           </button>
         </motion.div>
 
-        {/* 🧠 Animated Robot */}
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[480px] md:w-[600px]">
-          <RiveComponent className="w-full h-full" />
+        {/* 🧠 Debug Robot Visibility */}
+        <div style={{ width: '600px', height: '600px', background: '#111', marginTop: '50px', zIndex: 1000 }}>
+        <RiveComponent style={{ width: '100%', height: '100%' }} />
         </div>
+
       </section>
       {/* ROADMAP SECTION */}
       <section ref={sectionRef} className="py-28 bg-gradient-to-b from-[#111] to-black px-6">
