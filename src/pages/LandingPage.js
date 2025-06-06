@@ -14,7 +14,7 @@ function LandingPage() {
 
   // ✅ Load Rive animation with hook
   const { RiveComponent } = useRive({
-    src: "/hustler-robot.rev",
+    src: "/hustler-robot.riv",
     autoplay: true,
   });
 
