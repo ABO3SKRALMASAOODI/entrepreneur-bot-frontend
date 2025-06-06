@@ -117,7 +117,7 @@ function LandingPage() {
               style={{ width: "100%", height: "100%" }}
               ref={riveRef}
             >
-              <Rive src="../assets/robot.riv" /> {/* Replace with your Rive file path */}
+             <Rive src={require("../assets/robot.rev")} />  {/* Correct path to the Rive file */}
             </div>
           </motion.div>
         </div>
