@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import API from "../api/api";
-import { Link, useNavigate } from "react-router-dom";
-import { GoogleLogin } from '@react-oauth/google'; // Import GoogleLogin
+import { GoogleLogin } from '@react-oauth/google';  // Import GoogleLogin for Google authentication
+import jwtDecode from 'jwt-decode'; // For decoding Google JWT response
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ function Register() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+  // Handle regular email/password registration
   const handleRegister = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -23,25 +25,29 @@ function Register() {
     }
   };
 
+  // Handle Google Login Success
   const handleGoogleLoginSuccess = async (response) => {
-    const { credential } = response;
-    const decoded = jwtDecode(credential); // Decode Google response to get user data
+    const { credential } = response;  // Google credential returned after successful login
+    const decoded = jwtDecode(credential);  // Decode the JWT to extract user info
+
     try {
-      // Send the decoded Google credentials to the backend for further processing
-      const res = await API.post("/auth/google", { email: decoded.email, name: decoded.name });
-      localStorage.setItem("token", res.data.token);
-      navigate("/chat");
+      // Send the decoded Google credentials to your backend for verification and to get JWT
+      const res = await API.post("/auth/google", { token: credential });
+      localStorage.setItem("token", res.data.token); // Store token for session
+      navigate("/chat"); // Redirect to the chat page
     } catch (err) {
       setMessage("Google login failed.");
     }
   };
 
+  // Handle Google Login Error
   const handleGoogleLoginError = () => {
     setMessage("Google login failed.");
   };
 
   return (
     <div style={{ height: "100vh", backgroundColor: "#000", color: "#fff", fontFamily: "Segoe UI, sans-serif" }}>
+      {/* Header */}
       <div style={{
         padding: "1rem",
         background: "#000",
@@ -53,7 +59,15 @@ function Register() {
         <h2 style={{ margin: 0, fontSize: "1.5rem", color: "#fff" }}>The Hustler Bot</h2>
       </div>
 
-      <div style={{ maxWidth: "400px", margin: "2rem auto", padding: "2rem", backgroundColor: "#111", borderRadius: "16px", boxShadow: "0 0 20px rgba(0,0,0,0.6)" }}>
+      {/* Registration Form */}
+      <div style={{
+        maxWidth: "400px",
+        margin: "2rem auto",
+        padding: "2rem",
+        backgroundColor: "#111",
+        borderRadius: "16px",
+        boxShadow: "0 0 20px rgba(0,0,0,0.6)"
+      }}>
         <h3 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Create Your Account</h3>
 
         <form onSubmit={handleRegister}>
@@ -61,30 +75,34 @@ function Register() {
             type="email"
             placeholder="Email"
             value={email}
-            required
             onChange={(e) => setEmail(e.target.value)}
+            required
             style={inputStyle}
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
-            required
             onChange={(e) => setPassword(e.target.value)}
+            required
             style={inputStyle}
           />
           <button type="submit" style={btnStyle}>Register</button>
         </form>
 
         {/* Google Login Button */}
-        <GoogleLogin
-          onSuccess={handleGoogleLoginSuccess}
-          onError={handleGoogleLoginError}
-          useOneTap
-        />
+        <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
+          <GoogleLogin
+            onSuccess={handleGoogleLoginSuccess}
+            onError={handleGoogleLoginError}
+            useOneTap
+          />
+        </div>
 
-        {message && <p style={{ marginTop: "1rem", color: "#ccc", fontSize: "0.95rem" }}>{message}</p>}
+        {/* Display messages */}
+        {message && <p style={{ marginTop: "1rem", color: "#ccc", fontSize: "0.95rem", textAlign: "center" }}>{message}</p>}
 
+        {/* Links to Login and Legal Terms */}
         <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.9rem" }}>
           Already have an account?{" "}
           <Link to="/login" style={linkStyle}>Login</Link>
@@ -98,6 +116,7 @@ function Register() {
   );
 }
 
+// Styles for the components
 const inputStyle = {
   width: "100%",
   padding: "12px",

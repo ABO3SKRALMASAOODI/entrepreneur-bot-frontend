@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { GoogleLogin } from '@react-oauth/google'; // Import GoogleLogin
-import jwtDecode from 'jwt-decode'; // Import jwtDecode
+import API from "../api/api";
+import { GoogleLogin } from '@react-oauth/google';  // Import GoogleLogin for Google authentication
+import jwtDecode from 'jwt-decode'; // For decoding Google JWT response
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleNext = (e) => {
+  // Handle regular email/password sign-in
+  const handleNext = async (e) => {
     e.preventDefault();
     setMessage("");
 
@@ -16,30 +18,40 @@ function SignIn() {
       setMessage("Please enter your email");
       return;
     }
-    localStorage.removeItem("seen_intro"); // Always show intro on new login
 
-    navigate(`/enter-password?email=${encodeURIComponent(email)}`);
+    try {
+      // Send email to the backend for verification
+      const res = await API.post("/auth/login", { email });
+      localStorage.setItem("token", res.data.token); // Store the token for authentication
+      navigate("/chat"); // Redirect to chat
+    } catch (err) {
+      setMessage(err.response?.data?.error || "Sign-in failed");
+    }
   };
 
+  // Handle Google Login Success
   const handleGoogleLoginSuccess = async (response) => {
-    const { credential } = response;
-    const decoded = jwtDecode(credential); // Decode Google response to get user data
+    const { credential } = response;  // Google credential returned after successful login
+    const decoded = jwtDecode(credential);  // Decode the JWT to extract user info
+
     try {
-      // Send the decoded Google credentials to the backend for further processing
-      const res = await API.post("/auth/google", { email: decoded.email, name: decoded.name });
-      localStorage.setItem("token", res.data.token);
-      navigate("/chat");
+      // Send the decoded Google credentials to your backend for verification and to get JWT
+      const res = await API.post("/auth/google", { token: credential });
+      localStorage.setItem("token", res.data.token); // Store token for session
+      navigate("/chat"); // Redirect to the chat page
     } catch (err) {
       setMessage("Google login failed.");
     }
   };
 
+  // Handle Google Login Error
   const handleGoogleLoginError = () => {
     setMessage("Google login failed.");
   };
 
   return (
     <div style={{ height: "100vh", backgroundColor: "#000", color: "#fff", fontFamily: "Segoe UI, sans-serif" }}>
+      {/* Header */}
       <div style={{
         padding: "1rem",
         background: "#000",
@@ -51,6 +63,7 @@ function SignIn() {
         <h2 style={{ margin: 0, fontSize: "1.5rem", color: "#fff" }}>The Hustler Bot</h2>
       </div>
 
+      {/* SignIn Form */}
       <div style={{
         maxWidth: "400px",
         margin: "2rem auto",
@@ -66,24 +79,27 @@ function SignIn() {
             type="email"
             placeholder="Email"
             value={email}
-            required
             onChange={(e) => setEmail(e.target.value)}
+            required
             style={inputStyle}
           />
 
           <button type="submit" style={btnStyle}>Next</button>
         </form>
 
-        <GoogleLogin
-          onSuccess={handleGoogleLoginSuccess}
-          onError={handleGoogleLoginError}
-          useOneTap
-        />
+        {/* Google Login Button */}
+        <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
+          <GoogleLogin
+            onSuccess={handleGoogleLoginSuccess}
+            onError={handleGoogleLoginError}
+            useOneTap
+          />
+        </div>
 
-        {message && (
-          <p style={{ marginTop: "1rem", color: "#ccc", fontSize: "0.95rem", textAlign: "center" }}>{message}</p>
-        )}
+        {/* Display messages */}
+        {message && <p style={{ marginTop: "1rem", color: "#ccc", fontSize: "0.95rem", textAlign: "center" }}>{message}</p>}
 
+        {/* Links to Register and Legal Terms */}
         <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.9rem" }}>
           Don’t have an account?{" "}
           <Link to="/register" style={linkStyle}>Register</Link>
@@ -97,6 +113,7 @@ function SignIn() {
   );
 }
 
+// Styles for the components
 const inputStyle = {
   width: "100%",
   padding: "12px",
