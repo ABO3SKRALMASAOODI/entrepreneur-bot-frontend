@@ -8,7 +8,6 @@ import {
 } from "../api/api";
 import API from "../api/api";
 
-// Modal for Subscription
 function SubscribeModal({ onClose, onSubscribe }) {
   return (
     <div style={modalOverlay}>
@@ -32,7 +31,6 @@ function SubscribeModal({ onClose, onSubscribe }) {
   );
 }
 
-// Intro Modal
 function IntroModal({ onContinue }) {
   return (
     <div style={modalOverlay}>
@@ -56,6 +54,7 @@ function IntroModal({ onContinue }) {
     </div>
   );
 }
+
 function Chat() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
@@ -101,33 +100,37 @@ function Chat() {
       setMessages([]);
     }
   };
-
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-
+  
     try {
       let sessionId = currentSessionId;
-
+  
       if (!sessionId) {
         sessionId = await startSession();  // ✅ Now returns the number directly
         setCurrentSessionId(sessionId);
         await loadSessions();
       }
-
+      
+  
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-
+      
       console.log("Sending:", { sessionId, prompt });
       const reply = await sendMessageToSession(sessionId, prompt);
-
+  
+      if (messages.length === 3) {
+        await loadSessions();
+      }
+  
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
     }
   };
-
+  
   const handleNewSession = () => {
     setMessages([]);
     setPrompt("");
@@ -159,33 +162,74 @@ function Chat() {
     <div style={layout}>
       <Link to="/account" style={floatingAccountBtn}>👤</Link>
 
-      {/* Sidebar */}
-      <div style={{ position: "fixed", top: 0, left: 0, height: "100%", width: "260px", backgroundColor: "#111", color: "#fff", padding: sidebarOpen ? "2rem 1rem" : "0", transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)", transition: "transform 0.3s ease-in-out", zIndex: 1000 }}>
+      <div style={{
+        flex: "0 0 260px",
+        width: sidebarOpen ? "260px" : "0",
+        minWidth: sidebarOpen ? "260px" : "0",
+        maxWidth: sidebarOpen ? "260px" : "0",
+        transition: "width 0.3s ease",
+        backgroundColor: "#111",
+        color: "#fff",
+        padding: sidebarOpen ? "2rem 1rem" : "0",
+        overflow: "hidden"
+      }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
           <button onClick={() => setSidebarOpen(false)} style={closeBtn}>×</button>
         </div>
 
-        {/* Sidebar content */}
+        <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
+          {userEmail || "User"}
+        </p>
+
         <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
-        <button onClick={() => { setSidebarOpen(false); setShowModal(true); }} style={sidebarBtn}>Subscribe</button>
+        <button onClick={() => {
+          setSidebarOpen(false);
+          setShowModal(true);
+        }} style={sidebarBtn}>Subscribe</button>
         <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
+
+        <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
+        <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
+
+        <div style={{ maxHeight: "300px", overflowY: "auto", marginBottom: "1rem" }}>
+          {sessions.map((s) => (
+            <button key={s.id} onClick={() => loadMessages(s.id)} style={{
+              ...sidebarBtn,
+              backgroundColor: currentSessionId === s.id ? "#b30000" : "#222",
+              marginBottom: "0.5rem"
+            }}>
+              {s.title || `Session ${s.id}`}
+            </button>
+          ))}
+        </div>
+        <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
       </div>
 
-      {/* Main Chat Area */}
-      <div style={{ marginLeft: sidebarOpen ? "260px" : "0", flexGrow: 1, display: "flex", flexDirection: "column", height: "calc(100vh - 60px)", overflow: "hidden" }}>
-        {/* Top Bar */}
+      <div style={{
+        flexGrow: 1,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        minWidth: 0
+      }}>
         <div style={topBar}>
           <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>☰</button>
           <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
           <div style={{ width: "30px" }} />
         </div>
 
-        {/* Chat Window */}
-        <div style={{ flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem", display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#000" }}>
+        <div style={chatWindow}>
           {messages.map((msg, i) => (
-            <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
-              <div style={{ background: msg.role === "user" ? "#8b0000" : "#660000", padding: "12px 16px", borderRadius: "16px", color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap", boxShadow: "0 2px 10px rgba(0,0,0,0.2)" }}>
+            <div key={i} style={{
+              display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
+            }}>
+              <div style={{
+                background: msg.role === "user" ? "#8b0000" : "#660000",
+                padding: "12px 16px", borderRadius: "16px",
+                color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+              }}>
                 <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
                 <div style={{ marginTop: "6px" }}>{msg.content}</div>
               </div>
@@ -194,13 +238,17 @@ function Chat() {
           <div ref={bottomRef} />
         </div>
 
-        {/* Chat Form */}
         <form onSubmit={handleSend} style={chatForm}>
-          <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="Ask your business question..." rows={2} style={inputBox} />
+          <textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Ask your business question..."
+            rows={2}
+            style={inputBox}
+          />
           <button type="submit" style={mainBtn}>➤</button>
         </form>
 
-        {/* Error Message */}
         {error && (
           <div style={{ padding: "0.5rem 1rem", color: "#ff8080", backgroundColor: "#2f1f1f" }}>
             ❌ {error}
@@ -218,59 +266,33 @@ function Chat() {
     </div>
   );
 }
+
 // 🔧 Styles
+
 const layout = {
-  height: "100vh",
-  width: "100vw",
-  display: "flex",
-  flexDirection: "row",
-  backgroundColor: "#000",
-  color: "#eee",
-  fontFamily: "Segoe UI, sans-serif",
+  height: "100vh", width: "100vw", display: "flex", flexDirection: "row",
+  backgroundColor: "#000", color: "#eee", fontFamily: "Segoe UI, sans-serif"
 };
 
 const topBar = {
-  padding: "1rem",
-  paddingTop: "calc(env(safe-area-inset-top, 1rem) + 0.5rem)", // iOS safe padding for notch
-  background: "#000",
-  borderBottom: "1px solid #222",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  position: "sticky",
-  top: 0,
-  zIndex: 1000,
+  padding: "1rem", background: "#000", borderBottom: "1px solid #222",
+  display: "flex", justifyContent: "space-between", alignItems: "center"
 };
 
 const chatWindow = {
-  flexGrow: 1,
-  overflowY: "auto",
-  padding: "1rem 1rem 2rem",
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem",
-  backgroundColor: "#000",
+  flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem",
+  display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#000"
 };
 
 const chatForm = {
-  padding: "1rem",
-  backgroundColor: "#000",
-  display: "flex",
-  justifyContent: "center",
-  borderTop: "1px solid #222",
+  padding: "1rem", backgroundColor: "#000", display: "flex",
+  justifyContent: "center", borderTop: "1px solid #222"
 };
 
 const inputBox = {
-  width: "70%",
-  maxWidth: "800px",
-  backgroundColor: "#111",
-  color: "#fff",
-  border: "1px solid #444",
-  borderRadius: "12px",
-  padding: "12px",
-  fontSize: "1rem",
-  resize: "none",
-  marginRight: "10px",
+  width: "70%", maxWidth: "800px", backgroundColor: "#111",
+  color: "#fff", border: "1px solid #444", borderRadius: "12px",
+  padding: "12px", fontSize: "1rem", resize: "none", marginRight: "10px"
 };
 
 const mainBtn = {
@@ -280,7 +302,7 @@ const mainBtn = {
   borderRadius: "10px",
   border: "none",
   cursor: "pointer",
-  fontSize: "1rem",
+  fontSize: "1rem"
 };
 
 const linkStyle = {
@@ -288,7 +310,7 @@ const linkStyle = {
   marginTop: "0.5rem",
   color: "#ccc",
   textDecoration: "underline",
-  fontSize: "0.95rem",
+  fontSize: "0.95rem"
 };
 
 const sidebarBtn = {
@@ -300,22 +322,13 @@ const sidebarBtn = {
   borderRadius: "10px",
   border: "none",
   fontSize: "1rem",
-  cursor: "pointer",
+  cursor: "pointer"
 };
 
 const closeBtn = {
-  backgroundColor: "#222",
-  border: "none",
-  borderRadius: "50%",
-  width: "32px",
-  height: "32px",
-  color: "#fff",
-  fontSize: "1.2rem",
-  fontWeight: "bold",
-  cursor: "pointer",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
+  backgroundColor: "#222", border: "none", borderRadius: "50%",
+  width: "32px", height: "32px", color: "#fff", fontSize: "1.2rem",
+  fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
 };
 
 const floatingAccountBtn = {
@@ -334,73 +347,33 @@ const floatingAccountBtn = {
   zIndex: 10005,
   textDecoration: "none",
   border: "1px solid #444",
-  boxShadow: "0 0 10px rgba(0,0,0,0.4)",
+  boxShadow: "0 0 10px rgba(0,0,0,0.4)"
 };
 
 const modalOverlay = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100vw",
-  height: "100vh",
-  backgroundColor: "rgba(0, 0, 0, 0.85)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 10002,
+  position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
+  backgroundColor: "rgba(0, 0, 0, 0.85)", display: "flex",
+  justifyContent: "center", alignItems: "center", zIndex: 10002
 };
 
 const modalContent = {
-  background: "#111",
-  borderRadius: "1.5rem",
-  padding: "3rem",
-  width: "95%",
-  maxWidth: "650px",
-  color: "#fff",
-  boxShadow: "0 0 50px rgba(0,0,0,0.8)",
-  textAlign: "center",
+  background: "#111", borderRadius: "1.5rem", padding: "3rem",
+  width: "95%", maxWidth: "650px", color: "#fff", boxShadow: "0 0 50px rgba(0,0,0,0.8)",
+  textAlign: "center"
 };
 
-const modalTitle = {
-  marginBottom: "1.5rem",
-  fontSize: "2rem",
-};
-
-const modalDescription = {
-  fontSize: "1.1rem",
-  color: "#ccc",
-  marginBottom: "2rem",
-};
-
-const modalList = {
-  paddingLeft: "1.8rem",
-  lineHeight: "1.8",
-  fontSize: "1rem",
-  color: "#ddd",
-  textAlign: "left",
-};
-
+const modalTitle = { marginBottom: "1.5rem", fontSize: "2rem" };
+const modalDescription = { fontSize: "1.1rem", color: "#ccc", marginBottom: "2rem" };
+const modalList = { paddingLeft: "1.8rem", lineHeight: "1.8", fontSize: "1rem", color: "#ddd", textAlign: "left" };
 const subscribeButton = {
-  background: "#8b0000",
-  color: "#fff",
-  padding: "14px 28px",
-  borderRadius: "12px",
-  border: "none",
-  cursor: "pointer",
-  fontSize: "1.1rem",
-  width: "100%",
-  fontWeight: "bold",
+  background: "#8b0000", color: "#fff", padding: "14px 28px",
+  borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1.1rem",
+  width: "100%", fontWeight: "bold"
 };
-
 const cancelButton = {
-  background: "none",
-  border: "none",
-  color: "#aaa",
-  textDecoration: "underline",
-  cursor: "pointer",
-  display: "block",
-  margin: "1rem auto 0",
-  fontSize: "0.95rem",
+  background: "none", border: "none", color: "#aaa",
+  textDecoration: "underline", cursor: "pointer", display: "block",
+  margin: "1rem auto 0", fontSize: "0.95rem"
 };
 
 export default Chat;

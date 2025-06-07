@@ -7,14 +7,6 @@ body {
   background-color: #000;
   color: #fff;
   scroll-behavior: smooth;
-  margin: 0;
-  padding: 0;
-  overflow: hidden; /* Prevent body from scrolling */
-}
-
-html, #root {
-  height: 100%; /* Full height */
-  overflow: hidden; /* Prevent scrolling on the root element */
 }
 
 /* Optional glow effect */
@@ -28,53 +20,15 @@ html, #root {
   animation: pulseLine 2s infinite;
 }
 
-#root {
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* Full screen height */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Flexbox layout for sidebar and main content */
-.layout {
-  display: flex;
-  height: 100%;
+::-webkit-scrollbar-thumb {
+  background: #ff1a1a;
+  border-radius: 4px;
 }
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 260px;
-  height: 100%;
-  background-color: #111;
-  color: #fff;
-  padding: 2rem 1rem;
-  transition: transform 0.3s ease-in-out;
-  z-index: 1000;
-}
-
-.chatWindow {
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  height: 100%;
-  flex-grow: 1;
-  background-color: #000;
-  overflow: hidden; /* Prevent scrolling within the chat window */
-}
-
-.chatMessages {
-  flex-grow: 1; /* Allow chat messages container to grow */
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  overflow: hidden; /* Prevent scrolling for chat messages */
-}
-
-.chatForm {
-  padding: 1rem;
-  background-color: #000;
-  display: flex;
-  justify-content: center;
-  border-top: 1px solid #222;
+::-webkit-scrollbar-track {
+  background: #000;
 }
