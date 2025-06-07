@@ -165,18 +165,17 @@ function Chat() {
       {/* Sidebar */}
       <div
         style={{
-          transition: "transform 0.3s ease-in-out",
-          width: "260px",
-          transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
-          backgroundColor: "#111",
-          color: "#fff",
-          padding: sidebarOpen ? "2rem 1rem" : "0",
-          overflow: "hidden",
-          position: "absolute",
+          position: "fixed",
           top: 0,
           left: 0,
           height: "100%",
-          zIndex: 100
+          width: "260px",
+          backgroundColor: "#111",
+          color: "#fff",
+          padding: sidebarOpen ? "2rem 1rem" : "0",
+          transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
+          transition: "transform 0.3s ease-in-out",
+          zIndex: 1000
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -220,7 +219,8 @@ function Chat() {
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
-          paddingLeft: sidebarOpen ? "260px" : "0",
+          transition: "padding-left 0.3s ease-in-out",
+          paddingLeft: window.innerWidth >= 768 && sidebarOpen ? "260px" : "0",
         }}
       >
         <div style={topBar}>
