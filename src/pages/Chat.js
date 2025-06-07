@@ -121,10 +121,6 @@ function Chat() {
       console.log("Sending:", { sessionId, prompt });
       const reply = await sendMessageToSession(sessionId, prompt);
 
-      if (messages.length === 3) {
-        await loadSessions();
-      }
-
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
@@ -169,13 +165,13 @@ function Chat() {
           top: 0,
           left: 0,
           height: "100%",
-          width: window.innerWidth <= 768 ? "200px" : "260px",  // Adjust sidebar width for mobile
+          width: "260px",
           backgroundColor: "#111",
           color: "#fff",
-          padding: window.innerWidth <= 768 ? "1rem" : "2rem 1rem",  // Reduced padding for mobile
+          padding: sidebarOpen ? "2rem 1rem" : "0",
           transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
           transition: "transform 0.3s ease-in-out",
-          zIndex: 1000,
+          zIndex: 1000
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -221,20 +217,10 @@ function Chat() {
           overflow: "hidden",
           transition: "padding-left 0.3s ease-in-out",
           paddingLeft: window.innerWidth >= 768 && sidebarOpen ? "260px" : "0",
-          position: "relative",
         }}
       >
         <div style={topBar}>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            style={{
-              ...mainBtn,
-              marginRight: "1rem",
-              zIndex: 10001,  // Ensure the button is always on top
-            }}
-          >
-            ☰
-          </button>
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>☰</button>
           <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
           <div style={{ width: "30px" }} />
         </div>
@@ -295,63 +281,42 @@ const layout = {
 };
 
 const topBar = {
-  padding: window.innerWidth <= 768 ? "0.5rem" : "1rem",  // Reduced padding for mobile
-  background: "#000",
-  borderBottom: "1px solid #222",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  minHeight: window.innerWidth <= 768 ? "48px" : "auto",
+  padding: "1rem", background: "#000", borderBottom: "1px solid #222",
+  display: "flex", justifyContent: "space-between", alignItems: "center"
 };
 
 const chatWindow = {
-  flexGrow: 1,
-  overflowY: "auto",
-  padding: window.innerWidth <= 768 ? "0.5rem 0.5rem 1.5rem" : "1rem 1rem 2rem",  // Reduced padding for mobile
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem",
-  backgroundColor: "#000",
+  flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem",
+  display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#000"
 };
 
 const chatForm = {
-  padding: window.innerWidth <= 768 ? "0.5rem" : "1rem",
-  backgroundColor: "#000",
-  display: "flex",
-  justifyContent: "center",
-  borderTop: "1px solid #222",
+  padding: "1rem", backgroundColor: "#000", display: "flex",
+  justifyContent: "center", borderTop: "1px solid #222"
 };
 
 const inputBox = {
-  width: window.innerWidth <= 768 ? "85%" : "70%",  // Adjust width for mobile
-  maxWidth: "800px",
-  backgroundColor: "#111",
-  color: "#fff",
-  border: "1px solid #444",
-  borderRadius: "12px",
-  padding: window.innerWidth <= 768 ? "8px" : "12px",
-  fontSize: window.innerWidth <= 768 ? "0.9rem" : "1rem",
-  resize: "none",
-  marginRight: "10px",
+  width: "70%", maxWidth: "800px", backgroundColor: "#111",
+  color: "#fff", border: "1px solid #444", borderRadius: "12px",
+  padding: "12px", fontSize: "1rem", resize: "none", marginRight: "10px"
 };
 
-const floatingAccountBtn = {
-  position: "fixed",
-  top: window.innerWidth <= 768 ? "10px" : "16px",  // Adjust position for mobile
-  right: "16px",
-  backgroundColor: "#222",
+const mainBtn = {
+  backgroundColor: "#8b0000",
   color: "#fff",
-  borderRadius: "50%",
-  width: window.innerWidth <= 768 ? "36px" : "42px",  // Adjust size for mobile
-  height: window.innerWidth <= 768 ? "36px" : "42px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  fontSize: window.innerWidth <= 768 ? "1rem" : "1.2rem",
-  zIndex: 10005,
-  textDecoration: "none",
-  border: "1px solid #444",
-  boxShadow: "0 0 10px rgba(0,0,0,0.4)"
+  padding: "10px 18px",
+  borderRadius: "10px",
+  border: "none",
+  cursor: "pointer",
+  fontSize: "1rem"
+};
+
+const linkStyle = {
+  display: "block",
+  marginTop: "0.5rem",
+  color: "#ccc",
+  textDecoration: "underline",
+  fontSize: "0.95rem"
 };
 
 const sidebarBtn = {
@@ -362,8 +327,8 @@ const sidebarBtn = {
   padding: "12px",
   borderRadius: "10px",
   border: "none",
-  fontSize: window.innerWidth <= 768 ? "0.9rem" : "1rem",  // Adjust button size for mobile
-  cursor: "pointer",
+  fontSize: "1rem",
+  cursor: "pointer"
 };
 
 const closeBtn = {
@@ -372,12 +337,49 @@ const closeBtn = {
   fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
 };
 
-const linkStyle = {
-  display: "block",
-  marginTop: "0.5rem",
-  color: "#ccc",
-  textDecoration: "underline",
-  fontSize: "0.95rem"
+const floatingAccountBtn = {
+  position: "fixed",
+  top: "16px",
+  right: "16px",
+  backgroundColor: "#222",
+  color: "#fff",
+  borderRadius: "50%",
+  width: "42px",
+  height: "42px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  fontSize: "1.2rem",
+  zIndex: 10005,
+  textDecoration: "none",
+  border: "1px solid #444",
+  boxShadow: "0 0 10px rgba(0,0,0,0.4)"
+};
+
+const modalOverlay = {
+  position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
+  backgroundColor: "rgba(0, 0, 0, 0.85)", display: "flex",
+  justifyContent: "center", alignItems: "center", zIndex: 10002
+};
+
+const modalContent = {
+  background: "#111", borderRadius: "1.5rem", padding: "3rem",
+  width: "95%", maxWidth: "650px", color: "#fff", boxShadow: "0 0 50px rgba(0,0,0,0.8)",
+  textAlign: "center"
+};
+
+const modalTitle = { marginBottom: "1.5rem", fontSize: "2rem" };
+const modalDescription = { fontSize: "1.1rem", color: "#ccc", marginBottom: "2rem" };
+const modalList = { paddingLeft: "1.8rem", lineHeight: "1.8", fontSize: "1rem", color: "#ddd", textAlign: "left" };
+const subscribeButton = {
+  background: "#8b0000", color: "#fff", padding: "14px 28px",
+  borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1.1rem",
+  width: "100%", fontWeight: "bold"
+};
+const cancelButton = {
+  background: "none", border: "none", color: "#aaa",
+  textDecoration: "underline", cursor: "pointer", display: "block",
+  margin: "1rem auto 0", fontSize: "0.95rem"
 };
 
 export default Chat;
