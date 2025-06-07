@@ -26,9 +26,9 @@ const StickyNavbar = () => {
           The Hustler Bot
         </Link>
         <div className="flex gap-6">
-          <Link to="/#features" className="text-white hover:text-red-500 transition">
-            Features
-          </Link>
+        <Link to="/features" className="text-white hover:text-red-500 transition">
+          Features
+        </Link>
           <Link to="/register" className="text-white hover:text-red-500 transition">
             Register
           </Link>
