@@ -7,6 +7,14 @@ body {
   background-color: #000;
   color: #fff;
   scroll-behavior: smooth;
+  height: 100%; /* Ensure body takes full height */
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent body from scrolling */
+}
+
+html, #root {
+  height: 100%; /* Ensure the root element also takes full height */
 }
 
 /* Optional glow effect */
