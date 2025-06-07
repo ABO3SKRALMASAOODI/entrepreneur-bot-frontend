@@ -43,8 +43,8 @@ const FeaturesPage = () => {
     <div className="bg-black text-white min-h-screen font-sans">
       <StickyNavbar />
 
-      {/* Top-left Go Back Button */}
-      <div className="fixed top-6 left-6 z-50">
+      {/* Go Back button (after navbar logo) */}
+      <div className="mt-24 px-6">
         <button
           onClick={() => navigate("/")}
           className="bg-gray-800 border border-red-600 text-white px-4 py-2 rounded-xl shadow-[0_0_15px_#ff1a1a] hover:bg-gray-700 transition"
@@ -53,18 +53,7 @@ const FeaturesPage = () => {
         </button>
       </div>
 
-      {/* Bottom-left Start Trial Button */}
-      <div className="fixed bottom-6 left-6 z-50">
-        <button
-          onClick={() => navigate("/register")}
-          className="bg-gradient-to-r from-red-600 to-red-900 text-white px-6 py-3 rounded-xl font-bold shadow-[0_0_20px_#ff1a1a] hover:scale-105 transition"
-        >
-          Start Trial
-        </button>
-      </div>
-
-      {/* Main Section */}
-      <section className="pt-36 pb-20 px-6 max-w-6xl mx-auto text-center">
+      <section className="pt-12 pb-20 px-6 max-w-6xl mx-auto text-center">
         <motion.h1
           className="text-5xl md:text-6xl font-bold mb-12 drop-shadow-[0_0_15px_#ff1a1a]"
           initial={{ opacity: 0, y: 40 }}
@@ -88,6 +77,16 @@ const FeaturesPage = () => {
               <p className="text-gray-300">{feature.description}</p>
             </motion.div>
           ))}
+        </div>
+
+        {/* Start Trial Button after all features */}
+        <div className="mt-16 text-left">
+          <button
+            onClick={() => navigate("/register")}
+            className="bg-gradient-to-r from-red-600 to-red-900 text-white px-6 py-3 rounded-xl font-bold shadow-[0_0_20px_#ff1a1a] hover:scale-105 transition"
+          >
+            Start Trial
+          </button>
         </div>
       </section>
     </div>
