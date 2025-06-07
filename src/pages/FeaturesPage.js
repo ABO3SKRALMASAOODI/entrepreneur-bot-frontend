@@ -80,7 +80,7 @@ const FeaturesPage = () => {
         </div>
 
         {/* Start Trial Button after all features */}
-        <div className="mt-16 text-left">
+        <div className="mt-16 flex justify-end">
           <button
             onClick={() => navigate("/register")}
             className="bg-gradient-to-r from-red-600 to-red-900 text-white px-6 py-3 rounded-xl font-bold shadow-[0_0_20px_#ff1a1a] hover:scale-105 transition"
