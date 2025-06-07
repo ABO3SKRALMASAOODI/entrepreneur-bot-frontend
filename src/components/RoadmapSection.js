@@ -40,6 +40,7 @@ function RoadmapSection() {
 />
 
 
+
       {/* 🧭 Section Title */}
       <motion.h2
         className="text-5xl md:text-6xl font-bold text-center mb-24 text-white drop-shadow-[0_0_15px_#ff1a1a] relative z-10"
