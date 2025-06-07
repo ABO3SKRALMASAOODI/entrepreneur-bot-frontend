@@ -277,8 +277,6 @@ function Chat() {
     </div>
   );
 }
-
-// 🔧 Styles
 // 🔧 Styles
 const layout = {
   height: "100vh",
@@ -292,7 +290,7 @@ const layout = {
 
 const topBar = {
   padding: "1rem",
-  paddingTop: "calc(env(safe-area-inset-top, 1rem) + 0.5rem)", // iOS safe padding
+  paddingTop: "calc(env(safe-area-inset-top, 1rem) + 0.5rem)", // iOS safe padding for notch
   background: "#000",
   borderBottom: "1px solid #222",
   display: "flex",
