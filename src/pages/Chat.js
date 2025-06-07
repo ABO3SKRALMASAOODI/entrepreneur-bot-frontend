@@ -285,9 +285,15 @@ const layout = {
 };
 
 const topBar = {
-  padding: "1rem", background: "#000", borderBottom: "1px solid #222",
-  display: "flex", justifyContent: "space-between", alignItems: "center"
+  padding: window.innerWidth <= 768 ? "0.5rem" : "1rem",
+  background: "#000",
+  borderBottom: "1px solid #222",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  minHeight: window.innerWidth <= 768 ? "48px" : "auto"
 };
+
 
 const chatWindow = {
   flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem",
@@ -295,15 +301,27 @@ const chatWindow = {
 };
 
 const chatForm = {
-  padding: "1rem", backgroundColor: "#000", display: "flex",
-  justifyContent: "center", borderTop: "1px solid #222"
+  padding: window.innerWidth <= 768 ? "0.5rem" : "1rem",
+  backgroundColor: "#000",
+  display: "flex",
+  justifyContent: "center",
+  borderTop: "1px solid #222"
 };
 
+
 const inputBox = {
-  width: "70%", maxWidth: "800px", backgroundColor: "#111",
-  color: "#fff", border: "1px solid #444", borderRadius: "12px",
-  padding: "12px", fontSize: "1rem", resize: "none", marginRight: "10px"
+  width: "70%",
+  maxWidth: "800px",
+  backgroundColor: "#111",
+  color: "#fff",
+  border: "1px solid #444",
+  borderRadius: "12px",
+  padding: window.innerWidth <= 768 ? "8px" : "12px",
+  fontSize: window.innerWidth <= 768 ? "0.9rem" : "1rem",
+  resize: "none",
+  marginRight: "10px"
 };
+
 
 const mainBtn = {
   backgroundColor: "#8b0000",
