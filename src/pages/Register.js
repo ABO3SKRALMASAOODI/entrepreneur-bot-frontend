@@ -28,10 +28,9 @@ function Register() {
   // Handle Google Login Success
   const handleGoogleLoginSuccess = async (response) => {
     const { credential } = response;  // Google credential returned after successful login
-    const decoded = jwtDecode(credential);  // Decode the JWT to extract user info
 
     try {
-      // Send the decoded Google credentials to your backend for verification and to get JWT
+      // Send the Google token to your backend for verification and to get JWT
       const res = await API.post("/auth/google", { token: credential });
       localStorage.setItem("token", res.data.token); // Store token
       navigate("/chat"); // Redirect to chat page
@@ -102,7 +101,7 @@ function Register() {
           <Link to="/legal" style={linkStyle}>View Terms & Policies</Link>
         </p>
 
-        {/* Google Login Button */}
+        {/* Google Login Button (Below the email form) */}
         <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
           <GoogleLogin
             onSuccess={handleGoogleLoginSuccess}

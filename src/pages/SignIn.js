@@ -32,10 +32,9 @@ function SignIn() {
   // Handle Google Login Success
   const handleGoogleLoginSuccess = async (response) => {
     const { credential } = response;  // Google credential returned after successful login
-    const decoded = jwtDecode(credential);  // Decode the JWT to extract user info
 
     try {
-      // Send the decoded Google credentials to your backend for verification and to get JWT
+      // Send the Google token to the backend for verification and to get JWT
       const res = await API.post("/auth/google", { token: credential });
       localStorage.setItem("token", res.data.token); // Store token for session
       navigate("/chat"); // Redirect to the chat page
