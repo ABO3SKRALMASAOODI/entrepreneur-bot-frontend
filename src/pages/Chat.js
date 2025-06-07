@@ -56,7 +56,6 @@ function IntroModal({ onContinue }) {
     </div>
   );
 }
-
 function Chat() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
@@ -221,12 +220,14 @@ function Chat() {
           overflow: "hidden"  // Prevent scrolling of the entire chat window
         }}
       >
+        {/* Top Bar */}
         <div style={topBar}>
           <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>☰</button>
           <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
           <div style={{ width: "30px" }} />
         </div>
 
+        {/* Chat Window */}
         <div style={chatWindow}>
           {messages.map((msg, i) => (
             <div key={i} style={{
@@ -246,6 +247,7 @@ function Chat() {
           <div ref={bottomRef} />
         </div>
 
+        {/* Chat Form */}
         <form onSubmit={handleSend} style={chatForm}>
           <textarea
             value={prompt}
@@ -257,6 +259,7 @@ function Chat() {
           <button type="submit" style={mainBtn}>➤</button>
         </form>
 
+        {/* Error Message */}
         {error && (
           <div style={{ padding: "0.5rem 1rem", color: "#ff8080", backgroundColor: "#2f1f1f" }}>
             ❌ {error}
@@ -276,7 +279,6 @@ function Chat() {
 }
 
 // 🔧 Styles
-
 const layout = {
   height: "100vh", width: "100vw", display: "flex", flexDirection: "row",
   backgroundColor: "#000", color: "#eee", fontFamily: "Segoe UI, sans-serif"
