@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import StickyNavbar from "../components/StickyNavbar";
 
@@ -36,8 +37,10 @@ const features = [
 ];
 
 const FeaturesPage = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="bg-black text-white min-h-screen">
+    <div className="bg-black text-white min-h-screen font-sans">
       <StickyNavbar />
       <section className="pt-36 pb-20 px-6 max-w-6xl mx-auto text-center">
         <motion.h1
@@ -65,6 +68,22 @@ const FeaturesPage = () => {
           ))}
         </div>
       </section>
+
+      {/* Fixed Bottom Buttons */}
+      <div className="fixed bottom-6 right-6 flex flex-col items-end gap-4 z-50">
+        <button
+          onClick={() => navigate("/")}
+          className="bg-gray-800 border border-red-600 text-white px-5 py-2 rounded-xl shadow-[0_0_15px_#ff1a1a] hover:bg-gray-700 transition"
+        >
+          ← Go Back
+        </button>
+        <button
+          onClick={() => navigate("/register")}
+          className="bg-gradient-to-r from-red-600 to-red-900 text-white px-6 py-3 rounded-xl font-bold shadow-[0_0_20px_#ff1a1a] hover:scale-105 transition"
+        >
+          Start Trial
+        </button>
+      </div>
     </div>
   );
 };
