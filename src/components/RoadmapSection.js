@@ -33,11 +33,13 @@ function RoadmapSection() {
 
       {/* 🧠 Blueprint Background Layer */}
       <motion.div
-      className="absolute inset-0 bg-[url('/blueprint.svg')] bg-repeat opacity-5 pointer-events-none z-0"
+      className="absolute inset-0 bg-repeat opacity-5 pointer-events-none z-0"
+      style={{ backgroundImage: "url('/blueprint.svg')" }}
       initial={{ y: 0 }}
       whileInView={{ y: -80 }}
       transition={{ duration: 5 }}
 />
+
 
 
 
