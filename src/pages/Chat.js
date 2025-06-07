@@ -217,8 +217,8 @@ function Chat() {
           flexGrow: 1,
           display: "flex",
           flexDirection: "column",
-          overflow: "auto", 
-          height: "100vh"
+          height: "100vh",
+          overflow: "hidden"  // Prevent scrolling of the entire chat window
         }}
       >
         <div style={topBar}>
