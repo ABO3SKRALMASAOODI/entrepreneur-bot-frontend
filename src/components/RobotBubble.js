@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 const RobotBubble = () => {
   return (
     <motion.div
-      className="fixed bottom-6 right-6 sm:left-1/2 sm:transform sm:-translate-x-1/2 z-50 cursor-pointer"
+      className="fixed bottom-6 z-50 cursor-pointer flex items-center gap-3 sm:left-1/2 sm:transform sm:-translate-x-1/2"
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       transition={{ type: "spring", stiffness: 200 }}
