@@ -100,37 +100,37 @@ function Chat() {
       setMessages([]);
     }
   };
+
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-  
+
     try {
       let sessionId = currentSessionId;
-  
+
       if (!sessionId) {
         sessionId = await startSession();  // ✅ Now returns the number directly
         setCurrentSessionId(sessionId);
         await loadSessions();
       }
-      
-  
+
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-      
+
       console.log("Sending:", { sessionId, prompt });
       const reply = await sendMessageToSession(sessionId, prompt);
-  
+
       if (messages.length === 3) {
         await loadSessions();
       }
-  
+
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
     }
   };
-  
+
   const handleNewSession = () => {
     setMessages([]);
     setPrompt("");
@@ -162,17 +162,23 @@ function Chat() {
     <div style={layout}>
       <Link to="/account" style={floatingAccountBtn}>👤</Link>
 
-      <div style={{
-        flex: "0 0 260px",
-        width: sidebarOpen ? "260px" : "0",
-        minWidth: sidebarOpen ? "260px" : "0",
-        maxWidth: sidebarOpen ? "260px" : "0",
-        transition: "width 0.3s ease",
-        backgroundColor: "#111",
-        color: "#fff",
-        padding: sidebarOpen ? "2rem 1rem" : "0",
-        overflow: "hidden"
-      }}>
+      {/* Sidebar */}
+      <div
+        style={{
+          transition: "transform 0.3s ease-in-out",
+          width: "260px",
+          transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
+          backgroundColor: "#111",
+          color: "#fff",
+          padding: sidebarOpen ? "2rem 1rem" : "0",
+          overflow: "hidden",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          height: "100%",
+          zIndex: 100
+        }}
+      >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
           <button onClick={() => setSidebarOpen(false)} style={closeBtn}>×</button>
@@ -183,10 +189,7 @@ function Chat() {
         </p>
 
         <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
-        <button onClick={() => {
-          setSidebarOpen(false);
-          setShowModal(true);
-        }} style={sidebarBtn}>Subscribe</button>
+        <button onClick={() => { setSidebarOpen(false); setShowModal(true); }} style={sidebarBtn}>Subscribe</button>
         <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
 
         <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
@@ -194,11 +197,15 @@ function Chat() {
 
         <div style={{ maxHeight: "300px", overflowY: "auto", marginBottom: "1rem" }}>
           {sessions.map((s) => (
-            <button key={s.id} onClick={() => loadMessages(s.id)} style={{
-              ...sidebarBtn,
-              backgroundColor: currentSessionId === s.id ? "#b30000" : "#222",
-              marginBottom: "0.5rem"
-            }}>
+            <button
+              key={s.id}
+              onClick={() => loadMessages(s.id)}
+              style={{
+                ...sidebarBtn,
+                backgroundColor: currentSessionId === s.id ? "#b30000" : "#222",
+                marginBottom: "0.5rem"
+              }}
+            >
               {s.title || `Session ${s.id}`}
             </button>
           ))}
@@ -206,13 +213,16 @@ function Chat() {
         <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
       </div>
 
-      <div style={{
-        flexGrow: 1,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-        minWidth: 0
-      }}>
+      {/* Main Chat Area */}
+      <div
+        style={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          paddingLeft: sidebarOpen ? "260px" : "0",
+        }}
+      >
         <div style={topBar}>
           <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>☰</button>
           <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
