@@ -160,66 +160,20 @@ function Chat() {
       <Link to="/account" style={floatingAccountBtn}>👤</Link>
 
       {/* Sidebar */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          height: "100%",
-          width: "260px",
-          backgroundColor: "#111",
-          color: "#fff",
-          padding: sidebarOpen ? "2rem 1rem" : "0",
-          transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
-          transition: "transform 0.3s ease-in-out",
-          zIndex: 1000
-        }}
-      >
+      <div style={{ position: "fixed", top: 0, left: 0, height: "100%", width: "260px", backgroundColor: "#111", color: "#fff", padding: sidebarOpen ? "2rem 1rem" : "0", transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)", transition: "transform 0.3s ease-in-out", zIndex: 1000 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
           <button onClick={() => setSidebarOpen(false)} style={closeBtn}>×</button>
         </div>
 
-        <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
-          {userEmail || "User"}
-        </p>
-
+        {/* Sidebar content */}
         <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
         <button onClick={() => { setSidebarOpen(false); setShowModal(true); }} style={sidebarBtn}>Subscribe</button>
         <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
-
-        <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
-        <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
-
-        <div style={{ maxHeight: "300px", overflowY: "auto", marginBottom: "1rem" }}>
-          {sessions.map((s) => (
-            <button
-              key={s.id}
-              onClick={() => loadMessages(s.id)}
-              style={{
-                ...sidebarBtn,
-                backgroundColor: currentSessionId === s.id ? "#b30000" : "#222",
-                marginBottom: "0.5rem"
-              }}
-            >
-              {s.title || `Session ${s.id}`}
-            </button>
-          ))}
-        </div>
-        <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
       </div>
 
       {/* Main Chat Area */}
-      <div
-        style={{
-          marginLeft: sidebarOpen ? "260px" : "0", 
-          flexGrow: 1,
-          display: "flex",
-          flexDirection: "column",
-          height: "100vh",
-          overflow: "hidden"  // Prevent scrolling of the entire chat window
-        }}
-      >
+      <div style={{ marginLeft: sidebarOpen ? "260px" : "0", flexGrow: 1, display: "flex", flexDirection: "column", height: "calc(100vh - 60px)", overflow: "hidden" }}>
         {/* Top Bar */}
         <div style={topBar}>
           <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>☰</button>
@@ -228,17 +182,10 @@ function Chat() {
         </div>
 
         {/* Chat Window */}
-        <div style={chatWindow}>
+        <div style={{ flexGrow: 1, overflowY: "auto", padding: "1rem 1rem 2rem", display: "flex", flexDirection: "column", gap: "1rem", backgroundColor: "#000" }}>
           {messages.map((msg, i) => (
-            <div key={i} style={{
-              display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
-            }}>
-              <div style={{
-                background: msg.role === "user" ? "#8b0000" : "#660000",
-                padding: "12px 16px", borderRadius: "16px",
-                color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
-              }}>
+            <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
+              <div style={{ background: msg.role === "user" ? "#8b0000" : "#660000", padding: "12px 16px", borderRadius: "16px", color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap", boxShadow: "0 2px 10px rgba(0,0,0,0.2)" }}>
                 <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
                 <div style={{ marginTop: "6px" }}>{msg.content}</div>
               </div>
@@ -249,13 +196,7 @@ function Chat() {
 
         {/* Chat Form */}
         <form onSubmit={handleSend} style={chatForm}>
-          <textarea
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Ask your business question..."
-            rows={2}
-            style={inputBox}
-          />
+          <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="Ask your business question..." rows={2} style={inputBox} />
           <button type="submit" style={mainBtn}>➤</button>
         </form>
 

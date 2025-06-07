@@ -7,22 +7,14 @@ body {
   background-color: #000;
   color: #fff;
   scroll-behavior: smooth;
-  height: 100%; /* Ensure body takes full height */
   margin: 0;
   padding: 0;
   overflow: hidden; /* Prevent body from scrolling */
 }
 
 html, #root {
-  height: 100%;
+  height: 100%; /* Full height */
   overflow: hidden; /* Prevent scrolling on the root element */
-}
-
-/* Ensuring top bar is visible and not behind status bar for mobile */
-@media (max-width: 768px) {
-  body {
-    padding-top: calc(env(safe-area-inset-top) + 1rem); /* Adjust for iPhone notch */
-  }
 }
 
 /* Optional glow effect */
@@ -36,23 +28,10 @@ html, #root {
   animation: pulseLine 2s infinite;
 }
 
-/* Styling for scrollbars (not visible but to ensure compatibility) */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-thumb {
-  background: #ff1a1a;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-track {
-  background: #000;
-}
-
-/* Prevent scroll and keep everything in view */
 #root {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; /* Full screen height */
 }
 
 /* Flexbox layout for sidebar and main content */
@@ -98,127 +77,4 @@ html, #root {
   display: flex;
   justify-content: center;
   border-top: 1px solid #222;
-}
-
-/* Button styles */
-.mainBtn {
-  background-color: #8b0000;
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.sidebarBtn {
-  width: 100%;
-  margin-bottom: 0.8rem;
-  background-color: #8b0000;
-  color: #fff;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.floatingAccountBtn {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  background-color: #222;
-  color: #fff;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2rem;
-  z-index: 10005;
-  text-decoration: none;
-  border: 1px solid #444;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-}
-
-.closeBtn {
-  background-color: #222;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  color: #fff;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.85);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10002;
-}
-
-.modalContent {
-  background: #111;
-  border-radius: 1.5rem;
-  padding: 3rem;
-  width: 95%;
-  max-width: 650px;
-  color: #fff;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
-  text-align: center;
-}
-
-.modalTitle {
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
-}
-
-.modalDescription {
-  font-size: 1.1rem;
-  color: #ccc;
-  margin-bottom: 2rem;
-}
-
-.modalList {
-  padding-left: 1.8rem;
-  line-height: 1.8;
-  font-size: 1rem;
-  color: #ddd;
-  text-align: left;
-}
-
-.subscribeButton {
-  background: #8b0000;
-  color: #fff;
-  padding: 14px 28px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-size: 1.1rem;
-  width: 100%;
-  font-weight: bold;
-}
-
-.cancelButton {
-  background: none;
-  border: none;
-  color: #aaa;
-  text-decoration: underline;
-  cursor: pointer;
-  display: block;
-  margin: 1rem auto 0;
-  font-size: 0.95rem;
 }
