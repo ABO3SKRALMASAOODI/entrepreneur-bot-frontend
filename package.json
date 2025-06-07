@@ -6,6 +6,7 @@
     "@babel/plugin-transform-class-properties": "^7.27.1",
     "@babel/plugin-transform-nullish-coalescing-operator": "^7.27.1",
     "@babel/plugin-transform-private-methods": "^7.27.1",
+    "@react-oauth/google": "^0.12.2",
     "@rive-app/react-canvas": "^4.21.1",
     "@svgr/plugin-svgo": "^8.1.0",
     "@testing-library/dom": "^10.4.0",

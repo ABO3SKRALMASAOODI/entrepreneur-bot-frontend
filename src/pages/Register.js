@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import API from "../api/api";
 import { Link, useNavigate } from "react-router-dom";
+import { GoogleLogin } from '@react-oauth/google'; // Import GoogleLogin
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -22,9 +23,25 @@ function Register() {
     }
   };
 
+  const handleGoogleLoginSuccess = async (response) => {
+    const { credential } = response;
+    const decoded = jwtDecode(credential); // Decode Google response to get user data
+    try {
+      // Send the decoded Google credentials to the backend for further processing
+      const res = await API.post("/auth/google", { email: decoded.email, name: decoded.name });
+      localStorage.setItem("token", res.data.token);
+      navigate("/chat");
+    } catch (err) {
+      setMessage("Google login failed.");
+    }
+  };
+
+  const handleGoogleLoginError = () => {
+    setMessage("Google login failed.");
+  };
+
   return (
     <div style={{ height: "100vh", backgroundColor: "#000", color: "#fff", fontFamily: "Segoe UI, sans-serif" }}>
-      {/* Header */}
       <div style={{
         padding: "1rem",
         background: "#000",
@@ -36,9 +53,9 @@ function Register() {
         <h2 style={{ margin: 0, fontSize: "1.5rem", color: "#fff" }}>The Hustler Bot</h2>
       </div>
 
-      {/* Form */}
       <div style={{ maxWidth: "400px", margin: "2rem auto", padding: "2rem", backgroundColor: "#111", borderRadius: "16px", boxShadow: "0 0 20px rgba(0,0,0,0.6)" }}>
         <h3 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Create Your Account</h3>
+
         <form onSubmit={handleRegister}>
           <input
             type="email"
@@ -58,6 +75,14 @@ function Register() {
           />
           <button type="submit" style={btnStyle}>Register</button>
         </form>
+
+        {/* Google Login Button */}
+        <GoogleLogin
+          onSuccess={handleGoogleLoginSuccess}
+          onError={handleGoogleLoginError}
+          useOneTap
+        />
+
         {message && <p style={{ marginTop: "1rem", color: "#ccc", fontSize: "0.95rem" }}>{message}</p>}
 
         <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.9rem" }}>
