@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRive } from "rive-react";
 import StickyNavbar from "../components/StickyNavbar";
 import RobotBubble from "../components/RobotBubble";
+import ChipCircuit from "../components/ChipCircuit";
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -74,6 +75,7 @@ function LandingPage() {
   return (
     <>
       <StickyNavbar />
+      <ChipCircuit />
       <div className="bg-black text-white font-sans overflow-x-hidden">
         {/* HERO */}
         <section className="relative min-h-screen flex flex-col justify-center items-center px-6 overflow-hidden">
