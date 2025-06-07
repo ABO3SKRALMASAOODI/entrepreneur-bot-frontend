@@ -75,7 +75,6 @@ function LandingPage() {
   return (
     <>
       <StickyNavbar />
-      <ChipCircuit />
       <div className="bg-black text-white font-sans overflow-x-hidden">
         {/* HERO */}
         <section className="relative min-h-screen flex flex-col justify-center items-center px-6 overflow-hidden">
