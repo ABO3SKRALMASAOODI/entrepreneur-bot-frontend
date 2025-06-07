@@ -4,7 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRive } from "rive-react";
 import StickyNavbar from "../components/StickyNavbar";
 import RobotBubble from "../components/RobotBubble";
-import ChipCircuit from "../components/ChipCircuit";
+
 
 function LandingPage() {
   const navigate = useNavigate();
