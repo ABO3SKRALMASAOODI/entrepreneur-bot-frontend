@@ -38,11 +38,13 @@ function HeroSection() {
 
       {/* 🔵 Parallax Blueprint Layer (slow scroll motion) */}
       <motion.div
-        className="absolute inset-0 bg-[url('/blueprint.svg')] bg-repeat opacity-5 pointer-events-none z-0"
-        initial={{ y: 0 }}
-        whileInView={{ y: -100 }}
-        transition={{ duration: 6, ease: 'easeOut' }}
-      />
+      className="absolute inset-0 bg-repeat opacity-5 pointer-events-none z-0"
+      style={{ backgroundImage: `url(${process.env.PUBLIC_URL + '/blueprint.svg'})` }}
+      initial={{ y: 0 }}
+      whileInView={{ y: -100 }}
+      transition={{ duration: 6, ease: 'easeOut' }}
+/>
+
 
       {/* ⚡ Hero Content */}
       <motion.div

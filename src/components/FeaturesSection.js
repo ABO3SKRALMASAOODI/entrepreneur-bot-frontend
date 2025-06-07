@@ -40,7 +40,7 @@ function FeaturesSection() {
       {/* Optional Blueprint Background */}
       <motion.div
         className="absolute inset-0 bg-repeat opacity-5 pointer-events-none z-0"
-        style={{ backgroundImage: "url('/blueprint.svg')" }}
+        style={{ backgroundImage: `url(${process.env.PUBLIC_URL + '/blueprint.svg'})` }}
         initial={{ y: 0 }}
         whileInView={{ y: -60 }}
         transition={{ duration: 6 }}
