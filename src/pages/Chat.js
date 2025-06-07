@@ -8,6 +8,7 @@ import {
 } from "../api/api";
 import API from "../api/api";
 
+// Modal for Subscription
 function SubscribeModal({ onClose, onSubscribe }) {
   return (
     <div style={modalOverlay}>
@@ -31,6 +32,7 @@ function SubscribeModal({ onClose, onSubscribe }) {
   );
 }
 
+// Intro Modal
 function IntroModal({ onContinue }) {
   return (
     <div style={modalOverlay}>
@@ -211,12 +213,12 @@ function Chat() {
       {/* Main Chat Area */}
       <div
         style={{
+          marginLeft: sidebarOpen ? "260px" : "0", 
           flexGrow: 1,
           display: "flex",
           flexDirection: "column",
-          overflow: "hidden",
-          transition: "padding-left 0.3s ease-in-out",
-          paddingLeft: window.innerWidth >= 768 && sidebarOpen ? "260px" : "0",
+          overflow: "auto", 
+          height: "100vh"
         }}
       >
         <div style={topBar}>
