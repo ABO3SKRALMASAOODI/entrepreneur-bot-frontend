@@ -9,7 +9,7 @@ function SignIn() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  // Handle regular email/password sign-in
+  // Handle the regular email/password sign-in
   const handleNext = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -20,12 +20,12 @@ function SignIn() {
     }
 
     try {
-      // Send email to the backend for verification
+      // Email login logic (send email to backend)
       const res = await API.post("/auth/login", { email });
-      localStorage.setItem("token", res.data.token); // Store the token for authentication
-      navigate("/chat"); // Redirect to chat
+      localStorage.setItem("token", res.data.token); // Store token
+      navigate("/chat"); // Redirect to chat page
     } catch (err) {
-      setMessage(err.response?.data?.error || "Sign-in failed");
+      setMessage("Login failed. Please try again.");
     }
   };
 
@@ -51,7 +51,6 @@ function SignIn() {
 
   return (
     <div style={{ height: "100vh", backgroundColor: "#000", color: "#fff", fontFamily: "Segoe UI, sans-serif" }}>
-      {/* Header */}
       <div style={{
         padding: "1rem",
         background: "#000",
@@ -63,7 +62,6 @@ function SignIn() {
         <h2 style={{ margin: 0, fontSize: "1.5rem", color: "#fff" }}>The Hustler Bot</h2>
       </div>
 
-      {/* SignIn Form */}
       <div style={{
         maxWidth: "400px",
         margin: "2rem auto",
@@ -74,6 +72,7 @@ function SignIn() {
       }}>
         <h3 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Welcome Back</h3>
 
+        {/* Email Login Form */}
         <form onSubmit={handleNext}>
           <input
             type="email"
@@ -83,11 +82,22 @@ function SignIn() {
             required
             style={inputStyle}
           />
-
           <button type="submit" style={btnStyle}>Next</button>
         </form>
 
-        {/* Google Login Button */}
+        {/* Display messages */}
+        {message && <p style={{ marginTop: "1rem", color: "#ccc", fontSize: "0.95rem", textAlign: "center" }}>{message}</p>}
+
+        {/* Links to Register and Legal Terms */}
+        <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.9rem" }}>
+          Don’t have an account? <Link to="/register" style={linkStyle}>Register</Link>
+        </p>
+
+        <p style={{ textAlign: "center", marginTop: "1rem", fontSize: "0.9rem" }}>
+          <Link to="/legal" style={linkStyle}>View Terms & Policies</Link>
+        </p>
+
+        {/* Google Login Button (Below the email form) */}
         <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
           <GoogleLogin
             onSuccess={handleGoogleLoginSuccess}
@@ -95,25 +105,11 @@ function SignIn() {
             useOneTap
           />
         </div>
-
-        {/* Display messages */}
-        {message && <p style={{ marginTop: "1rem", color: "#ccc", fontSize: "0.95rem", textAlign: "center" }}>{message}</p>}
-
-        {/* Links to Register and Legal Terms */}
-        <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.9rem" }}>
-          Don’t have an account?{" "}
-          <Link to="/register" style={linkStyle}>Register</Link>
-        </p>
-
-        <p style={{ textAlign: "center", marginTop: "1rem", fontSize: "0.9rem" }}>
-          <Link to="/legal" style={linkStyle}>View Terms & Policies</Link>
-        </p>
       </div>
     </div>
   );
 }
 
-// Styles for the components
 const inputStyle = {
   width: "100%",
   padding: "12px",

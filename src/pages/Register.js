@@ -33,8 +33,8 @@ function Register() {
     try {
       // Send the decoded Google credentials to your backend for verification and to get JWT
       const res = await API.post("/auth/google", { token: credential });
-      localStorage.setItem("token", res.data.token); // Store token for session
-      navigate("/chat"); // Redirect to the chat page
+      localStorage.setItem("token", res.data.token); // Store token
+      navigate("/chat"); // Redirect to chat page
     } catch (err) {
       setMessage("Google login failed.");
     }
@@ -47,7 +47,6 @@ function Register() {
 
   return (
     <div style={{ height: "100vh", backgroundColor: "#000", color: "#fff", fontFamily: "Segoe UI, sans-serif" }}>
-      {/* Header */}
       <div style={{
         padding: "1rem",
         background: "#000",
@@ -59,7 +58,6 @@ function Register() {
         <h2 style={{ margin: 0, fontSize: "1.5rem", color: "#fff" }}>The Hustler Bot</h2>
       </div>
 
-      {/* Registration Form */}
       <div style={{
         maxWidth: "400px",
         margin: "2rem auto",
@@ -70,6 +68,7 @@ function Register() {
       }}>
         <h3 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Create Your Account</h3>
 
+        {/* Email Registration Form */}
         <form onSubmit={handleRegister}>
           <input
             type="email"
@@ -90,15 +89,6 @@ function Register() {
           <button type="submit" style={btnStyle}>Register</button>
         </form>
 
-        {/* Google Login Button */}
-        <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
-          <GoogleLogin
-            onSuccess={handleGoogleLoginSuccess}
-            onError={handleGoogleLoginError}
-            useOneTap
-          />
-        </div>
-
         {/* Display messages */}
         {message && <p style={{ marginTop: "1rem", color: "#ccc", fontSize: "0.95rem", textAlign: "center" }}>{message}</p>}
 
@@ -111,12 +101,20 @@ function Register() {
         <p style={{ textAlign: "center", marginTop: "1rem", fontSize: "0.9rem" }}>
           <Link to="/legal" style={linkStyle}>View Terms & Policies</Link>
         </p>
+
+        {/* Google Login Button */}
+        <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
+          <GoogleLogin
+            onSuccess={handleGoogleLoginSuccess}
+            onError={handleGoogleLoginError}
+            useOneTap
+          />
+        </div>
       </div>
     </div>
   );
 }
 
-// Styles for the components
 const inputStyle = {
   width: "100%",
   padding: "12px",
