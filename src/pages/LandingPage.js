@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRive } from "rive-react";
 import StickyNavbar from "../components/StickyNavbar";
 import RobotBubble from "../components/RobotBubble";
-
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -29,10 +28,12 @@ function LandingPage() {
       if (heroInput) heroInput.value = mouseX;
       if (bubbleInput) bubbleInput.value = mouseX;
     };
+
     const onMouseMove = (e) => handleMouse(e.clientX);
     const onScroll = () => handleMouse(window.scrollY % window.innerWidth);
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("scroll", onScroll);
+
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("scroll", onScroll);
@@ -225,13 +226,13 @@ function LandingPage() {
 
         {/* BUBBLE CHAT */}
         <div
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-[#111] border border-red-700 rounded-full px-4 py-2 shadow-[0_0_25px_#ff1a1a] hover:scale-105 transition cursor-pointer"
+          className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center gap-3 bg-[#111] border border-red-700 rounded-full px-4 py-2 shadow-[0_0_25px_#ff1a1a] hover:scale-105 transition cursor-pointer"
           onClick={() => navigate("/register")}
         >
           <div className="w-12 h-12 rounded-full overflow-hidden">
             <BubbleBot style={{ width: "100%", height: "100%" }} />
           </div>
-          <span className="text-sm text-white opacity-90 whitespace-nowrap">
+          <span className="text-sm text-white opacity-90 whitespace-nowrap text-center">
             Hello, how can I help you with your business today?
           </span>
         </div>
