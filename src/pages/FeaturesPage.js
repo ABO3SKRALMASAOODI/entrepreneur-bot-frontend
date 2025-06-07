@@ -42,6 +42,28 @@ const FeaturesPage = () => {
   return (
     <div className="bg-black text-white min-h-screen font-sans">
       <StickyNavbar />
+
+      {/* Top-left Go Back Button */}
+      <div className="fixed top-6 left-6 z-50">
+        <button
+          onClick={() => navigate("/")}
+          className="bg-gray-800 border border-red-600 text-white px-4 py-2 rounded-xl shadow-[0_0_15px_#ff1a1a] hover:bg-gray-700 transition"
+        >
+          ← Go Back
+        </button>
+      </div>
+
+      {/* Bottom-left Start Trial Button */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <button
+          onClick={() => navigate("/register")}
+          className="bg-gradient-to-r from-red-600 to-red-900 text-white px-6 py-3 rounded-xl font-bold shadow-[0_0_20px_#ff1a1a] hover:scale-105 transition"
+        >
+          Start Trial
+        </button>
+      </div>
+
+      {/* Main Section */}
       <section className="pt-36 pb-20 px-6 max-w-6xl mx-auto text-center">
         <motion.h1
           className="text-5xl md:text-6xl font-bold mb-12 drop-shadow-[0_0_15px_#ff1a1a]"
@@ -68,22 +90,6 @@ const FeaturesPage = () => {
           ))}
         </div>
       </section>
-
-      {/* Fixed Bottom Buttons */}
-      <div className="fixed bottom-6 right-6 flex flex-col items-end gap-4 z-50">
-        <button
-          onClick={() => navigate("/")}
-          className="bg-gray-800 border border-red-600 text-white px-5 py-2 rounded-xl shadow-[0_0_15px_#ff1a1a] hover:bg-gray-700 transition"
-        >
-          ← Go Back
-        </button>
-        <button
-          onClick={() => navigate("/register")}
-          className="bg-gradient-to-r from-red-600 to-red-900 text-white px-6 py-3 rounded-xl font-bold shadow-[0_0_20px_#ff1a1a] hover:scale-105 transition"
-        >
-          Start Trial
-        </button>
-      </div>
     </div>
   );
 };
