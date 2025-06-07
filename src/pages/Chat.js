@@ -165,17 +165,17 @@ function Chat() {
       {/* Sidebar */}
       <div
         style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          height: "100%",
-          width: "260px",
+          width: sidebarOpen ? "260px" : "0", // Width of the sidebar
+          minWidth: sidebarOpen ? "260px" : "0",
+          maxWidth: sidebarOpen ? "260px" : "0",
+          transition: "width 0.3s ease-in-out",
           backgroundColor: "#111",
           color: "#fff",
-          padding: sidebarOpen ? "2rem 1rem" : "0",
-          transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
-          transition: "transform 0.3s ease-in-out",
-          zIndex: 1000
+          overflow: "hidden",
+          padding: sidebarOpen ? "2rem 1rem" : "0", // Open/close padding
+          display: "flex",
+          flexDirection: "column",
+          zIndex: 1000,
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -220,7 +220,7 @@ function Chat() {
           flexDirection: "column",
           overflow: "hidden",
           transition: "padding-left 0.3s ease-in-out",
-          paddingLeft: window.innerWidth >= 768 && sidebarOpen ? "260px" : "0",
+          paddingLeft: window.innerWidth >= 768 && sidebarOpen ? "260px" : "0", // Padding adjusts based on the sidebar state
         }}
       >
         <div style={topBar}>
@@ -265,14 +265,6 @@ function Chat() {
           </div>
         )}
       </div>
-
-      {showModal && <SubscribeModal onClose={() => setShowModal(false)} onSubscribe={handleSubscribe} />}
-      {showIntro && (
-        <IntroModal onContinue={() => {
-          localStorage.setItem("seen_intro", "true");
-          setShowIntro(false);
-        }} />
-      )}
     </div>
   );
 }
