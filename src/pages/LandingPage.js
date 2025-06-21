@@ -23,7 +23,7 @@ function TypingText({ text = "", speed = 50, loop = true }) {
       const resetTimeout = setTimeout(() => {
         setDisplayedText("");
         setIndex(0);
-      }, 2000);
+      }, 10000);
       return () => clearTimeout(resetTimeout);
     }
   }, [index, text, speed, loop]);
