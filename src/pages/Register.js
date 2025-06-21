@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import API from "../api/api";
 import { Link, useNavigate } from "react-router-dom";
-import StickyNavbar from "../components/StickyNavbar";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -26,8 +25,16 @@ function Register() {
   return (
     <div style={{ height: "100vh", backgroundColor: "#000", color: "#fff", fontFamily: "Segoe UI, sans-serif" }}>
       {/* Header */}
-      <StickyNavbar />
-
+      <div style={{
+        padding: "1rem",
+        background: "#000",
+        borderBottom: "1px solid #222",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+        <h2 style={{ margin: 0, fontSize: "1.5rem", color: "#fff" }}>The Hustler Bot</h2>
+      </div>
 
       {/* Form */}
       <div style={{ maxWidth: "400px", margin: "2rem auto", padding: "2rem", backgroundColor: "#111", borderRadius: "16px", boxShadow: "0 0 20px rgba(0,0,0,0.6)" }}>
