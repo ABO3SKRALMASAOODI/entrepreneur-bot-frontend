@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useRive } from "rive-react";
 import StickyNavbar from "../components/StickyNavbar";
 import RobotBubble from "../components/RobotBubble";
-// Add this above your LandingPage function
 import { useEffect, useState } from "react";
 
 function TypingText({ text = "", speed = 50, loop = true }) {
@@ -38,8 +37,6 @@ function TypingText({ text = "", speed = 50, loop = true }) {
     </span>
   );
 }
-
-
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -76,36 +73,51 @@ function LandingPage() {
     };
   }, [heroRive, bubbleRive]);
 
+  const [selectedFeature, setSelectedFeature] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
   const features = [
     {
       icon: "💡",
       title: "Validate Business Ideas",
       desc: "Quickly assess and refine your startup ideas with instant AI feedback, saving you months of trial and error.",
+      moreInfo:
+        "Hustler Bot helps you evaluate your startup ideas by simulating investor feedback, analyzing risk factors, and recommending pivots or improvements before you waste time or money.",
     },
     {
       icon: "📈",
       title: "Tailored Growth Plans",
       desc: "Receive a personalized roadmap with milestones, actions, and KPIs based on your business type.",
+      moreInfo:
+        "You’ll receive AI-generated roadmaps personalized to your niche, guiding you through MVP development, marketing, fundraising, and scaling.",
     },
     {
       icon: "🧠",
       title: "24/7 AI Mentorship",
       desc: "Get guidance anytime from an intelligent assistant trained on successful startup strategies.",
+      moreInfo:
+        "No matter the hour, you can ask Hustler Bot anything—pitch decks, branding, hiring, tech stack suggestions—and get high-level advice instantly.",
     },
     {
       icon: "🚀",
       title: "Product & Marketing Help",
       desc: "From building MVPs to writing ad copy, Hustler Bot supports you with actionable suggestions.",
+      moreInfo:
+        "Stuck on how to promote? Hustler Bot writes ads, product pages, and even helps you craft launch plans that convert visitors into users.",
     },
     {
       icon: "🔒",
       title: "Data Security First",
       desc: "Your ideas and progress are encrypted and never shared. 100% private.",
+      moreInfo:
+        "Your work is your own. Data is stored securely, encrypted end-to-end, and never used to train models or sold to others.",
     },
     {
       icon: "💳",
       title: "7-Day Free Trial",
       desc: "No payment needed upfront. Try the bot, build something real, and only pay if it works.",
+      moreInfo:
+        "No credit card needed. Try all features, validate your ideas, and upgrade only if it works for you.",
     },
   ];
 
@@ -169,17 +181,43 @@ function LandingPage() {
             {features.map((item, index) => (
               <motion.div
                 key={index}
-                className="bg-[#111] border border-transparent rounded-2xl p-6 shadow-[0_0_30px_rgba(255,26,26,0.2)] transition-all duration-300 hover:border-red-600 hover:shadow-[0_0_25px_#ff1a1a]"
+                onClick={() => {
+                  setSelectedFeature(item);
+                  setShowModal(true);
+                }}
+                className="cursor-pointer bg-[#111] border border-transparent rounded-2xl p-6 shadow-[0_0_30px_rgba(255,26,26,0.2)] transition-all duration-300 hover:border-red-600 hover:shadow-[0_0_25px_#ff1a1a]"
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
               >
-                <h3 className="text-2xl font-bold mb-3">{item.icon} {item.title}</h3>
+                <h3 className="text-2xl font-bold mb-3">
+                  {item.icon} {item.title}
+                </h3>
                 <p className="text-gray-300 text-md">{item.desc}</p>
               </motion.div>
             ))}
           </div>
         </section>
+
+        {/* Modal */}
+        {showModal && selectedFeature && (
+          <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[9999] px-4">
+            <div className="bg-[#111] text-white rounded-2xl p-6 max-w-lg w-full relative shadow-[0_0_30px_#ff1a1a] border border-red-700">
+              <button
+                className="absolute top-3 right-4 text-2xl text-white hover:text-red-500"
+                onClick={() => setShowModal(false)}
+              >
+                &times;
+              </button>
+              <h2 className="text-2xl font-bold mb-4">
+                {selectedFeature.icon} {selectedFeature.title}
+              </h2>
+              <p className="text-gray-300 text-md leading-relaxed">
+                {selectedFeature.moreInfo}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* ROADMAP */}
         <section className="py-36 bg-black relative z-10 overflow-hidden px-4 md:px-12">
@@ -259,20 +297,18 @@ function LandingPage() {
             </button>
           </motion.div>
         </section>
-       {/* BUBBLE CHAT */}
-       <div
-      className="fixed bottom-6 left-1/2 transform -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-50 flex items-center gap-3 bg-[#111] border border-red-700 rounded-full px-4 py-2 shadow-[0_0_25px_#ff1a1a] hover:scale-105 transition cursor-pointer"
-      onClick={() => navigate("/register")}
-      style={{ width: "auto", minWidth: "320px", height: "64px" }} // Fixed height
->
-      <div className="w-12 h-12 rounded-full overflow-hidden">
-    <BubbleBot style={{ width: "100%", height: "100%" }} />
-    </div>
-    <TypingText text="Hello, how can I help you with your business today?" speed={50} />
-</div>
 
-
-
+        {/* BUBBLE CHAT */}
+        <div
+          className="fixed bottom-6 left-1/2 transform -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-50 flex items-center gap-3 bg-[#111] border border-red-700 rounded-full px-4 py-2 shadow-[0_0_25px_#ff1a1a] hover:scale-105 transition cursor-pointer"
+          onClick={() => navigate("/register")}
+          style={{ width: "auto", minWidth: "320px", height: "64px" }}
+        >
+          <div className="w-12 h-12 rounded-full overflow-hidden">
+            <BubbleBot style={{ width: "100%", height: "100%" }} />
+          </div>
+          <TypingText text="Hello, how can I help you with your business today?" speed={50} />
+        </div>
       </div>
     </>
   );
