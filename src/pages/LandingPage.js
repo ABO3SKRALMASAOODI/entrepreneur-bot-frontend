@@ -13,31 +13,32 @@ function TypingText({ text = "", speed = 50, loop = true }) {
   useEffect(() => {
     if (!text) return;
 
-    const timeout = setTimeout(() => {
-      setDisplayedText((prev) => prev + text[index]);
-      setIndex((prev) => prev + 1);
-    }, speed);
-
-    if (index === text.length && loop) {
-      setTimeout(() => {
+    if (index < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText((prev) => prev + text[index]);
+        setIndex(index + 1);
+      }, speed);
+      return () => clearTimeout(timeout);
+    } else if (loop) {
+      const resetTimeout = setTimeout(() => {
         setDisplayedText("");
         setIndex(0);
-      }, 2000); // wait before looping
+      }, 2000);
+      return () => clearTimeout(resetTimeout);
     }
-
-    return () => clearTimeout(timeout);
   }, [index, text, speed, loop]);
 
   return (
     <span
       className="text-sm text-white opacity-90 whitespace-nowrap inline-block overflow-hidden"
-      style={{ width: "100%", maxWidth: "220px" }} // optional width cap
+      style={{ width: "100%", maxWidth: "220px" }}
     >
       {displayedText}
       <span className="animate-pulse">|</span>
     </span>
   );
 }
+
 
 
 function LandingPage() {
