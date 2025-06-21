@@ -4,6 +4,26 @@ import { motion } from "framer-motion";
 import { useRive } from "rive-react";
 import StickyNavbar from "../components/StickyNavbar";
 import RobotBubble from "../components/RobotBubble";
+import { useState } from "react";
+
+// Typing Text Component
+function TypingText({ text, speed = 40 }) {
+  const [displayedText, setDisplayedText] = useState("");
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayedText((prev) => prev + text[i]);
+      i++;
+      if (i >= text.length) clearInterval(interval);
+    }, speed);
+    return () => clearInterval(interval);
+  }, [text, speed]);
+  return (
+    <span className="text-sm text-white opacity-90 whitespace-nowrap">
+      {displayedText}
+    </span>
+  );
+}
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -231,9 +251,7 @@ function LandingPage() {
        <div className="w-12 h-12 rounded-full overflow-hidden">
       <BubbleBot style={{ width: "100%", height: "100%" }} />
       </div>
-      <span className="text-sm text-white opacity-90 whitespace-nowrap">
-      Hello, how can I help you with your business today?
-      </span>
+      <TypingText text="Hello, how can I help you with your business today?" />
       </div>
 
 
