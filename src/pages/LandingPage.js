@@ -75,52 +75,87 @@ function LandingPage() {
 
   const [selectedFeature, setSelectedFeature] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
   const features = [
     {
       icon: "💡",
       title: "Validate Business Ideas",
-      desc: "Quickly assess and refine your startup ideas with instant AI feedback, saving you months of trial and error.",
-      moreInfo:
-        "Hustler Bot helps you evaluate your startup ideas by simulating investor feedback, analyzing risk factors, and recommending pivots or improvements before you waste time or money.",
+      desc: "Quickly assess and refine your startup ideas with instant AI feedback.",
+      moreInfo: `Hustler Bot helps you pressure-test your business ideas before you commit time and money.
+  
+  It simulates investor-style questions, evaluates market fit, and highlights weak assumptions in seconds.
+  
+  💭 Get clarity on your concept  
+  🧪 Spot red flags early  
+  🛠️ Receive actionable improvement tips  
+  💡 Save months of trial and error`,
     },
     {
       icon: "📈",
       title: "Tailored Growth Plans",
-      desc: "Receive a personalized roadmap with milestones, actions, and KPIs based on your business type.",
-      moreInfo:
-        "You’ll receive AI-generated roadmaps personalized to your niche, guiding you through MVP development, marketing, fundraising, and scaling.",
+      desc: "Get a roadmap with milestones, actions, and KPIs based on your business type.",
+      moreInfo: `Hustler Bot builds a custom growth strategy tailored to your idea, audience, and goals.
+  
+  No templates — just precise steps to go from MVP to market domination.
+  
+  📊 Stage-by-stage strategy  
+  🎯 Milestones, KPIs, and timelines  
+  🧭 Guidance for scaling, hiring, and funding  
+  🔁 Dynamic updates as your business evolves`,
     },
     {
       icon: "🧠",
       title: "24/7 AI Mentorship",
       desc: "Get guidance anytime from an intelligent assistant trained on successful startup strategies.",
-      moreInfo:
-        "No matter the hour, you can ask Hustler Bot anything—pitch decks, branding, hiring, tech stack suggestions—and get high-level advice instantly.",
+      moreInfo: `Never feel stuck again. Hustler Bot is your always-available cofounder, coach, and sounding board.
+  
+  Whether you're crafting your pitch, deciding pricing, or planning a pivot — it's there.
+  
+  🤖 Ask unlimited startup questions  
+  📈 Get advice trained on top-tier business strategy  
+  🧑‍💼 Make smarter decisions in minutes, not days  
+  🌙 Available 24/7 — even when human mentors sleep`,
     },
     {
       icon: "🚀",
       title: "Product & Marketing Help",
       desc: "From building MVPs to writing ad copy, Hustler Bot supports you with actionable suggestions.",
-      moreInfo:
-        "Stuck on how to promote? Hustler Bot writes ads, product pages, and even helps you craft launch plans that convert visitors into users.",
+      moreInfo: `Hustler Bot helps you ship faster and launch better.
+  
+  It assists with building MVPs, writing landing pages, creating social content, and more.
+  
+  🛠️ MVP feature breakdowns  
+  📣 High-converting ad and product copy  
+  🗓️ Launch plans tailored to your audience  
+  🧪 Continuous feedback on your messaging`,
     },
     {
       icon: "🔒",
       title: "Data Security First",
       desc: "Your ideas and progress are encrypted and never shared. 100% private.",
-      moreInfo:
-        "Your work is your own. Data is stored securely, encrypted end-to-end, and never used to train models or sold to others.",
+      moreInfo: `We take your privacy seriously.
+  
+  Your ideas, strategy, and progress are encrypted and stored securely. No sharing. No model training. Just yours.
+  
+  🔐 End-to-end encryption  
+  🚫 Not used to train AI  
+  🧾 Full data transparency  
+  ✅ Built with privacy-first principles`,
     },
     {
       icon: "💳",
       title: "7-Day Free Trial",
       desc: "No payment needed upfront. Try the bot, build something real, and only pay if it works.",
-      moreInfo:
-        "No credit card needed. Try all features, validate your ideas, and upgrade only if it works for you.",
+      moreInfo: `We believe in earning your trust — not forcing it.
+  
+  That’s why we let you use Hustler Bot free for 7 days with zero commitment.
+  
+  🆓 No credit card required  
+  ⚙️ Access all premium features  
+  📈 Build and validate real ideas  
+  💸 Upgrade only if it delivers value`,
     },
   ];
-
+  
   return (
     <>
       <StickyNavbar />
@@ -206,7 +241,7 @@ function LandingPage() {
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.8, opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full max-w-3xl md:max-w-4xl bg-[#111] text-white rounded-2xl shadow-[0_0_40px_#ff1a1a] border border-red-700 p-8 md:p-12"
+      className="relative w-full max-w-3xl md:max-w-4xl max-h-[85vh] overflow-y-auto bg-[#111] text-white rounded-2xl shadow-[0_0_40px_#ff1a1a] border border-red-700 p-8 md:p-12"
     >
       {/* close button */}
       <button
@@ -224,12 +259,13 @@ function LandingPage() {
       </h2>
 
       {/* body text */}
-      <p className="text-gray-300 text-lg leading-relaxed whitespace-pre-line">
+      <pre className="whitespace-pre-wrap text-gray-300 text-lg leading-relaxed font-sans">
         {selectedFeature.moreInfo}
-      </p>
+      </pre>
     </motion.div>
   </div>
 )}
+
 
 
         {/* ROADMAP */}
