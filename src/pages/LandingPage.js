@@ -1,29 +1,34 @@
-import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useRive } from "rive-react";
 import StickyNavbar from "../components/StickyNavbar";
 import RobotBubble from "../components/RobotBubble";
-import { useState } from "react";
+// Add this above your LandingPage function
+import { useEffect, useState } from "react";
 
-// Typing Text Component
-function TypingText({ text, speed = 40 }) {
+function TypingText({ text = "", speed = 40 }) {
   const [displayedText, setDisplayedText] = useState("");
+
   useEffect(() => {
+    if (!text) return;
+
     let i = 0;
     const interval = setInterval(() => {
       setDisplayedText((prev) => prev + text[i]);
       i++;
       if (i >= text.length) clearInterval(interval);
     }, speed);
+
     return () => clearInterval(interval);
   }, [text, speed]);
+
   return (
     <span className="text-sm text-white opacity-90 whitespace-nowrap">
       {displayedText}
     </span>
   );
 }
+
 
 function LandingPage() {
   const navigate = useNavigate();
