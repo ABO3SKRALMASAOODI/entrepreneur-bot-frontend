@@ -6,25 +6,35 @@ import RobotBubble from "../components/RobotBubble";
 // Add this above your LandingPage function
 import { useEffect, useState } from "react";
 
-function TypingText({ text = "", speed = 40 }) {
+function TypingText({ text = "", speed = 50, loop = true }) {
   const [displayedText, setDisplayedText] = useState("");
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     if (!text) return;
 
-    let i = 0;
-    const interval = setInterval(() => {
-      setDisplayedText((prev) => prev + text[i]);
-      i++;
-      if (i >= text.length) clearInterval(interval);
+    const timeout = setTimeout(() => {
+      setDisplayedText((prev) => prev + text[index]);
+      setIndex((prev) => prev + 1);
     }, speed);
 
-    return () => clearInterval(interval);
-  }, [text, speed]);
+    if (index === text.length && loop) {
+      setTimeout(() => {
+        setDisplayedText("");
+        setIndex(0);
+      }, 2000); // wait before looping
+    }
+
+    return () => clearTimeout(timeout);
+  }, [index, text, speed, loop]);
 
   return (
-    <span className="text-sm text-white opacity-90 whitespace-nowrap">
+    <span
+      className="text-sm text-white opacity-90 whitespace-nowrap inline-block overflow-hidden"
+      style={{ width: "100%", maxWidth: "220px" }} // optional width cap
+    >
       {displayedText}
+      <span className="animate-pulse">|</span>
     </span>
   );
 }
@@ -249,15 +259,17 @@ function LandingPage() {
           </motion.div>
         </section>
        {/* BUBBLE CHAT */}
-      <div
+       <div
       className="fixed bottom-6 left-1/2 transform -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-50 flex items-center gap-3 bg-[#111] border border-red-700 rounded-full px-4 py-2 shadow-[0_0_25px_#ff1a1a] hover:scale-105 transition cursor-pointer"
-       onClick={() => navigate("/register")}
-      >
-       <div className="w-12 h-12 rounded-full overflow-hidden">
-      <BubbleBot style={{ width: "100%", height: "100%" }} />
-      </div>
-      <TypingText text="Hello, how can I help you with your business today?" />
-      </div>
+      onClick={() => navigate("/register")}
+      style={{ width: "auto", minWidth: "320px", height: "64px" }} // Fixed height
+>
+      <div className="w-12 h-12 rounded-full overflow-hidden">
+    <BubbleBot style={{ width: "100%", height: "100%" }} />
+    </div>
+    <TypingText text="Hello, how can I help you with your business today?" speed={50} />
+</div>
+
 
 
       </div>
