@@ -31,7 +31,7 @@ function TypingText({ text = "", speed = 50, loop = true }) {
   return (
     <span
       className="text-sm text-white opacity-90 whitespace-nowrap inline-block overflow-hidden"
-      style={{ width: "100%", maxWidth: "220px" }}
+      style={{ width: "100%", maxWidth: "400px" }}
     >
       {displayedText}
       <span className="animate-pulse">|</span>
