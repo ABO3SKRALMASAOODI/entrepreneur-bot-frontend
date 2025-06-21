@@ -198,26 +198,39 @@ function LandingPage() {
             ))}
           </div>
         </section>
+{/* Modal */}
+{showModal && selectedFeature && (
+  <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
+    <motion.div
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.8, opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="relative w-full max-w-3xl md:max-w-4xl bg-[#111] text-white rounded-2xl shadow-[0_0_40px_#ff1a1a] border border-red-700 p-8 md:p-12"
+    >
+      {/* close button */}
+      <button
+        onClick={() => setShowModal(false)}
+        aria-label="Close"
+        className="absolute top-4 right-5 text-3xl font-semibold text-white hover:text-red-500"
+      >
+        &times;
+      </button>
 
-        {/* Modal */}
-        {showModal && selectedFeature && (
-          <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[9999] px-4">
-            <div className="bg-[#111] text-white rounded-2xl p-6 max-w-lg w-full relative shadow-[0_0_30px_#ff1a1a] border border-red-700">
-              <button
-                className="absolute top-3 right-4 text-2xl text-white hover:text-red-500"
-                onClick={() => setShowModal(false)}
-              >
-                &times;
-              </button>
-              <h2 className="text-2xl font-bold mb-4">
-                {selectedFeature.icon} {selectedFeature.title}
-              </h2>
-              <p className="text-gray-300 text-md leading-relaxed">
-                {selectedFeature.moreInfo}
-              </p>
-            </div>
-          </div>
-        )}
+      {/* headline */}
+      <h2 className="text-3xl md:text-4xl font-bold mb-6 flex items-center gap-3">
+        <span className="text-4xl">{selectedFeature.icon}</span>
+        {selectedFeature.title}
+      </h2>
+
+      {/* body text */}
+      <p className="text-gray-300 text-lg leading-relaxed whitespace-pre-line">
+        {selectedFeature.moreInfo}
+      </p>
+    </motion.div>
+  </div>
+)}
+
 
         {/* ROADMAP */}
         <section className="py-36 bg-black relative z-10 overflow-hidden px-4 md:px-12">
