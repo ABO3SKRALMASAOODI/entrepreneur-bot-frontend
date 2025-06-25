@@ -88,7 +88,7 @@ function Chat() {
     if (transactionToken) {
       // OPTIONAL: Confirm Paddle.js is loaded
       if (window.Paddle) {
-        window.Paddle.Setup({ vendor: YOUR_VENDOR_ID }); // Replace with your real Paddle Vendor ID
+        window.Paddle.Setup({ vendor: 232315 }); // Replace with your real Paddle Vendor ID
   
         window.Paddle.Checkout.open({
           transactionToken: transactionToken
