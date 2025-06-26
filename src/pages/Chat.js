@@ -159,20 +159,16 @@ function Chat() {
         headers: { Authorization: `Bearer ${token}` },
       });
   
-      const transactionId = res.data.transaction_id;
-      if (!transactionId) return alert("Failed to initiate checkout.");
+      const checkoutUrl = res.data.checkout_url;
+      if (!checkoutUrl) return alert("Failed to initiate checkout.");
   
-      if (window.Paddle) {
-        window.Paddle.Setup({ vendor: 232315 }); 
-        window.Paddle.Checkout.open({ transactionId });  // ✅ Correct key
-      } else {
-        alert("Paddle not loaded. Please refresh and try again.");
-      }
+      window.location.href = checkoutUrl;  // ✅ Redirect user to Paddle checkout
     } catch (err) {
       console.error(err);
       alert("Failed to start checkout session.");
     }
   };
+  
   
   
 
