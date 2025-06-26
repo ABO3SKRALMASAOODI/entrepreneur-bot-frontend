@@ -163,15 +163,17 @@ function Chat() {
       if (!transactionId) return alert("Failed to initiate checkout.");
   
       if (window.Paddle) {
-        window.Paddle.Environment.set("production"); 
-        window.Paddle.Checkout.open({ transaction: transactionId });
+        window.Paddle.Setup({ vendor: 232315 }); 
+        window.Paddle.Checkout.open({ transactionId });  // ✅ Correct key
       } else {
         alert("Paddle not loaded. Please refresh and try again.");
       }
-    } catch {
+    } catch (err) {
+      console.error(err);
       alert("Failed to start checkout session.");
     }
   };
+  
   
 
   return (
