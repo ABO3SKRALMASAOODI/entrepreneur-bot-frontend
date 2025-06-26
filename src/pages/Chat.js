@@ -170,8 +170,16 @@ function Chat() {
       const checkoutUrl = res.data.checkout_url;
       if (!checkoutUrl) return alert("Failed to initiate checkout.");
   
-      window.location.href = checkoutUrl;
-    } catch {
+      const url = new URL(checkoutUrl);
+      const transactionId = url.searchParams.get("_ptxn");
+  
+      if (transactionId && window.Paddle) {
+        window.Paddle.Checkout.open({ transactionId });
+      } else {
+        alert("Failed to initiate checkout. Please contact support.");
+      }
+    } catch (err) {
+      console.error(err);
       alert("Failed to start checkout session.");
     }
   };
