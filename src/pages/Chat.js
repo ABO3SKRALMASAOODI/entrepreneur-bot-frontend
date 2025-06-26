@@ -82,22 +82,11 @@ function Chat() {
     }
   }, []);
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const transactionToken = params.get("_ptxn");
-  
-    if (transactionToken) {
-      // OPTIONAL: Confirm Paddle.js is loaded
-      if (window.Paddle) {
-        window.Paddle.Setup({ vendor: 232315 }); // Replace with your real Paddle Vendor ID
-  
-        window.Paddle.Checkout.open({
-          transactionToken: transactionToken
-        });
-      } else {
-        console.error("Paddle.js is not loaded.");
-      }
+    if (window.Paddle) {
+      window.Paddle.Setup({ vendor: 232315 });  // Replace with your actual Paddle Vendor ID
     }
   }, []);
+  
   
   const loadSessions = async () => {
     try {
@@ -161,19 +150,29 @@ function Chat() {
     localStorage.removeItem("seen_intro");
     navigate("/login");
   };
-
   const handleSubscribe = async () => {
     const token = localStorage.getItem("token");
     if (!token) return alert("Please log in first.");
+  
     try {
       const res = await API.post("/paddle/create-checkout-session", {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      window.location.href = res.data.checkout_url;
+  
+      const transactionId = res.data.transaction_id;
+      if (!transactionId) return alert("Failed to initiate checkout.");
+  
+      if (window.Paddle) {
+        window.Paddle.Environment.set("production"); 
+        window.Paddle.Checkout.open({ transaction: transactionId });
+      } else {
+        alert("Paddle not loaded. Please refresh and try again.");
+      }
     } catch {
       alert("Failed to start checkout session.");
     }
   };
+  
 
   return (
     <div style={layout}>
