@@ -170,13 +170,11 @@ function Chat() {
       const checkoutUrl = res.data.checkout_url;
       if (!checkoutUrl) return alert("Failed to initiate checkout.");
   
-      window.location.href = checkoutUrl;  // ✅ Redirect user to Paddle checkout
-    } catch (err) {
-      console.error(err);
+      window.location.href = checkoutUrl;
+    } catch {
       alert("Failed to start checkout session.");
     }
   };
-  
   
   
 
