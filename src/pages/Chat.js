@@ -164,9 +164,7 @@ function Chat() {
       const checkoutUrl = res.data.checkout_url;
       if (!checkoutUrl) return alert("Failed to initiate checkout.");
   
-      // ✅ Redirect user to /checkout page with _ptxn param
-      window.location.href = checkoutUrl;
-  
+      window.location.href = checkoutUrl;  // ✅ Simple redirect to Paddle hosted checkout
     } catch (err) {
       console.error(err);
       alert("Failed to start checkout session.");
