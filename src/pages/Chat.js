@@ -83,16 +83,10 @@ function Chat() {
   }, []);
   useEffect(() => {
     if (window.Paddle) {
-      window.Paddle.Setup({ vendor: 232315 });  // Replace with your actual Paddle Vendor ID
+      window.Paddle.Setup({ vendor: 232315 });  // Your Paddle Vendor ID
     }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const transactionId = urlParams.get("_ptxn");
-
-    if (transactionId && window.Paddle) {
-      window.Paddle.Checkout.open({ transactionId });
-    }
-}, []);
+  }, []);
+  
 
   
   
