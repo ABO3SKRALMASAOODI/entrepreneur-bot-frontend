@@ -160,24 +160,19 @@ function Chat() {
       const res = await API.post("/paddle/create-checkout-session", {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
   
       const checkoutUrl = res.data.checkout_url;
       if (!checkoutUrl) return alert("Failed to initiate checkout.");
   
-      const url = new URL(checkoutUrl);
-      const transactionId = url.searchParams.get("_ptxn");
+      // ✅ Redirect user to /checkout page with _ptxn param
+      window.location.href = checkoutUrl;
   
-      if (transactionId && window.Paddle) {
-        window.Paddle.Checkout.open({ transactionId });
-      } else {
-        alert("Failed to initiate checkout. Please contact support.");
-      }
     } catch (err) {
       console.error(err);
       alert("Failed to start checkout session.");
     }
   };
+  
   
   
 
