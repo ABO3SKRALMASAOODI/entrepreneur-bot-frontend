@@ -163,9 +163,10 @@ function Chat() {
     if (!token) return alert("Please log in first.");
   
     try {
-      const res = await API.post("/create-checkout-session", {}, {
+      const res = await API.post("/paddle/create-checkout-session", {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      
   
       const checkoutUrl = res.data.checkout_url;
       if (!checkoutUrl) return alert("Failed to initiate checkout.");
