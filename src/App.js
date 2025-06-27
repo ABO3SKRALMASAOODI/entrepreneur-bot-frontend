@@ -11,7 +11,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Account from "./pages/Account";
 import LandingPage from "./pages/LandingPage";
 import FeaturesPage from "./pages/FeaturesPage";
-import CheckoutHandler from "./CheckoutHandler";
+import CheckoutHandler from "./pages/CheckoutHandler";
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/login" />;
