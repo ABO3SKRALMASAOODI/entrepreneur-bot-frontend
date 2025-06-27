@@ -152,28 +152,31 @@ function Chat() {
     localStorage.removeItem("seen_intro");
     navigate("/login");
   };
-  const handleSubscribe = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return alert("Please log in first.");
   
-    try {
-      const res = await API.post("/paddle/create-checkout-session", {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-  
-      const { transaction_id } = res.data;
-      if (!transaction_id) return alert("Failed to initiate checkout.");
-  
-      if (window.Paddle) {
-        window.Paddle.Checkout.open({ transactionId: transaction_id });
-      } else {
-        alert("Paddle is not loaded. Please refresh the page.");
+const handleSubscribe = async () => {
+  const token = localStorage.getItem("token");
+  if (!token) return alert("Please log in first.");
+
+  try {
+    const res = await API.post("/paddle/create-checkout-session", {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const { transaction_id } = res.data;
+    if (!transaction_id) return alert("Checkout failed");
+
+    Paddle.Checkout.open({
+      transactionId: transaction_id,
+      settings: {
+        displayMode: "overlay",
+        variant: "one-page"
       }
-    } catch (err) {
-      console.error(err);
-      alert("Failed to start checkout session.");
-    }
-  };
+    });
+  } catch (err) {
+    console.error(err);
+    alert("Checkout failed");
+  }
+};
   
   
   
