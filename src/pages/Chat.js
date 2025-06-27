@@ -161,10 +161,14 @@ function Chat() {
         headers: { Authorization: `Bearer ${token}` },
       });
   
-      const checkoutUrl = res.data.checkout_url;
-      if (!checkoutUrl) return alert("Failed to initiate checkout.");
+      const { transaction_id } = res.data;
+      if (!transaction_id) return alert("Failed to initiate checkout.");
   
-      window.location.href = checkoutUrl;  // ✅ Simple redirect to Paddle hosted checkout
+      if (window.Paddle) {
+        window.Paddle.Checkout.open({ transactionId: transaction_id });
+      } else {
+        alert("Paddle is not loaded. Please refresh the page.");
+      }
     } catch (err) {
       console.error(err);
       alert("Failed to start checkout session.");
