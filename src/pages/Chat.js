@@ -1,3 +1,5 @@
+/* global Paddle */
+
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -7,8 +9,49 @@ import {
   getMessagesForSession,
 } from "../api/api";
 import API from "../api/api";
+function SubscribeModal({ onClose }) {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://www.paypal.com/sdk/js?client-id=Ae2RwmDLWdwKBbfXWEJTrdp0ayrQHT4rpHmPia6eowzT8lcNYkoI8Jrwjomp6yju6kBRw29bsH94yHiA&vault=true&intent=subscription";
+    script.addEventListener("load", () => {
+      if (window.paypal) {
+        window.paypal.Buttons({
+          style: {
+            shape: 'rect',
+            color: 'gold',
+            layout: 'vertical',
+            label: 'subscribe'
+          },
+          createSubscription: function (data, actions) {
+            return actions.subscription.create({
+              plan_id: 'P-2B747066NS8574712NBP5LZQ'  // Your real Plan ID
+            });
+          },
+          onApprove: function (data, actions) {
+            alert("Subscription successful!");
 
-function SubscribeModal({ onClose, onSubscribe }) {
+            const token = localStorage.getItem("token");
+            if (!token) return alert("Missing login token.");
+
+            API.post("/paypal/subscription", { subscriptionId: data.subscriptionID })
+              .then(() => {
+                alert("Your account is now upgraded!");
+                window.location.reload();
+              })
+              .catch(() => {
+                alert("Subscription confirmed with PayPal, but failed to update your account. Contact support.");
+              });
+          }
+        }).render('#paypal-button-container');
+      }
+    });
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <div style={modalOverlay}>
       <div style={modalContent}>
@@ -24,12 +67,14 @@ function SubscribeModal({ onClose, onSubscribe }) {
           <li>⚡ Faster responses and priority support</li>
           <li>🌐 Future features and updates included for free</li>
         </ul>
-        <button onClick={onSubscribe} style={subscribeButton}>Upgrade to Pro</button>
+
+        <div id="paypal-button-container" style={{ marginTop: "1.5rem" }}></div>
         <button onClick={onClose} style={cancelButton}>No thanks, maybe later</button>
       </div>
     </div>
   );
 }
+
 
 function IntroModal({ onContinue }) {
   return (
@@ -79,11 +124,6 @@ function Chat() {
   useEffect(() => {
     if (!localStorage.getItem("seen_intro")) {
       setShowIntro(true);
-    }
-  }, []);
-  useEffect(() => {
-    if (window.Paddle) {
-      window.Paddle.Setup({ vendor: 232315 });  // Your Paddle Vendor ID
     }
   }, []);
   
@@ -153,30 +193,6 @@ function Chat() {
     navigate("/login");
   };
   
-const handleSubscribe = async () => {
-  const token = localStorage.getItem("token");
-  if (!token) return alert("Please log in first.");
-
-  try {
-    const res = await API.post("/paddle/create-checkout-session", {}, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    const { transaction_id } = res.data;
-    if (!transaction_id) return alert("Checkout failed");
-
-    Paddle.Checkout.open({
-      transactionId: transaction_id,
-      settings: {
-        displayMode: "overlay",
-        variant: "one-page"
-      }
-    });
-  } catch (err) {
-    console.error(err);
-    alert("Checkout failed");
-  }
-};
   
   
   
@@ -279,7 +295,7 @@ const handleSubscribe = async () => {
         )}
       </div>
 
-      {showModal && <SubscribeModal onClose={() => setShowModal(false)} onSubscribe={handleSubscribe} />}
+      {showModal && <SubscribeModal onClose={() => setShowModal(false)} />}
       {showIntro && (
         <IntroModal onContinue={() => {
           localStorage.setItem("seen_intro", "true");
