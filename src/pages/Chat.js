@@ -29,19 +29,20 @@ function SubscribeModal({ onClose }) {
           },
           onApprove: function (data, actions) {
             alert("Subscription successful!");
-
+        
             const token = localStorage.getItem("token");
             if (!token) return alert("Missing login token.");
-
+        
             API.post("/paypal/subscription", { subscriptionId: data.subscriptionID })
               .then(() => {
                 alert("Your account is now upgraded!");
-                window.location.reload();
+                window.location.href = "https://thehustlerbot.com/chat";  // ✅ Redirect to chat page after success
               })
               .catch(() => {
                 alert("Subscription confirmed with PayPal, but failed to update your account. Contact support.");
               });
-          }
+        }
+        
         }).render('#paypal-button-container');
       }
     });
