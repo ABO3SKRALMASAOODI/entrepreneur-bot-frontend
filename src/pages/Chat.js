@@ -12,38 +12,12 @@ import API from "../api/api";
 function SubscribeModal({ onClose }) {
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "https://www.paypal.com/sdk/js?client-id=Ae2RwmDLWdwKBbfXWEJTrdp0ayrQHT4rpHmPia6eowzT8lcNYkoI8Jrwjomp6yju6kBRw29bsH94yHiA&vault=true&intent=subscription";
+    script.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
     script.addEventListener("load", () => {
-      if (window.paypal) {
-        window.paypal.Buttons({
-          style: {
-            shape: 'rect',
-            color: 'gold',
-            layout: 'vertical',
-            label: 'subscribe'
-          },
-          createSubscription: function (data, actions) {
-            return actions.subscription.create({
-              plan_id: 'P-2B747066NS8574712NBP5LZQ'  // Your real Plan ID
-            });
-          },
-          onApprove: function (data, actions) {
-            alert("Subscription successful!");
-        
-            const token = localStorage.getItem("token");
-            if (!token) return alert("Missing login token.");
-        
-            API.post("/paypal/subscription", { subscriptionId: data.subscriptionID })
-              .then(() => {
-                alert("Your account is now upgraded!");
-                window.location.href = "https://thehustlerbot.com/chat";  // ✅ Redirect to chat page after success
-              })
-              .catch(() => {
-                alert("Subscription confirmed with PayPal, but failed to update your account. Contact support.");
-              });
-        }
-        
-        }).render('#paypal-button-container');
+      if (window.Paddle) {
+        window.Paddle.Initialize({
+          token: "live_dcf6d3e20a0df8006f9462d419f",
+        });
       }
     });
     document.body.appendChild(script);
@@ -52,6 +26,26 @@ function SubscribeModal({ onClose }) {
       document.body.removeChild(script);
     };
   }, []);
+
+  const handlePaddleSubscribe = () => {
+    window.Paddle.Checkout.open({
+      pricingId: "pri_01jynfg4knxtn69ncekyxg2cjz",
+      customData: { user_id: getUserId() },
+      successCallback: () => {
+        alert("Thank you! Your account will be upgraded shortly.");
+        window.location.href = "https://thehustlerbot.com/chat";
+      },
+    });
+  };
+
+  const getUserId = () => {
+    try {
+      const payload = JSON.parse(atob(localStorage.getItem("token").split(".")[1]));
+      return payload.user_id;
+    } catch {
+      return null;
+    }
+  };
 
   return (
     <div style={modalOverlay}>
@@ -69,8 +63,12 @@ function SubscribeModal({ onClose }) {
           <li>🌐 Future features and updates included for free</li>
         </ul>
 
-        <div id="paypal-button-container" style={{ marginTop: "1.5rem" }}></div>
-        <button onClick={onClose} style={cancelButton}>No thanks, maybe later</button>
+        <button onClick={handlePaddleSubscribe} style={subscribeButton}>
+          Subscribe with Paddle
+        </button>
+        <button onClick={onClose} style={cancelButton}>
+          No thanks, maybe later
+        </button>
       </div>
     </div>
   );
