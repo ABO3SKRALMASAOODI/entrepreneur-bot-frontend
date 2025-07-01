@@ -1,49 +1,25 @@
-/* global Paddle */
-
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import {
-  startSession,
-  sendMessageToSession,
-  getSessions,
-  getMessagesForSession,
-} from "../api/api";
+import React from "react";
 import API from "../api/api";
+
 function SubscribeModal({ onClose }) {
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
-    script.addEventListener("load", () => {
-      if (window.Paddle) {
-        window.Paddle.Initialize({
-          token: "live_dcf6d3e20a0df8006f9462d419f",
-        });
-      }
-    });
-    document.body.appendChild(script);
 
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  const handlePaddleSubscribe = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return alert("Please log in first.");
 
-  const handlePaddleSubscribe = () => {
-    window.Paddle.Checkout.open({
-      pricingId: "pri_01jynfg4knxtn69ncekyxg2cjz",
-      customData: { user_id: getUserId() },
-      successCallback: () => {
-        alert("Thank you! Your account will be upgraded shortly.");
-        window.location.href = "https://thehustlerbot.com/chat";
-      },
-    });
-  };
-
-  const getUserId = () => {
     try {
-      const payload = JSON.parse(atob(localStorage.getItem("token").split(".")[1]));
-      return payload.user_id;
-    } catch {
-      return null;
+      const res = await API.post("/paddle/create-checkout-session", {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (res.data.checkout_url) {
+        window.location.href = res.data.checkout_url;
+      } else {
+        alert("Failed to get checkout link.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to start checkout session.");
     }
   };
 
