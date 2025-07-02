@@ -11,7 +11,6 @@ import ResetPassword from "./pages/ResetPassword";
 import Account from "./pages/Account";
 import LandingPage from "./pages/LandingPage";
 import FeaturesPage from "./pages/FeaturesPage";
-import CheckoutHandler from "./pages/CheckoutHandler";
 import PaddleCheckoutPage from "./pages/PaddleCheckoutPage";
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -28,7 +27,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/verify" element={<VerifyCode />} />
         <Route path="/change-password" element={<ChangePassword />} />
-        <Route path="/checkout" element={<CheckoutHandler />} />
+        
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/account" element={<PrivateRoute><Account /></PrivateRoute>} />
         <Route path="/features" element={<FeaturesPage />} />
