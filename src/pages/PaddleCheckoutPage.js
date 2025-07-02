@@ -10,7 +10,18 @@ export default function PaddleCheckoutPage() {
         token: 'live_dcf6d3e20a0df8006f9462d419f'  // Your Paddle client token
       });
 
-      // If Paddle detects the _ptxn param, it auto-opens the checkout
+      const urlParams = new URLSearchParams(window.location.search);
+      const txn = urlParams.get('_ptxn');
+
+      if (txn) {
+        window.Paddle.Checkout.open({
+          transactionId: txn,
+          successCallback: () => {
+            // After successful payment, redirect to /chat
+            window.location.href = '/chat';
+          }
+        });
+      }
     };
     document.body.appendChild(script);
   }, []);
