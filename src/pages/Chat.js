@@ -13,12 +13,12 @@ function SubscribeModal({ onClose }) {
   const handlePaddleSubscribe = async () => {
     const token = localStorage.getItem("token");
     if (!token) return alert("Please log in first.");
-
+  
     try {
       const res = await API.post("/paddle/create-checkout-session", {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-
+  
       if (res.data.checkout_url) {
         window.location.href = res.data.checkout_url;
       } else {
@@ -29,6 +29,7 @@ function SubscribeModal({ onClose }) {
       alert("Failed to start checkout session.");
     }
   };
+  
 
   return (
     <div style={modalOverlay}>

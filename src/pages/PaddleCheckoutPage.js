@@ -1,20 +1,16 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 export default function PaddleCheckoutPage() {
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const ptxn = urlParams.get('_ptxn');
-
     const script = document.createElement('script');
     script.src = 'https://cdn.paddle.com/paddle/v2/paddle.js';
     script.async = true;
     script.onload = () => {
-      window.Paddle.Initialize({ token: 'live_dcf6d3e20a0df8006f9462d419f' });
+      window.Paddle.Initialize({
+        token: 'live_dcf6d3e20a0df8006f9462d419f'  // Your Paddle client token
+      });
 
-      if (ptxn) {
-        // Paddle auto-detects _ptxn and opens checkout, but to be safe:
-        console.log('Opening Paddle Checkout with _ptxn:', ptxn);
-      }
+      // If Paddle detects the _ptxn param, it auto-opens the checkout
     };
     document.body.appendChild(script);
   }, []);
