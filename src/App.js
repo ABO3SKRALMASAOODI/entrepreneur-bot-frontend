@@ -12,7 +12,7 @@ import Account from "./pages/Account";
 import LandingPage from "./pages/LandingPage";
 import FeaturesPage from "./pages/FeaturesPage";
 import PaddleCheckoutPage from "./pages/PaddleCheckoutPage";
-
+import SubscribePage from "./pages/SubscribePage";
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -35,7 +35,7 @@ function App() {
         <Route path="/features" element={<FeaturesPage />} />
         <Route path="/legal" element={<Legal />} />
         <Route path="/paddle-checkout" element={<PaddleCheckoutPage />} />
-       
+        <Route path="/subscribe" element={<SubscribePage />} />
 
         <Route
           path="/chat"

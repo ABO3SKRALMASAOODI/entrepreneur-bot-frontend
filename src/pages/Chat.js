@@ -94,10 +94,30 @@ function Chat() {
   const [showModal, setShowModal] = useState(false);
   const [showIntro, setShowIntro] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const navigate = useNavigate();
   const bottomRef = useRef(null);
   const userEmail = localStorage.getItem("user_email");
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const checkSubscription = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+  
+      try {
+        const res = await API.get("/status/subscription", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.data.is_subscribed) {
+          navigate("/subscribe");
+        }
+      } catch (err) {
+        console.error("Failed to check subscription:", err);
+      }
+    };
+  
+    checkSubscription();
+  }, [navigate]);
+  
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
