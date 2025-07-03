@@ -19,6 +19,8 @@ function SubscribeModal({ onClose }) {
         headers: { Authorization: `Bearer ${token}` }
       });
   
+      console.log("Checkout URL from Paddle:", res.data.checkout_url);
+  
       if (res.data.checkout_url) {
         window.location.href = res.data.checkout_url;
       } else {
