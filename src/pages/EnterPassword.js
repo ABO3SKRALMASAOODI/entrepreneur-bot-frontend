@@ -20,14 +20,28 @@ function EnterPassword() {
     e.preventDefault();
     try {
       const response = await API.post("/auth/login", { email, password });
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user_email", email); // ✅ FIX: Store email for Account page
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user_email", email); // ✅ Keep storing user email
+  
       setMessage("✅ Login successful!");
-      setTimeout(() => navigate("/chat"), 500);
+  
+      // Check subscription immediately after login
+      const statusRes = await API.get("/status/subscription", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+  
+      if (statusRes.data.is_subscribed) {
+        navigate("/chat");
+      } else {
+        navigate("/subscribe");
+      }
+  
     } catch (error) {
       setMessage(error.response?.data?.error || "Login failed");
     }
   };
+  
 
   return (
     <div style={pageStyle}>
