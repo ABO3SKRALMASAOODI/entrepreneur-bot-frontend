@@ -45,7 +45,7 @@ function Chat() {
   const bottomRef = useRef(null);
   const userEmail = localStorage.getItem("user_email");
   const navigate = useNavigate();
-
+  const [checkingSub, setCheckingSub] = useState(true);
   useEffect(() => {
     const checkSubscription = async () => {
       const token = localStorage.getItem("token");
@@ -60,11 +60,14 @@ function Chat() {
         }
       } catch (err) {
         console.error("Failed to check subscription:", err);
+      } finally {
+        setCheckingSub(false);  // mark loading as done
       }
     };
   
     checkSubscription();
   }, [navigate]);
+  
   
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
