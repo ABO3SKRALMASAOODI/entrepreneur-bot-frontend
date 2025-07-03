@@ -6,10 +6,12 @@ export default function PaddleCheckoutPage() {
     script.src = 'https://cdn.paddle.com/paddle/v2/paddle.js';
     script.async = true;
     script.onload = () => {
+      // Correct order: set environment first
+      window.Paddle.Environment.set('sandbox');  // Keep this only for testing; remove when going live
+
       window.Paddle.Initialize({
-        token: 'test_525dbb28620d16a4cd9f286338b'  // Your Sandbox token
+        token: 'test_525dbb28620d16a4cd9f286338b'  // Your Paddle Sandbox client token
       });
-      window.Paddle.Environment.set('sandbox');  // Required for Sandbox testing
 
       const urlParams = new URLSearchParams(window.location.search);
       const txn = urlParams.get('_ptxn');
@@ -17,8 +19,8 @@ export default function PaddleCheckoutPage() {
       if (txn) {
         window.Paddle.Checkout.open({
           transactionId: txn,
-          successCallback: () => {
-            window.location.href = '/chat';
+          settings: {
+            successUrl: 'https://thehustlerbot.com/chat'  // Redirect to chat after successful payment
           }
         });
       }
