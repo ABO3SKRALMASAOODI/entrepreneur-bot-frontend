@@ -25,9 +25,10 @@ function EnterPassword() {
       setMessage("✅ Login successful!");
       console.log("Login success, token:", token);  // <<== Add this log
   
-      const statusRes = await API.get("/status/subscription", {
+      const statusRes = await API.get("/auth/status/subscription", {
         headers: { Authorization: `Bearer ${token}` }
       });
+      
       console.log("Subscription status response:", statusRes.data);  // <<== Add this log
   
       if (statusRes.data.is_subscribed) {
