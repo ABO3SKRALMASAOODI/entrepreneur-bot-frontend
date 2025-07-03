@@ -248,7 +248,8 @@ function Chat() {
         )}
       </div>
 
-      
+      {showModal && <SubscribeModal onClose={() => setShowModal(false)} />}
+
       {showIntro && (
         <IntroModal onContinue={() => {
           localStorage.setItem("seen_intro", "true");
