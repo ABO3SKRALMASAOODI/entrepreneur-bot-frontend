@@ -175,10 +175,7 @@ function Chat() {
         </p>
 
         <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
-        <button onClick={() => {
-          setSidebarOpen(false);
-          setShowModal(true);
-        }} style={sidebarBtn}>Subscribe</button>
+        
         <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
 
         <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
@@ -248,7 +245,7 @@ function Chat() {
         )}
       </div>
 
-      {showModal && <SubscribeModal onClose={() => setShowModal(false)} />}
+      
 
       {showIntro && (
         <IntroModal onContinue={() => {
