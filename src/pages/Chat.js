@@ -8,57 +8,6 @@ import {
 } from "../api/api";
 import API from "../api/api";
 
-function SubscribeModal({ onClose }) {
-
-  const handlePaddleSubscribe = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return alert("Please log in first.");
-  
-    try {
-      const res = await API.post("/paddle/create-checkout-session", {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-  
-      console.log("Checkout URL from Paddle:", res.data.checkout_url);
-  
-      if (res.data.checkout_url) {
-        window.location.href = res.data.checkout_url;
-      } else {
-        alert("Failed to get checkout link.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Failed to start checkout session.");
-    }
-  };
-  
-
-  return (
-    <div style={modalOverlay}>
-      <div style={modalContent}>
-        <h1 style={modalTitle}>Unlock Full Access to The Hustler Bot 🚀</h1>
-        <p style={modalDescription}>
-          Upgrade to the Pro version for just <strong>$20/month</strong> and get unlimited access to a powerful AI mentor.
-        </p>
-        <ul style={modalList}>
-          <li>✅ Unlimited business questions, advice, and mentoring</li>
-          <li>📈 Personalized startup strategies tailored to your goals</li>
-          <li>🧠 Expert-level insights on marketing, funding, product, and more</li>
-          <li>🛠️ Access to exclusive tools and entrepreneurial resources</li>
-          <li>⚡ Faster responses and priority support</li>
-          <li>🌐 Future features and updates included for free</li>
-        </ul>
-
-        <button onClick={handlePaddleSubscribe} style={subscribeButton}>
-          Subscribe with Paddle
-        </button>
-        <button onClick={onClose} style={cancelButton}>
-          No thanks, maybe later
-        </button>
-      </div>
-    </div>
-  );
-}
 
 
 function IntroModal({ onContinue }) {
@@ -91,7 +40,6 @@ function Chat() {
   const [sessions, setSessions] = useState([]);
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [error, setError] = useState("");
-  const [showModal, setShowModal] = useState(false);
   const [showIntro, setShowIntro] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const bottomRef = useRef(null);
@@ -300,7 +248,7 @@ function Chat() {
         )}
       </div>
 
-      {showModal && <SubscribeModal onClose={() => setShowModal(false)} />}
+      
       {showIntro && (
         <IntroModal onContinue={() => {
           localStorage.setItem("seen_intro", "true");
