@@ -15,21 +15,20 @@ function EnterPassword() {
     if (emailFromURL) setEmail(emailFromURL);
     else navigate("/login");
   }, [location, navigate]);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await API.post("/auth/login", { email, password });
       const token = response.data.token;
       localStorage.setItem("token", token);
-      localStorage.setItem("user_email", email); // ✅ Keep storing user email
-  
+      localStorage.setItem("user_email", email);
       setMessage("✅ Login successful!");
+      console.log("Login success, token:", token);  // <<== Add this log
   
-      // Check subscription immediately after login
       const statusRes = await API.get("/status/subscription", {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log("Subscription status response:", statusRes.data);  // <<== Add this log
   
       if (statusRes.data.is_subscribed) {
         navigate("/chat");
@@ -38,6 +37,7 @@ function EnterPassword() {
       }
   
     } catch (error) {
+      console.error("Login or subscription check failed:", error);  // <<== Add this log
       setMessage(error.response?.data?.error || "Login failed");
     }
   };
