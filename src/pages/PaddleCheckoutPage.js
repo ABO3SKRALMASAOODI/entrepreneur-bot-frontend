@@ -7,8 +7,9 @@ export default function PaddleCheckoutPage() {
     script.async = true;
     script.onload = () => {
       window.Paddle.Initialize({
-        token: 'live_dcf6d3e20a0df8006f9462d419f'  // Your Paddle client token
+        token: 'test_525dbb28620d16a4cd9f286338b'  // Your Sandbox token
       });
+      window.Paddle.Environment.set('sandbox');  // Required for Sandbox testing
 
       const urlParams = new URLSearchParams(window.location.search);
       const txn = urlParams.get('_ptxn');
@@ -17,7 +18,6 @@ export default function PaddleCheckoutPage() {
         window.Paddle.Checkout.open({
           transactionId: txn,
           successCallback: () => {
-            // After successful payment, redirect to /chat
             window.location.href = '/chat';
           }
         });
