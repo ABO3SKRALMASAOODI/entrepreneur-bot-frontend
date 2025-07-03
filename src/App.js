@@ -12,6 +12,8 @@ import Account from "./pages/Account";
 import LandingPage from "./pages/LandingPage";
 import FeaturesPage from "./pages/FeaturesPage";
 import PaddleCheckoutPage from "./pages/PaddleCheckoutPage";
+import PaddleCheckoutContainer from "./pages/PaddleCheckoutContainer";
+
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/login" />;
@@ -33,6 +35,7 @@ function App() {
         <Route path="/features" element={<FeaturesPage />} />
         <Route path="/legal" element={<Legal />} />
         <Route path="/paddle-checkout" element={<PaddleCheckoutPage />} />
+        <Route path="/paddle-checkout-container" element={<PaddleCheckoutContainer />} />
 
         <Route
           path="/chat"
