@@ -9,6 +9,7 @@ import {
 import API from "../api/api";
 
 function SubscribeModal({ onClose }) {
+
   const handlePaddleSubscribe = async () => {
     const token = localStorage.getItem("token");
     if (!token) return alert("Please log in first.");
@@ -19,7 +20,7 @@ function SubscribeModal({ onClose }) {
       });
   
       if (res.data.checkout_url) {
-        window.location.href = res.data.checkout_url;  // Redirect directly to Paddle hosted checkout
+        window.location.href = res.data.checkout_url;
       } else {
         alert("Failed to get checkout link.");
       }
