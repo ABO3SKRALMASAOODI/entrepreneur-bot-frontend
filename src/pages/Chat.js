@@ -46,6 +46,26 @@ function Chat() {
   const userEmail = localStorage.getItem("user_email");
   const navigate = useNavigate();
   const [checkingSub, setCheckingSub] = useState(true);
+  const [subscriptionId, setSubscriptionId] = useState(null);
+
+  useEffect(() => {
+   const fetchSubscriptionStatus = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const res = await API.get("/auth/status/subscription", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSubscriptionId(res.data.subscription_id);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchSubscriptionStatus();
+}, []);
+
   useEffect(() => {
     const checkSubscription = async () => {
       const token = localStorage.getItem("token");
@@ -111,10 +131,15 @@ function Chat() {
     if (!confirmCancel) return;
   
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token || !subscriptionId) {
+      alert("Missing subscription details.");
+      return;
+    }
   
     try {
-      const res = await API.post("/paddle/cancel-subscription", {}, {
+      const res = await API.post("/paddle/cancel-subscription", {
+        subscription_id: subscriptionId
+      }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert(res.data.message);
