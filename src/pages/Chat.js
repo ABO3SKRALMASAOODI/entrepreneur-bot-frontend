@@ -230,21 +230,8 @@ function Chat() {
         <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
         <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
 
-        <div style={{ maxHeight: "300px", overflowY: "auto", marginBottom: "1rem" }}>
-          {sessions.map((s) => (
-            <button key={s.id} onClick={() => loadMessages(s.id)} style={{
-              ...sidebarBtn,
-              backgroundColor: currentSessionId === s.id ? "#b30000" : "#222",
-              marginBottom: "0.5rem"
-            }}>
-              {s.title || `Session ${s.id}`}
-            </button>
-          ))}
-        </div>
-        <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
-        <button onClick={handleCancelSubscription} style={cancelButton}>
-        Cancel Subscription
-        </button>
+       
+       
         </div>  {/* Sidebar Closing Div */}
 
 
