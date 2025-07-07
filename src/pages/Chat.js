@@ -70,9 +70,9 @@ function Chat() {
     const checkSubscription = async () => {
       const token = localStorage.getItem("token");
       if (!token) return;
-  
+    
       try {
-        const res = await API.get("/status/subscription", {
+        const res = await API.get("/auth/status/subscription", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (!res.data.is_subscribed) {
@@ -81,9 +81,10 @@ function Chat() {
       } catch (err) {
         console.error("Failed to check subscription:", err);
       } finally {
-        setCheckingSub(false);  // mark loading as done
+        setCheckingSub(false);
       }
     };
+    
   
     checkSubscription();
   }, [navigate]);
