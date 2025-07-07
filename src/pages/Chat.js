@@ -104,6 +104,26 @@ function Chat() {
       setMessages([]);
     }
   };
+  const handleCancelSubscription = async () => {
+    const confirmCancel = window.confirm(
+      "Are you sure you want to cancel auto-renewal? You'll keep access until the end of your billing period."
+    );
+    if (!confirmCancel) return;
+  
+    const token = localStorage.getItem("token");
+    if (!token) return;
+  
+    try {
+      const res = await API.post("/paddle/cancel-subscription", {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      alert(res.data.message);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to cancel subscription. Please try again.");
+    }
+  };
+  
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
@@ -196,7 +216,11 @@ function Chat() {
           ))}
         </div>
         <Link to="/legal" style={linkStyle}>Terms & Policies</Link>
-      </div>
+        <button onClick={handleCancelSubscription} style={cancelButton}>
+        Cancel Subscription
+        </button>
+        </div>  {/* Sidebar Closing Div */}
+
 
       <div style={{
         flexGrow: 1,
