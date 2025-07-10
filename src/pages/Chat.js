@@ -167,15 +167,11 @@ function Chat() {
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
       setBotThinking(true);
-  
       const rawReply = await sendMessageToSession(sessionId, prompt);
       console.log("Raw assistant reply:", rawReply); // 🪵 Debug
-  
-      // 🧼 Clean reply string
-      const reply = typeof rawReply === "string"
-        ? rawReply.replace(/undefined/g, "").trim()
-        : "";
-  
+      
+      const reply = rawReply?.reply?.replace(/undefined/g, "").trim();
+      
       if (reply) {
         setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
       } else {
@@ -188,7 +184,7 @@ function Chat() {
           },
         ]);
       }
-  
+      
       if (messages.length === 3) {
         await loadSessions();
       }
