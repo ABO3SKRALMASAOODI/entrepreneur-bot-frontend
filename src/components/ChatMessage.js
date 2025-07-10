@@ -3,30 +3,34 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 function TypingTextMessage({ text, speed = 20, onDone }) {
-  const [displayed, setDisplayed] = useState("");
-
-  useEffect(() => {
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < text.length) {
-        setDisplayed((prev) => prev + text[i]);
-        i++;
-      } else {
-        clearInterval(interval);
-        onDone?.();
-      }
-    }, speed);
-    return () => clearInterval(interval);
-  }, [text]);
-
-  return (
-    <span>
-      {displayed}
-      <span className="animate-pulse">|</span>
-    </span>
-  );
-}
-
+    const [displayed, setDisplayed] = useState("");
+  
+    useEffect(() => {
+      if (!text || typeof text !== "string") return;
+  
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          setDisplayed((prev) => prev + text[i]);
+          i++;
+        } else {
+          clearInterval(interval);
+          onDone?.();
+        }
+      }, speed);
+      return () => clearInterval(interval);
+    }, [text]);
+  
+    return (
+      <span>
+        {displayed}
+        {text && displayed.length < text.length ? (
+          <span className="animate-pulse">|</span>
+        ) : null}
+      </span>
+    );
+  }
+  
 export default function ChatMessage({ msg, index }) {
   const isUser = msg.role === "user";
 
