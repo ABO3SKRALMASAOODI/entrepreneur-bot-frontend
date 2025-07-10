@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation
+} from "react-router-dom";
+
+import API from "./api/api"; // Use your custom Axios instance
 
 import SignIn from "./pages/SignIn";
 import Legal from "./pages/legal";
@@ -20,52 +28,38 @@ function AppWrapper() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+
   useEffect(() => {
     let interval;
-  
+
     const refreshToken = async () => {
       try {
-        const res = await axios.post(
-          "https://entrepreneur-bot-backend.onrender.com/auth/refresh-token",
-          {},
-          { withCredentials: true }
-        );
+        const res = await API.post("/auth/refresh-token");
         const token = res.data.access_token;
         localStorage.setItem("token", token);
       } catch (err) {
-        console.warn("Token refresh failed", err);
+        console.warn("⚠️ Background token refresh failed");
         localStorage.removeItem("token");
       }
     };
-  
+
     const checkAuthAndMaybeRedirect = async () => {
       try {
         let token = localStorage.getItem("token");
-  
+
         // Try refreshing token if missing
         if (!token) {
-          const res = await axios.post(
-            "https://entrepreneur-bot-backend.onrender.com/auth/refresh-token",
-            {},
-            { withCredentials: true }
-          );
+          const res = await API.post("/auth/refresh-token");
           token = res.data.access_token;
           localStorage.setItem("token", token);
         }
-  
+
         // 🔁 Start background refresh every 10 minutes
-        interval = setInterval(refreshToken, 600000);
-  
-        // If we're on landing, check subscription
+        interval = setInterval(refreshToken, 600000); // 10 mins
+
+        // If user is on landing page, redirect if already subscribed
         if (location.pathname === "/") {
-          const subRes = await axios.get(
-            "https://entrepreneur-bot-backend.onrender.com/auth/status/subscription",
-            {
-              headers: { Authorization: `Bearer ${token}` },
-              withCredentials: true
-            }
-          );
-  
+          const subRes = await API.get("/auth/status/subscription");
           if (subRes.data.is_subscribed) {
             navigate("/chat");
           }
@@ -76,13 +70,12 @@ function AppWrapper() {
         setLoading(false);
       }
     };
-  
+
     checkAuthAndMaybeRedirect();
-  
-    // 🔁 Clean up interval on unmount
+
     return () => clearInterval(interval);
   }, [navigate, location]);
-  
+
   function PrivateRoute({ children }) {
     const token = localStorage.getItem("token");
     return token ? children : <Navigate to="/login" />;
