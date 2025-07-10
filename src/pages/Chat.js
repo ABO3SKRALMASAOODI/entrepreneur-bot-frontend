@@ -170,23 +170,21 @@ function Chat() {
       const reply = await sendMessageToSession(sessionId, prompt);
 
       
-      if (reply) {
-        setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
-      } else {
-        console.warn("Invalid reply received:", reply);
+      const safeReply = typeof reply === "string" && reply.trim().length > 0
+  ? reply.trim()
+  : "⚠️ I didn't quite catch that. Try rephrasing?";
 
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            content: "⚠️ I didn't quite catch that. Try rephrasing?",
-          },
-        ]);
-      }
-      
-      if (messages.length === 3) {
-        await loadSessions();
-      }
+// Construct the updated message list
+const updatedMessages = [...messages, { role: "assistant", content: safeReply }];
+
+// Update the state once
+setMessages(updatedMessages);
+
+// Use the actual new length to determine when to load sessions
+if (updatedMessages.length === 4) {
+  await loadSessions();
+}
+
     } catch (err) {
       console.error("Chat error:", err);
       setError(err.response?.data?.error || "Error during chat");
@@ -268,6 +266,12 @@ function Chat() {
         {messages.map((msg, i) => (
         <ChatMessage key={i} msg={msg} index={i} />
         ))}
+{botThinking && (
+  <ChatMessage
+    msg={{ role: "assistant", content: "..." }}
+    index={messages.length}
+  />
+)}
 
           <div ref={bottomRef} />
         </div>
