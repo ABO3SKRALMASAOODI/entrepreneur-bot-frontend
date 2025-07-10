@@ -38,7 +38,9 @@ function TypingTextMessage({ text, speed = 20, onDone }) {
 // Main chat message component
 export default function ChatMessage({ msg, index }) {
   const isUser = msg.role === "user";
-  const content = typeof msg.content === "string" ? msg.content : "";
+  const content = msg?.content || "";
+  console.log("🧠 msg content received:", msg?.content);
+
 
   console.log("ChatMessage received:", msg); // 🪵 Debug: log incoming message
 
