@@ -67,7 +67,16 @@ export default function ChatMessage({ msg, index }) {
       >
         <strong>{isUser ? "You" : "The Hustler Bot"}</strong>
         <div style={{ marginTop: "6px" }}>
-          {isUser ? content : <TypingTextMessage text={content} />}
+        {isUser ? (
+  content
+) : (
+  content && typeof content === "string" ? (
+    <TypingTextMessage text={content} />
+  ) : (
+    <span style={{ color: "#f88" }}>⚠️ Assistant reply missing</span>
+  )
+)}
+
         </div>
       </div>
     </motion.div>
