@@ -1,36 +1,41 @@
-// src/components/ChatMessage.js
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
+// Typing animation for assistant messages
 function TypingTextMessage({ text, speed = 20, onDone }) {
-    const [displayed, setDisplayed] = useState("");
-  
-    useEffect(() => {
-      if (!text || typeof text !== "string") return;
-  
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i < text.length) {
-          setDisplayed((prev) => prev + text[i]);
-          i++;
-        } else {
-          clearInterval(interval);
-          onDone?.();
-        }
-      }, speed);
-      return () => clearInterval(interval);
-    }, [text]);
-  
-    return (
-      <span>
-        {displayed}
-        {text && displayed.length < text.length ? (
-          <span className="animate-pulse">|</span>
-        ) : null}
-      </span>
-    );
-  }
-  
+  const [displayed, setDisplayed] = useState("");
+
+  useEffect(() => {
+    if (!text || typeof text !== "string") {
+      setDisplayed(""); // Avoid showing "undefined"
+      return;
+    }
+
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < text.length) {
+        setDisplayed((prev) => prev + text[i]);
+        i++;
+      } else {
+        clearInterval(interval);
+        onDone?.();
+      }
+    }, speed);
+
+    return () => clearInterval(interval);
+  }, [text, speed, onDone]);
+
+  if (!text || typeof text !== "string") return null;
+
+  return (
+    <span>
+      {displayed}
+      {displayed.length < text.length && <span className="animate-pulse">|</span>}
+    </span>
+  );
+}
+
+// Main message component
 export default function ChatMessage({ msg, index }) {
   const isUser = msg.role === "user";
 
