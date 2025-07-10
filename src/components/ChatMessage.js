@@ -7,7 +7,7 @@ function TypingTextMessage({ text, speed = 20, onDone }) {
 
   useEffect(() => {
     if (!text || typeof text !== "string") {
-      setDisplayed(""); // Avoid showing "undefined"
+      setDisplayed(""); // prevent showing undefined
       return;
     }
 
@@ -35,9 +35,12 @@ function TypingTextMessage({ text, speed = 20, onDone }) {
   );
 }
 
-// Main message component
+// Main chat message component
 export default function ChatMessage({ msg, index }) {
   const isUser = msg.role === "user";
+  const content = typeof msg.content === "string" ? msg.content : "";
+
+  console.log("ChatMessage received:", msg); // 🪵 Debug: log incoming message
 
   return (
     <motion.div
@@ -62,7 +65,7 @@ export default function ChatMessage({ msg, index }) {
       >
         <strong>{isUser ? "You" : "The Hustler Bot"}</strong>
         <div style={{ marginTop: "6px" }}>
-          {isUser ? msg.content : <TypingTextMessage text={msg.content} />}
+          {isUser ? content : <TypingTextMessage text={content} />}
         </div>
       </div>
     </motion.div>
