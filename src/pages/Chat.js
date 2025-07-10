@@ -173,7 +173,8 @@ function Chat() {
       if (reply) {
         setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
       } else {
-        console.warn("Invalid reply received:", rawReply);
+        console.warn("Invalid reply received:", reply);
+
         setMessages((prev) => [
           ...prev,
           {
