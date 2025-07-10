@@ -150,7 +150,6 @@ function Chat() {
       alert("Failed to cancel subscription. Please try again.");
     }
   };
-  
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
@@ -159,28 +158,49 @@ function Chat() {
       let sessionId = currentSessionId;
   
       if (!sessionId) {
-        sessionId = await startSession();  // ✅ Now returns the number directly
+        sessionId = await startSession();
         setCurrentSessionId(sessionId);
         await loadSessions();
       }
-      
   
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-      
-      console.log("Sending:", { sessionId, prompt });
+  
+      // 🧠 Show thinking state (optional)
+      setBotThinking(true);
+  
       const reply = await sendMessageToSession(sessionId, prompt);
   
+      // 👇 Prevent undefined replies from being added
+      if (reply && typeof reply === "string" && reply.trim().length > 0) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: reply.trim() },
+        ]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: "⚠️ Sorry, I didn’t understand that. Try rephrasing?",
+          },
+        ]);
+      }
+  
+      // 🔄 Reload sessions if needed
       if (messages.length === 3) {
         await loadSessions();
       }
-  
-      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
+      console.error(err);
       setError(err.response?.data?.error || "Error during chat");
+    } finally {
+      // 🧠 Hide thinking state
+      setBotThinking(false);
     }
   };
+  
   
   const handleNewSession = () => {
     setMessages([]);
