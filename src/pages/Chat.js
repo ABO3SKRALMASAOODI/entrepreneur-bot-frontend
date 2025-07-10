@@ -7,7 +7,6 @@ import {
   getMessagesForSession,
 } from "../api/api";
 import API from "../api/api";
-import ChatMessage from "../components/ChatMessage";
 
 
 
@@ -48,7 +47,6 @@ function Chat() {
   const navigate = useNavigate();
   const [checkingSub, setCheckingSub] = useState(true);
   const [subscriptionId, setSubscriptionId] = useState(null);
-  const [botThinking, setBotThinking] = useState(false);
 
   useEffect(() => {
    const fetchSubscriptionStatus = async () => {
@@ -58,6 +56,7 @@ function Chat() {
     try {
       const res = await API.get("/auth/status/subscription", {
         headers: { Authorization: `Bearer ${token}` }
+
       });
       setSubscriptionId(res.data.subscription_id);
     } catch (err) {
@@ -76,6 +75,7 @@ function Chat() {
       try {
         const res = await API.get("/auth/status/subscription", {
           headers: { Authorization: `Bearer ${token}` }
+
         });
         if (!res.data.is_subscribed) {
           navigate("/subscribe");
@@ -144,13 +144,16 @@ function Chat() {
         subscription_id: subscriptionId
       }, {
         headers: { Authorization: `Bearer ${token}` }
+
       });
       alert(res.data.message);
     } catch (err) {
       console.error(err);
       alert("Failed to cancel subscription. Please try again.");
     }
-  };const handleSend = async (e) => {
+  };
+  
+  const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
   
@@ -158,42 +161,28 @@ function Chat() {
       let sessionId = currentSessionId;
   
       if (!sessionId) {
-        sessionId = await startSession();
+        sessionId = await startSession();  // ✅ Now returns the number directly
         setCurrentSessionId(sessionId);
         await loadSessions();
       }
+      
   
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-      setBotThinking(true);
-      const reply = await sendMessageToSession(sessionId, prompt);
-
       
-      const safeReply = typeof reply === "string" && reply.trim().length > 0
-  ? reply.trim()
-  : "⚠️ I didn't quite catch that. Try rephrasing?";
-
-// Construct the updated message list
-const updatedMessages = [...messages, { role: "assistant", content: safeReply }];
-
-// Update the state once
-setMessages(updatedMessages);
-
-// Use the actual new length to determine when to load sessions
-if (updatedMessages.length === 4) {
-  await loadSessions();
-}
-
+      console.log("Sending:", { sessionId, prompt });
+      const reply = await sendMessageToSession(sessionId, prompt);
+  
+      if (messages.length === 3) {
+        await loadSessions();
+      }
+  
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
-      console.error("Chat error:", err);
       setError(err.response?.data?.error || "Error during chat");
-    } finally {
-      setBotThinking(false);
     }
   };
-  
-  
   
   const handleNewSession = () => {
     setMessages([]);
@@ -263,16 +252,21 @@ if (updatedMessages.length === 4) {
         </div>
 
         <div style={chatWindow}>
-        {messages.map((msg, i) => (
-        <ChatMessage key={i} msg={msg} index={i} />
-        ))}
-{botThinking && (
-  <ChatMessage
-    msg={{ role: "assistant", content: "..." }}
-    index={messages.length}
-  />
-)}
-
+          {messages.map((msg, i) => (
+            <div key={i} style={{
+              display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
+            }}>
+              <div style={{
+                background: msg.role === "user" ? "#8b0000" : "#660000",
+                padding: "12px 16px", borderRadius: "16px",
+                color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+              }}>
+                <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
+                <div style={{ marginTop: "6px" }}>{msg.content}</div>
+              </div>
+            </div>
+          ))}
           <div ref={bottomRef} />
         </div>
 

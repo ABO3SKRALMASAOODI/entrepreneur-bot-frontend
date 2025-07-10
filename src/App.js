@@ -7,9 +7,9 @@ import {
   useNavigate,
   useLocation
 } from "react-router-dom";
+import axios from "axios";
 
-import API from "./api/api"; // Use your custom Axios instance
-
+// Page imports
 import SignIn from "./pages/SignIn";
 import Legal from "./pages/legal";
 import VerifyCode from "./pages/VerifyCode";
@@ -34,11 +34,15 @@ function AppWrapper() {
 
     const refreshToken = async () => {
       try {
-        const res = await API.post("/auth/refresh-token");
+        const res = await axios.post(
+          "https://entrepreneur-bot-backend.onrender.com/auth/refresh-token",
+          {},
+          { withCredentials: true }
+        );
         const token = res.data.access_token;
         localStorage.setItem("token", token);
       } catch (err) {
-        console.warn("⚠️ Background token refresh failed");
+        console.warn("Token refresh failed", err);
         localStorage.removeItem("token");
       }
     };
@@ -49,17 +53,28 @@ function AppWrapper() {
 
         // Try refreshing token if missing
         if (!token) {
-          const res = await API.post("/auth/refresh-token");
+          const res = await axios.post(
+            "https://entrepreneur-bot-backend.onrender.com/auth/refresh-token",
+            {},
+            { withCredentials: true }
+          );
           token = res.data.access_token;
           localStorage.setItem("token", token);
         }
 
-        // 🔁 Start background refresh every 10 minutes
-        interval = setInterval(refreshToken, 600000); // 10 mins
+        // Start background refresh every 10 minutes
+        interval = setInterval(refreshToken, 600000);
 
-        // If user is on landing page, redirect if already subscribed
+        // If we're on landing page, check subscription
         if (location.pathname === "/") {
-          const subRes = await API.get("/auth/status/subscription");
+          const subRes = await axios.get(
+            "https://entrepreneur-bot-backend.onrender.com/auth/status/subscription",
+            {
+              headers: { Authorization: `Bearer ${token}` }, // ✅ Fixed string interpolation
+              withCredentials: true
+            }
+          );
+
           if (subRes.data.is_subscribed) {
             navigate("/chat");
           }
@@ -73,7 +88,7 @@ function AppWrapper() {
 
     checkAuthAndMaybeRedirect();
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Clean up on unmount
   }, [navigate, location]);
 
   function PrivateRoute({ children }) {
