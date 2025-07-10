@@ -20,12 +20,28 @@ function AppWrapper() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-
   useEffect(() => {
+    let interval;
+  
+    const refreshToken = async () => {
+      try {
+        const res = await axios.post(
+          "https://entrepreneur-bot-backend.onrender.com/auth/refresh-token",
+          {},
+          { withCredentials: true }
+        );
+        const token = res.data.access_token;
+        localStorage.setItem("token", token);
+      } catch (err) {
+        console.warn("Token refresh failed", err);
+        localStorage.removeItem("token");
+      }
+    };
+  
     const checkAuthAndMaybeRedirect = async () => {
       try {
         let token = localStorage.getItem("token");
-
+  
         // Try refreshing token if missing
         if (!token) {
           const res = await axios.post(
@@ -36,8 +52,11 @@ function AppWrapper() {
           token = res.data.access_token;
           localStorage.setItem("token", token);
         }
-
-        // If we’re on "/", check subscription
+  
+        // 🔁 Start background refresh every 10 minutes
+        interval = setInterval(refreshToken, 600000);
+  
+        // If we're on landing, check subscription
         if (location.pathname === "/") {
           const subRes = await axios.get(
             "https://entrepreneur-bot-backend.onrender.com/auth/status/subscription",
@@ -46,25 +65,24 @@ function AppWrapper() {
               withCredentials: true
             }
           );
-
-          const { is_subscribed } = subRes.data;
-
-          // ✅ Redirect ONLY if user is subscribed
-          if (is_subscribed) {
+  
+          if (subRes.data.is_subscribed) {
             navigate("/chat");
           }
         }
       } catch (err) {
-        // Not logged in or token failed — that’s okay, just stay on landing
         localStorage.removeItem("token");
       } finally {
         setLoading(false);
       }
     };
-
+  
     checkAuthAndMaybeRedirect();
+  
+    // 🔁 Clean up interval on unmount
+    return () => clearInterval(interval);
   }, [navigate, location]);
-
+  
   function PrivateRoute({ children }) {
     const token = localStorage.getItem("token");
     return token ? children : <Navigate to="/login" />;
