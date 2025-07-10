@@ -7,6 +7,7 @@ import {
   getMessagesForSession,
 } from "../api/api";
 import API from "../api/api";
+import ChatMessage from "../components/ChatMessage";
 
 
 
@@ -249,21 +250,10 @@ function Chat() {
         </div>
 
         <div style={chatWindow}>
-          {messages.map((msg, i) => (
-            <div key={i} style={{
-              display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
-            }}>
-              <div style={{
-                background: msg.role === "user" ? "#8b0000" : "#660000",
-                padding: "12px 16px", borderRadius: "16px",
-                color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
-              }}>
-                <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
-                <div style={{ marginTop: "6px" }}>{msg.content}</div>
-              </div>
-            </div>
-          ))}
+        {messages.map((msg, i) => (
+        <ChatMessage key={i} msg={msg} index={i} />
+        ))}
+
           <div ref={bottomRef} />
         </div>
 
