@@ -22,11 +22,11 @@ function AppWrapper() {
   const location = useLocation();
 
   useEffect(() => {
-    const checkAuthAndRedirect = async () => {
+    const checkAuthAndMaybeRedirect = async () => {
       try {
         let token = localStorage.getItem("token");
 
-        // Try refreshing if no token
+        // Try refreshing token if missing
         if (!token) {
           const res = await axios.post(
             "https://entrepreneur-bot-backend.onrender.com/auth/refresh-token",
@@ -37,30 +37,32 @@ function AppWrapper() {
           localStorage.setItem("token", token);
         }
 
-        // Now check subscription
-        const subRes = await axios.get(
-          "https://entrepreneur-bot-backend.onrender.com/auth/status/subscription",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true
-          }
-        );
-
-        const { is_subscribed } = subRes.data;
-
-        // ✅ Auto-redirect if on "/" (landing) and already subscribed
+        // If we’re on "/", check subscription
         if (location.pathname === "/") {
-          navigate(is_subscribed ? "/chat" : "/subscribe");
+          const subRes = await axios.get(
+            "https://entrepreneur-bot-backend.onrender.com/auth/status/subscription",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+              withCredentials: true
+            }
+          );
+
+          const { is_subscribed } = subRes.data;
+
+          // ✅ Redirect ONLY if user is subscribed
+          if (is_subscribed) {
+            navigate("/chat");
+          }
         }
       } catch (err) {
-        console.warn("Not logged in or subscription check failed");
+        // Not logged in or token failed — that’s okay, just stay on landing
         localStorage.removeItem("token");
       } finally {
         setLoading(false);
       }
     };
 
-    checkAuthAndRedirect();
+    checkAuthAndMaybeRedirect();
   }, [navigate, location]);
 
   function PrivateRoute({ children }) {
