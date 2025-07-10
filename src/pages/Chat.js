@@ -150,8 +150,7 @@ function Chat() {
       console.error(err);
       alert("Failed to cancel subscription. Please try again.");
     }
-  };
-  const handleSend = async (e) => {
+  };const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
   
@@ -167,40 +166,40 @@ function Chat() {
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-  
-      // 🧠 Show thinking state (optional)
       setBotThinking(true);
   
-      const reply = await sendMessageToSession(sessionId, prompt);
+      const rawReply = await sendMessageToSession(sessionId, prompt);
+      console.log("Raw assistant reply:", rawReply); // 🪵 Debug
   
-      // 👇 Prevent undefined replies from being added
-      if (reply && typeof reply === "string" && reply.trim().length > 0) {
-        setMessages((prev) => [
-          ...prev,
-          { role: "assistant", content: reply.trim() },
-        ]);
+      // 🧼 Clean reply string
+      const reply = typeof rawReply === "string"
+        ? rawReply.replace(/undefined/g, "").trim()
+        : "";
+  
+      if (reply) {
+        setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
       } else {
+        console.warn("Invalid reply received:", rawReply);
         setMessages((prev) => [
           ...prev,
           {
             role: "assistant",
-            content: "⚠️ Sorry, I didn’t understand that. Try rephrasing?",
+            content: "⚠️ I didn't quite catch that. Try rephrasing?",
           },
         ]);
       }
   
-      // 🔄 Reload sessions if needed
       if (messages.length === 3) {
         await loadSessions();
       }
     } catch (err) {
-      console.error(err);
+      console.error("Chat error:", err);
       setError(err.response?.data?.error || "Error during chat");
     } finally {
-      // 🧠 Hide thinking state
       setBotThinking(false);
     }
   };
+  
   
   
   const handleNewSession = () => {
