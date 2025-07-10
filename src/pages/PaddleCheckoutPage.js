@@ -6,18 +6,12 @@ export default function PaddleCheckoutPage() {
     script.src = 'https://cdn.paddle.com/paddle/v2/paddle.js';
     script.async = true;
     script.onload = () => {
-      window.Paddle.Environment.set('sandbox');  // Keep only in sandbox/testing
-      window.Paddle.Initialize({
-        token: 'test_525dbb28620d16a4cd9f286338b'
-      });
+      // Correct order: set environment first
+      window.Paddle.Environment.set('sandbox');  // Keep this only for testing; remove when going live
 
-      // 💡 Set the user's email from localStorage (auto-prefill email)
-      const userEmail = localStorage.getItem("user_email");
-      if (userEmail) {
-        window.Paddle.Customer.set({
-          email: userEmail
-        });
-      }
+      window.Paddle.Initialize({
+        token: 'test_525dbb28620d16a4cd9f286338b'  // Your Paddle Sandbox client token
+      });
 
       const urlParams = new URLSearchParams(window.location.search);
       const txn = urlParams.get('_ptxn');
@@ -26,8 +20,7 @@ export default function PaddleCheckoutPage() {
         window.Paddle.Checkout.open({
           transactionId: txn,
           settings: {
-            variant: 'one-page', // ✅ makes it faster/smoother
-            successUrl: 'https://thehustlerbot.com/chat'
+            successUrl: 'https://thehustlerbot.com/chat'  // Redirect to chat after successful payment
           }
         });
       }

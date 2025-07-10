@@ -14,12 +14,11 @@ export default function SubscribePage() {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      if (res.data.transaction_id) {
-        window.location.href = `/paddle-checkout?_ptxn=${res.data.transaction_id}`;
+      if (res.data.checkout_url) {
+        window.location.href = res.data.checkout_url;
       } else {
-        alert("Failed to get transaction ID.");
+        alert("Failed to get checkout link.");
       }
-      
     } catch (err) {
       console.error(err);
       alert("Failed to start checkout session.");
