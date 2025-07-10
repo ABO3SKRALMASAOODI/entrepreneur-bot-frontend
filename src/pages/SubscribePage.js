@@ -51,7 +51,7 @@ export default function SubscribePage() {
           borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1.1rem",
           width: "100%", fontWeight: "bold"
         }}>
-          Subscribe with Paddle
+          Unlock Hustler Bot X5
         </button>
       </div>
     </div>
