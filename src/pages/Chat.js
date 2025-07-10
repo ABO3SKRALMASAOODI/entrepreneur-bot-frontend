@@ -167,10 +167,8 @@ function Chat() {
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
       setBotThinking(true);
-      const rawReply = await sendMessageToSession(sessionId, prompt);
-      console.log("Raw assistant reply:", rawReply); // 🪵 Debug
-      
-      const reply = rawReply?.reply?.replace(/undefined/g, "").trim();
+      const reply = await sendMessageToSession(sessionId, prompt);
+
       
       if (reply) {
         setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
