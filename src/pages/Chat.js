@@ -48,6 +48,7 @@ function Chat() {
   const navigate = useNavigate();
   const [checkingSub, setCheckingSub] = useState(true);
   const [subscriptionId, setSubscriptionId] = useState(null);
+  const [botThinking, setBotThinking] = useState(false);
 
   useEffect(() => {
    const fetchSubscriptionStatus = async () => {
