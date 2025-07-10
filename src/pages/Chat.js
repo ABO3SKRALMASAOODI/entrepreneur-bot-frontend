@@ -14,7 +14,7 @@ function IntroModal({ onContinue }) {
   return (
     <div style={modalOverlay}>
       <div style={modalContent}>
-        <h1 style={modalTitle}>Welcome to The Hustler Bot  💼</h1>
+        <h1 style={modalTitle}>Welcome to The Hustler Bot  </h1>
         <p style={modalDescription}>
           The Hustler Bot is your AI-powered startup mentor — designed to help entrepreneurs like you build smarter, faster, and more profitable businesses.
         </p>

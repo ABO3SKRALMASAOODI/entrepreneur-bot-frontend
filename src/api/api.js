@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://entrepreneur-bot-backend.onrender.com", // Your backend URL
+  baseURL: "https://entrepreneur-bot-backend.onrender.com",
+  withCredentials: true, // ✅ Add this line
 });
 
 // Include token automatically if available

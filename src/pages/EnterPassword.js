@@ -22,7 +22,7 @@ function EnterPassword() {
       const token = response.data.token;
       localStorage.setItem("token", token);
       localStorage.setItem("user_email", email);
-      setMessage("✅ Login successful!");
+      setMessage(" Login successful!");
       console.log("Login success, token:", token);  // <<== Add this log
   
       const statusRes = await API.get("/auth/status/subscription", {
