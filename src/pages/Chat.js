@@ -1,9 +1,5 @@
-// src/pages/Chat.js
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { useRive } from "rive-react";
-
 import {
   startSession,
   sendMessageToSession,
@@ -12,8 +8,31 @@ import {
 } from "../api/api";
 import API from "../api/api";
 
-import TypingText from "../components/TypingText";      // your typing-style component
-import RobotBubble from "../components/RobotBubble";    // Rive bubble bot
+
+
+function IntroModal({ onContinue }) {
+  return (
+    <div style={modalOverlay}>
+      <div style={modalContent}>
+        <h1 style={modalTitle}>Welcome to The Hustler Bot  </h1>
+        <p style={modalDescription}>
+          The Hustler Bot is your AI-powered startup mentor — designed to help entrepreneurs like you build smarter, faster, and more profitable businesses.
+        </p>
+        <ul style={modalList}>
+          <li>💡 Validate business ideas instantly with AI guidance</li>
+          <li>📈 Get personalized growth, marketing, and funding strategies</li>
+          <li>🧠 Ask unlimited business questions, 24/7</li>
+          <li>⚙️ Access startup tools and decision-making support</li>
+          <li>🔒 Your data stays private and secure at all times</li>
+        </ul>
+        <p style={{ ...modalDescription, marginTop: "2rem" }}>
+          Let’s get started and make your next big idea a success 🚀
+        </p>
+        <button onClick={onContinue} style={subscribeButton}>Start Chatting</button>
+      </div>
+    </div>
+  );
+}
 
 function Chat() {
   const [prompt, setPrompt] = useState("");
@@ -23,36 +42,75 @@ function Chat() {
   const [error, setError] = useState("");
   const [showIntro, setShowIntro] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [isThinking, setIsThinking] = useState(false);
-
   const bottomRef = useRef(null);
-  const navigate = useNavigate();
   const userEmail = localStorage.getItem("user_email");
+  const navigate = useNavigate();
+  const [checkingSub, setCheckingSub] = useState(true);
+  const [subscriptionId, setSubscriptionId] = useState(null);
 
-  // Initialize your bubble-bot Rive animation
-  const { rive: bubbleRive, RiveComponent: BubbleBot } = useRive({
-    src: "/hustler-bubble-bot.riv",
-    autoplay: true,
-    stateMachines: ["State Machine 1"],
-  });
+  useEffect(() => {
+   const fetchSubscriptionStatus = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-  // Scroll to bottom on new messages
+    try {
+      const res = await API.get("/auth/status/subscription", {
+        headers: { Authorization: `Bearer ${token}` }
+
+
+      });
+      setSubscriptionId(res.data.subscription_id);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchSubscriptionStatus();
+}, []);
+
+  useEffect(() => {
+    const checkSubscription = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+    
+      try {
+        const res = await API.get("/auth/status/subscription", {
+          headers: { Authorization: `Bearer ${token}` }
+
+
+        });
+        if (!res.data.is_subscribed) {
+          navigate("/subscribe");
+        }
+      } catch (err) {
+        console.error("Failed to check subscription:", err);
+      } finally {
+        setCheckingSub(false);
+      }
+    };
+    
+  
+    checkSubscription();
+  }, [navigate]);
+  
+  
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isThinking]);
+  }, [messages]);
 
-  // Load sessions once
   useEffect(() => {
     loadSessions();
   }, []);
 
-  // Show intro modal once
   useEffect(() => {
     if (!localStorage.getItem("seen_intro")) {
       setShowIntro(true);
     }
   }, []);
+  
 
+  
+  
   const loadSessions = async () => {
     try {
       const data = await getSessions();
@@ -71,7 +129,64 @@ function Chat() {
       setMessages([]);
     }
   };
+  const handleCancelSubscription = async () => {
+    const confirmCancel = window.confirm(
+      "Are you sure you want to cancel auto-renewal? You'll keep access until the end of your billing period."
+    );
+    if (!confirmCancel) return;
+  
+    const token = localStorage.getItem("token");
+    if (!token || !subscriptionId) {
+      alert("Missing subscription details.");
+      return;
+    }
+  
+    try {
+      const res = await API.post("/paddle/cancel-subscription", {
+        subscription_id: subscriptionId
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
 
+
+      });
+      alert(res.data.message);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to cancel subscription. Please try again.");
+    }
+  };
+  
+  const handleSend = async (e) => {
+    e.preventDefault();
+    if (!prompt.trim()) return;
+  
+    try {
+      let sessionId = currentSessionId;
+  
+      if (!sessionId) {
+        sessionId = await startSession();  // ✅ Now returns the number directly
+        setCurrentSessionId(sessionId);
+        await loadSessions();
+      }
+      
+  
+      const userMessage = { role: "user", content: prompt };
+      setMessages((prev) => [...prev, userMessage]);
+      setPrompt("");
+      
+      console.log("Sending:", { sessionId, prompt });
+      const reply = await sendMessageToSession(sessionId, prompt);
+  
+      if (messages.length === 3) {
+        await loadSessions();
+      }
+  
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+    } catch (err) {
+      setError(err.response?.data?.error || "Error during chat");
+    }
+  };
+  
   const handleNewSession = () => {
     setMessages([]);
     setPrompt("");
@@ -80,189 +195,84 @@ function Chat() {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem("token");
+    localStorage.removeItem("user_email");
+    localStorage.removeItem("seen_intro");
     navigate("/login");
   };
-
-  const handleSend = async (e) => {
-    e.preventDefault();
-    if (!prompt.trim()) return;
-
-    try {
-      let sessionId = currentSessionId;
-      if (!sessionId) {
-        sessionId = await startSession();
-        setCurrentSessionId(sessionId);
-        await loadSessions();
-      }
-
-      // Add user message
-      setMessages((prev) => [
-        ...prev,
-        { role: "user", content: prompt.trim() },
-      ]);
-      setPrompt("");
-      setIsThinking(true);
-
-      // Call API
-      const reply = await sendMessageToSession(sessionId, prompt);
-
-      // Update sessions list if needed
-      if (messages.length === 3) {
-        await loadSessions();
-      }
-
-      // Add assistant reply
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: reply },
-      ]);
-    } catch (err) {
-      setError(err.response?.data?.error || "Error during chat");
-    } finally {
-      setIsThinking(false);
-    }
-  };
+  
+  
+  
+  
 
   return (
     <div style={layout}>
-      <Link to="/account" style={floatingAccountBtn}>
-        👤
-      </Link>
+      <Link to="/account" style={floatingAccountBtn}>👤</Link>
 
-      {/* Sidebar */}
-      <div
-        style={{
-          flex: "0 0 260px",
-          width: sidebarOpen ? "260px" : "0",
-          transition: "width 0.3s ease",
-          backgroundColor: "#111",
-          color: "#fff",
-          overflow: "hidden",
-          padding: sidebarOpen ? "2rem 1rem" : "0",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h2 style={{ fontSize: "1.3rem" }}>The Hustler Bot</h2>
-          <button onClick={() => setSidebarOpen(false)} style={closeBtn}>
-            ×
-          </button>
+      <div style={{
+        flex: "0 0 260px",
+        width: sidebarOpen ? "260px" : "0",
+        minWidth: sidebarOpen ? "260px" : "0",
+        maxWidth: sidebarOpen ? "260px" : "0",
+        transition: "width 0.3s ease",
+        backgroundColor: "#111",
+        color: "#fff",
+        padding: sidebarOpen ? "2rem 1rem" : "0",
+        overflow: "hidden"
+      }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
+          <button onClick={() => setSidebarOpen(false)} style={closeBtn}>×</button>
         </div>
-        <p style={{ color: "#aaa", marginBottom: "1rem" }}>
+
+        <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
           {userEmail || "User"}
         </p>
-        <button onClick={handleNewSession} style={sidebarBtn}>
-          New Session
-        </button>
-        <button onClick={handleLogout} style={sidebarBtn}>
-          Logout
-        </button>
-        <hr style={{ borderColor: "#333", margin: "1.5rem 0" }} />
-        <h4 style={{ color: "#bbb" }}>Sessions</h4>
-        {sessions.map((s) => (
-          <button
-            key={s.id}
-            onClick={() => loadMessages(s.id)}
-            style={sidebarBtn}
-          >
-            {s.title || "Untitled"}
-          </button>
-        ))}
-      </div>
 
-      {/* Main Chat Area */}
-      <div
-        style={{
-          flexGrow: 1,
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#000",
-        }}
-      >
-        {/* Top Bar */}
+        <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
+        
+        <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
+
+        <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
+        <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
+
+       
+       
+        </div>  {/* Sidebar Closing Div */}
+
+
+      <div style={{
+        flexGrow: 1,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        minWidth: 0
+      }}>
         <div style={topBar}>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            style={{ ...mainBtn, marginRight: "1rem" }}
-          >
-            ☰
-          </button>
-          <h2 style={{ color: "#fff" }}>The Hustler Bot</h2>
-          <div style={{ width: 30 }} />
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>☰</button>
+          <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
+          <div style={{ width: "30px" }} />
         </div>
 
-        {/* Messages */}
         <div style={chatWindow}>
           {messages.map((msg, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: i * 0.05 }}
-              style={{
-                display: "flex",
-                justifyContent:
-                  msg.role === "user" ? "flex-end" : "flex-start",
-              }}
-            >
-              <motion.div
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.3 }}
-                style={{
-                  background:
-                    msg.role === "user" ? "#8b0000" : "#660000",
-                  padding: "12px 16px",
-                  borderRadius: "16px",
-                  color: "#fff",
-                  maxWidth: "75%",
-                  boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-                }}
-              >
-                <strong>
-                  {msg.role === "user" ? "You" : "The Hustler Bot"}
-                </strong>
-                <div style={{ marginTop: 6 }}>{msg.content}</div>
-              </motion.div>
-            </motion.div>
-          ))}
-
-          {/* Thinking Indicator */}
-          {isThinking && (
-            <motion.div
-              key="thinking"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              style={{ display: "flex", justifyContent: "flex-start" }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  background: "#660000",
-                  padding: "12px 16px",
-                  borderRadius: "16px",
-                  boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-                  gap: "8px",
-                }}
-              >
-                <BubbleBot style={{ width: 40, height: 40 }} />
-                <TypingText text="Thinking..." speed={100} loop={true} />
+            <div key={i} style={{
+              display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
+            }}>
+              <div style={{
+                background: msg.role === "user" ? "#8b0000" : "#660000",
+                padding: "12px 16px", borderRadius: "16px",
+                color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+              }}>
+                <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
+                <div style={{ marginTop: "6px" }}>{msg.content}</div>
               </div>
-            </motion.div>
-          )}
-
+            </div>
+          ))}
           <div ref={bottomRef} />
         </div>
 
-        {/* Input Form */}
         <form onSubmit={handleSend} style={chatForm}>
           <textarea
             value={prompt}
@@ -271,41 +281,27 @@ function Chat() {
             rows={2}
             style={inputBox}
           />
-          <button type="submit" style={mainBtn}>
-            ➤
-          </button>
+          <button type="submit" style={mainBtn}>➤</button>
         </form>
 
-        {/* Error */}
         {error && (
-          <div
-            style={{
-              padding: "0.5rem 1rem",
-              color: "#ff8080",
-              backgroundColor: "#2f1f1f",
-            }}
-          >
+          <div style={{ padding: "0.5rem 1rem", color: "#ff8080", backgroundColor: "#2f1f1f" }}>
             ❌ {error}
           </div>
         )}
       </div>
 
-      {/* Intro Modal */}
+      
+
       {showIntro && (
-        <IntroModal
-          onContinue={() => {
-            localStorage.setItem("seen_intro", "true");
-            setShowIntro(false);
-          }}
-        />
+        <IntroModal onContinue={() => {
+          localStorage.setItem("seen_intro", "true");
+          setShowIntro(false);
+        }} />
       )}
     </div>
   );
 }
-
-// (keep your existing IntroModal and styles here…)
-
-
 
 // 🔧 Styles
 
