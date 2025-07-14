@@ -242,19 +242,26 @@ export  function Chat() {
   ))}
 {loadingReply && (
   <div style={{
-    display: "flex", justifyContent: "flex-start"
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    gap: "10px",
+    marginTop: "10px",
+    marginLeft: "10px"
   }}>
+    <div style={{ width: "50px", height: "50px" }}>
+      <RiveComponent style={{ width: "100%", height: "100%" }} />
+    </div>
     <div style={{
-      background: "#660000",
-      padding: "12px 16px", borderRadius: "16px",
-      color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
-      boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+      color: "#fff",
+      background: "transparent",
+      fontWeight: "bold"
     }}>
-      <strong>The Hustler Bot</strong>
-      <div style={{ marginTop: "6px" }}>The Hustler Bot is thinking...</div>
+      The Hustler Bot is thinking...
     </div>
   </div>
 )}
+
 
   {pendingReply && (
     <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -302,16 +309,7 @@ export  function Chat() {
         )}
       </div>
 
-      {loadingReply && (
-        <div style={{
-          position: "fixed", bottom: "100px", right: "20px", width: "180px", height: "180px", zIndex: 9999
-        }}>
-          <RiveComponent style={{ width: "100%", height: "100%" }} />
-          <div style={{ textAlign: "center", marginTop: "-20px", color: "#fff", fontWeight: "bold" }}>
-            Thinking...
-          </div>
-        </div>
-      )}
+     
 
       {showIntro && (
         <IntroModal onContinue={() => {
