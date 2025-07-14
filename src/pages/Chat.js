@@ -1,20 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import {
-  startSession,
-  sendMessageToSession,
-  getSessions,
-  getMessagesForSession,
-} from "../api/api";
+import { startSession, sendMessageToSession, getSessions, getMessagesForSession } from "../api/api";
 import API from "../api/api";
+import { useRive } from "rive-react";
+import { AnimatePresence, motion } from "framer-motion";
 
-
+function TypingText({ text, speed = 20 }) {
+  const [displayed, setDisplayed] = useState("");
+  useEffect(() => {
+    setDisplayed("");
+    let index = 0;
+    const interval = setInterval(() => {
+      setDisplayed((prev) => prev + text[index]);
+      index++;
+      if (index >= text.length) clearInterval(interval);
+    }, speed);
+    return () => clearInterval(interval);
+  }, [text]);
+  return <div>{displayed}<span className="animate-pulse">|</span></div>;
+}
 
 function IntroModal({ onContinue }) {
   return (
     <div style={modalOverlay}>
       <div style={modalContent}>
-        <h1 style={modalTitle}>Welcome to The Hustler Bot  </h1>
+        <h1 style={modalTitle}>Welcome to The Hustler Bot 💼</h1>
         <p style={modalDescription}>
           The Hustler Bot is your AI-powered startup mentor — designed to help entrepreneurs like you build smarter, faster, and more profitable businesses.
         </p>
@@ -34,7 +44,7 @@ function IntroModal({ onContinue }) {
   );
 }
 
-function Chat() {
+export default function Chat() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
   const [sessions, setSessions] = useState([]);
@@ -42,73 +52,57 @@ function Chat() {
   const [error, setError] = useState("");
   const [showIntro, setShowIntro] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const bottomRef = useRef(null);
-  const userEmail = localStorage.getItem("user_email");
-  const navigate = useNavigate();
-  const [checkingSub, setCheckingSub] = useState(true);
+  const [loadingReply, setLoadingReply] = useState(false);
   const [subscriptionId, setSubscriptionId] = useState(null);
+  const bottomRef = useRef(null);
+  const navigate = useNavigate();
+  const userEmail = localStorage.getItem("user_email");
+
+  const { RiveComponent, rive } = useRive({
+    src: "/hustler-robot.riv",
+    autoplay: true,
+    stateMachines: ["State Machine 1"]
+  });
 
   useEffect(() => {
-   const fetchSubscriptionStatus = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      const res = await API.get("/auth/status/subscription", {
-        headers: { Authorization: `Bearer ${token}` }
-
-      });
-      setSubscriptionId(res.data.subscription_id);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  fetchSubscriptionStatus();
-}, []);
+    const handleMouse = (x) => {
+      const mouseX = x / window.innerWidth;
+      const input = rive?.inputs?.find((i) => i.name === "mouseX");
+      if (input) input.value = mouseX;
+    };
+    window.addEventListener("mousemove", (e) => handleMouse(e.clientX));
+    return () => window.removeEventListener("mousemove", (e) => handleMouse(e.clientX));
+  }, [rive]);
 
   useEffect(() => {
     const checkSubscription = async () => {
       const token = localStorage.getItem("token");
       if (!token) return;
-    
       try {
         const res = await API.get("/auth/status/subscription", {
           headers: { Authorization: `Bearer ${token}` }
-
         });
-        if (!res.data.is_subscribed) {
-          navigate("/subscribe");
-        }
+        if (!res.data.is_subscribed) navigate("/subscribe");
+        setSubscriptionId(res.data.subscription_id);
       } catch (err) {
-        console.error("Failed to check subscription:", err);
-      } finally {
-        setCheckingSub(false);
+        console.error(err);
       }
     };
-    
-  
     checkSubscription();
   }, [navigate]);
-  
-  
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   useEffect(() => {
     loadSessions();
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem("seen_intro")) {
-      setShowIntro(true);
-    }
+    if (!localStorage.getItem("seen_intro")) setShowIntro(true);
   }, []);
-  
 
-  
-  
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   const loadSessions = async () => {
     try {
       const data = await getSessions();
@@ -127,63 +121,51 @@ function Chat() {
       setMessages([]);
     }
   };
-  const handleCancelSubscription = async () => {
-    const confirmCancel = window.confirm(
-      "Are you sure you want to cancel auto-renewal? You'll keep access until the end of your billing period."
-    );
-    if (!confirmCancel) return;
-  
-    const token = localStorage.getItem("token");
-    if (!token || !subscriptionId) {
-      alert("Missing subscription details.");
-      return;
-    }
-  
-    try {
-      const res = await API.post("/paddle/cancel-subscription", {
-        subscription_id: subscriptionId
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
 
-      });
-      alert(res.data.message);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to cancel subscription. Please try again.");
-    }
-  };
-  
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-  
     try {
       let sessionId = currentSessionId;
-  
       if (!sessionId) {
-        sessionId = await startSession();  // ✅ Now returns the number directly
+        sessionId = await startSession();
         setCurrentSessionId(sessionId);
         await loadSessions();
       }
-      
-  
+
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-      
-      console.log("Sending:", { sessionId, prompt });
+      setLoadingReply(true);
       const reply = await sendMessageToSession(sessionId, prompt);
-  
-      if (messages.length === 3) {
-        await loadSessions();
-      }
-  
-      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: "", fullContent: reply }]);
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
+    } finally {
+      setLoadingReply(false);
     }
   };
-  
+
+  useEffect(() => {
+    if (!messages.length) return;
+    const last = messages[messages.length - 1];
+    if (last.role === "assistant" && last.content === "" && last.fullContent) {
+      let i = 0;
+      const interval = setInterval(() => {
+        setMessages((prev) => {
+          const m = [...prev];
+          const latest = { ...m[m.length - 1] };
+          latest.content = latest.fullContent.slice(0, i + 1);
+          m[m.length - 1] = latest;
+          return m;
+        });
+        i++;
+        if (i >= last.fullContent.length) clearInterval(interval);
+      }, 20);
+      return () => clearInterval(interval);
+    }
+  }, [messages]);
+
   const handleNewSession = () => {
     setMessages([]);
     setPrompt("");
@@ -197,10 +179,6 @@ function Chat() {
     localStorage.removeItem("seen_intro");
     navigate("/login");
   };
-  
-  
-  
-  
 
   return (
     <div style={layout}>
@@ -209,8 +187,6 @@ function Chat() {
       <div style={{
         flex: "0 0 260px",
         width: sidebarOpen ? "260px" : "0",
-        minWidth: sidebarOpen ? "260px" : "0",
-        maxWidth: sidebarOpen ? "260px" : "0",
         transition: "width 0.3s ease",
         backgroundColor: "#111",
         color: "#fff",
@@ -227,24 +203,10 @@ function Chat() {
         </p>
 
         <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
-        
         <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
+      </div>
 
-        <hr style={{ margin: "1.5rem 0", borderColor: "#333" }} />
-        <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
-
-       
-       
-        </div>  {/* Sidebar Closing Div */}
-
-
-      <div style={{
-        flexGrow: 1,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-        minWidth: 0
-      }}>
+      <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         <div style={topBar}>
           <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ ...mainBtn, marginRight: "1rem" }}>☰</button>
           <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#fff" }}>The Hustler Bot</h2>
@@ -252,21 +214,29 @@ function Chat() {
         </div>
 
         <div style={chatWindow}>
-          {messages.map((msg, i) => (
-            <div key={i} style={{
-              display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
-            }}>
-              <div style={{
-                background: msg.role === "user" ? "#8b0000" : "#660000",
-                padding: "12px 16px", borderRadius: "16px",
-                color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
-              }}>
-                <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
-                <div style={{ marginTop: "6px" }}>{msg.content}</div>
-              </div>
-            </div>
-          ))}
+          <AnimatePresence>
+            {messages.map((msg, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}
+              >
+                <div style={{
+                  background: msg.role === "user" ? "#8b0000" : "#660000",
+                  padding: "12px 16px", borderRadius: "16px", color: "#fff",
+                  maxWidth: "75%", whiteSpace: "pre-wrap", boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+                }}>
+                  <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
+                  <div style={{ marginTop: "6px" }}>
+                    {msg.role === "assistant" ? <TypingText text={msg.content} /> : msg.content}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
           <div ref={bottomRef} />
         </div>
 
@@ -288,7 +258,16 @@ function Chat() {
         )}
       </div>
 
-      
+      {loadingReply && (
+        <div style={{
+          position: "fixed", bottom: "100px", right: "20px", width: "180px", height: "180px", zIndex: 9999
+        }}>
+          <RiveComponent style={{ width: "100%", height: "100%" }} />
+          <div style={{ textAlign: "center", marginTop: "-20px", color: "#fff", fontWeight: "bold" }}>
+            Thinking...
+          </div>
+        </div>
+      )}
 
       {showIntro && (
         <IntroModal onContinue={() => {

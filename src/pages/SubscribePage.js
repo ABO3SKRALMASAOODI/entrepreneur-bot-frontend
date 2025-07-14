@@ -12,6 +12,7 @@ export default function SubscribePage() {
     try {
       const res = await API.post("/paddle/create-checkout-session", {}, {
         headers: { Authorization: `Bearer ${token}` }
+
       });
 
       if (res.data.checkout_url) {
@@ -51,7 +52,7 @@ export default function SubscribePage() {
           borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1.1rem",
           width: "100%", fontWeight: "bold"
         }}>
-          Unlock Hustler Bot X5
+          Subscribe with Paddle
         </button>
       </div>
     </div>
