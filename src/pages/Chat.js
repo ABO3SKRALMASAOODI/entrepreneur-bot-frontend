@@ -240,6 +240,21 @@ export  function Chat() {
       </div>
     </div>
   ))}
+{loadingReply && (
+  <div style={{
+    display: "flex", justifyContent: "flex-start"
+  }}>
+    <div style={{
+      background: "#660000",
+      padding: "12px 16px", borderRadius: "16px",
+      color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+      boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+    }}>
+      <strong>The Hustler Bot</strong>
+      <div style={{ marginTop: "6px" }}>The Hustler Bot is thinking...</div>
+    </div>
+  </div>
+)}
 
   {pendingReply && (
     <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -266,21 +281,7 @@ export  function Chat() {
 
   <div ref={bottomRef} />
 </div>
-{(loadingReply || pendingReply) && (
-  <div style={{
-    position: "fixed",
-    bottom: "120px",
-    right: "20px",
-    zIndex: 10010,
-    backgroundColor: "#660000",
-    padding: "12px 16px",
-    borderRadius: "16px",
-    color: "#fff",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.4)"
-  }}>
-    🤖 The Hustler Bot is thinking...
-  </div>
-)}
+
 
 
         <form onSubmit={handleSend} style={chatForm}>
