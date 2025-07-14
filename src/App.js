@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-  useLocation
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
-// Page imports
 import SignIn from "./pages/SignIn";
 import Legal from "./pages/legal";
 import VerifyCode from "./pages/VerifyCode";
@@ -28,10 +20,9 @@ function AppWrapper() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-
   useEffect(() => {
     let interval;
-
+  
     const refreshToken = async () => {
       try {
         const res = await axios.post(
@@ -46,11 +37,11 @@ function AppWrapper() {
         localStorage.removeItem("token");
       }
     };
-
+  
     const checkAuthAndMaybeRedirect = async () => {
       try {
         let token = localStorage.getItem("token");
-
+  
         // Try refreshing token if missing
         if (!token) {
           const res = await axios.post(
@@ -61,20 +52,21 @@ function AppWrapper() {
           token = res.data.access_token;
           localStorage.setItem("token", token);
         }
-
-        // Start background refresh every 10 minutes
+  
+        // 🔁 Start background refresh every 10 minutes
         interval = setInterval(refreshToken, 600000);
-
-        // If we're on landing page, check subscription
+  
+        // If we're on landing, check subscription
         if (location.pathname === "/") {
           const subRes = await axios.get(
             "https://entrepreneur-bot-backend.onrender.com/auth/status/subscription",
             {
-              headers: { Authorization: `Bearer ${token}` }, // ✅ Fixed string interpolation
+              headers: { Authorization: `Bearer ${token}` },
+
               withCredentials: true
             }
           );
-
+  
           if (subRes.data.is_subscribed) {
             navigate("/chat");
           }
@@ -85,12 +77,13 @@ function AppWrapper() {
         setLoading(false);
       }
     };
-
+  
     checkAuthAndMaybeRedirect();
-
-    return () => clearInterval(interval); // Clean up on unmount
+  
+    // 🔁 Clean up interval on unmount
+    return () => clearInterval(interval);
   }, [navigate, location]);
-
+  
   function PrivateRoute({ children }) {
     const token = localStorage.getItem("token");
     return token ? children : <Navigate to="/login" />;
