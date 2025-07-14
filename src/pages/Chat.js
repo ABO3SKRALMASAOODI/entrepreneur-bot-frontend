@@ -266,7 +266,7 @@ export  function Chat() {
 
   <div ref={bottomRef} />
 </div>
-{(loading || pendingReply) && (
+{(loadingReply || pendingReply) && (
   <div style={{
     position: "fixed",
     bottom: "120px",
