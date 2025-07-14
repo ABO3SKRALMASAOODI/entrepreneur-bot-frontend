@@ -324,14 +324,18 @@ export  function Chat() {
       }}>
         <strong>The Hustler Bot</strong>
         <div style={{ marginTop: "6px" }}>
-          <TypingText
-            text={pendingReply}
-            speed={15}
-            onComplete={() => {
-              setMessages((prev) => [...prev, { role: "assistant", content: pendingReply }]);
-              setPendingReply("");
-            }}
-          />
+        <TypingText
+  text={pendingReply}
+  speed={15}
+  onComplete={() => {
+    // Slightly delay adding the message so the thinking indicator disappears more naturally
+    setMessages((prev) => [...prev, { role: "assistant", content: pendingReply }]);
+    setTimeout(() => {
+      setPendingReply("");
+    }, 50); // You can try 0, 50, or 100ms — experiment with the number
+  }}
+/>
+
         </div>
       </div>
     </div>
