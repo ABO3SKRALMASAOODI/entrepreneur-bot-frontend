@@ -15,37 +15,35 @@ function EnterPassword() {
     if (emailFromURL) setEmail(emailFromURL);
     else navigate("/login");
   }, [location, navigate]);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await API.post("/auth/login", { email, password });
-
-      // ✅ Updated this line to use access_token instead of token
-      const token = response.data.access_token;
+      const token = response.data.token;
       localStorage.setItem("token", token);
       localStorage.setItem("user_email", email);
-
-      setMessage("Login successful!");
-      console.log("Login success, token:", token);
-
+      setMessage(" Login successful!");
+      console.log("Login success, token:", token);  // <<== Add this log
+  
       const statusRes = await API.get("/auth/status/subscription", {
         headers: { Authorization: `Bearer ${token}` }
+
       });
-
-      console.log("Subscription status response:", statusRes.data);
-
+      
+      console.log("Subscription status response:", statusRes.data);  // <<== Add this log
+  
       if (statusRes.data.is_subscribed) {
         navigate("/chat");
       } else {
         navigate("/subscribe");
       }
-
+  
     } catch (error) {
-      console.error("Login or subscription check failed:", error);
+      console.error("Login or subscription check failed:", error);  // <<== Add this log
       setMessage(error.response?.data?.error || "Login failed");
     }
   };
+  
 
   return (
     <div style={pageStyle}>
@@ -80,7 +78,6 @@ function EnterPassword() {
   );
 }
 
-// Styles remain unchanged
 const pageStyle = {
   height: "100vh",
   backgroundColor: "#000",

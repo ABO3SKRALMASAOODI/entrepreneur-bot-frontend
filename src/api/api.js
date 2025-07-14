@@ -1,27 +1,18 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://entrepreneur-bot-backend.onrender.com",
-  withCredentials: true, 
+  baseURL: "https://entrepreneur-bot-backend.onrender.com", // Your backend URL
 });
 
 // Include token automatically if available
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-
-  // Skip Authorization for these routes:
-  if (
-    token &&
-    !config.url.includes("/auth/refresh-token") &&
-    !config.url.includes("/auth/login") &&
-    !config.url.includes("/auth/register")
-  ) {
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-  }
 
+  }
   return config;
 });
-
 
 // ----- AUTHENTICATED CHAT SESSION ROUTES -----
 
@@ -50,4 +41,4 @@ export const getMessagesForSession = async (session_id) => {
   return res.data.messages;
 };
 
-export default API;
+export default API; 
