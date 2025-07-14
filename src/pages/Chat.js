@@ -217,24 +217,37 @@ export  function Chat() {
         </div>
         <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
 
-<ul style={{ listStyle: "none", padding: 0 }}>
-  {sessions.map((session) => (
-    <li
-      key={session.id}
-      style={{
-        marginBottom: "8px",
-        padding: "8px",
-        borderRadius: "8px",
-        backgroundColor: currentSessionId === session.id ? "#8b0000" : "#222",
-        color: "#fff",
-        cursor: "pointer"
-      }}
-      onClick={() => loadMessages(session.id)}
-    >
-      {session.name || `Session ${session.id}`}
-    </li>
-  ))}
+        <ul style={{ listStyle: "none", padding: 0 }}>
+  {sessions.map((session) => {
+    const sessionMessages = session.messages || [];
+    const title =
+      sessionMessages.length > 0
+        ? sessionMessages
+            .slice(0, 5)
+            .map((msg) => msg.content)
+            .join(" ")
+            .slice(0, 50) + "..."
+        : "Untitled Session";
+
+    return (
+      <li
+        key={session.id}
+        style={{
+          marginBottom: "8px",
+          padding: "8px",
+          borderRadius: "8px",
+          backgroundColor: currentSessionId === session.id ? "#8b0000" : "#222",
+          color: "#fff",
+          cursor: "pointer",
+        }}
+        onClick={() => loadMessages(session.id)}
+      >
+        {title}
+      </li>
+    );
+  })}
 </ul>
+
 
         <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
           {userEmail || "User"}
