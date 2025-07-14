@@ -4,12 +4,16 @@ import { startSession, sendMessageToSession, getSessions, getMessagesForSession 
 import API from "../api/api";
 import { useRive } from "rive-react";
 import { AnimatePresence, motion } from "framer-motion";
-
-function TypingText({ text, speed = 20 }) {
+function TypingText({ text = "", speed = 20 }) {
   const [displayed, setDisplayed] = useState("");
+
   useEffect(() => {
-    setDisplayed("");
+    if (!text) {
+      setDisplayed("");
+      return;
+    }
     let index = 0;
+    setDisplayed("");
     const interval = setInterval(() => {
       setDisplayed((prev) => prev + text[index]);
       index++;
@@ -17,8 +21,10 @@ function TypingText({ text, speed = 20 }) {
     }, speed);
     return () => clearInterval(interval);
   }, [text]);
-  return <div>{displayed}<span className="animate-pulse">|</span></div>;
+
+  return <div>{displayed || ""}<span className="animate-pulse">|</span></div>;
 }
+
 
 function IntroModal({ onContinue }) {
   return (
