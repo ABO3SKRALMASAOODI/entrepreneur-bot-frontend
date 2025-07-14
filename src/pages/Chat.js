@@ -8,30 +8,13 @@ import {
 } from "../api/api";
 import API from "../api/api";
 
-// ⬇️ Typing animation component
-function TypingText({ text, speed = 20 }) {
-  const [displayed, setDisplayed] = useState("");
-  const indexRef = useRef(0);
 
-  useEffect(() => {
-    setDisplayed("");
-    indexRef.current = 0;
-    const interval = setInterval(() => {
-      setDisplayed((prev) => prev + text[indexRef.current]);
-      indexRef.current += 1;
-      if (indexRef.current >= text.length) clearInterval(interval);
-    }, speed);
-    return () => clearInterval(interval);
-  }, [text]);
-
-  return <div>{displayed}</div>;
-}
 
 function IntroModal({ onContinue }) {
   return (
     <div style={modalOverlay}>
       <div style={modalContent}>
-        <h1 style={modalTitle}>Welcome to The Hustler Bot</h1>
+        <h1 style={modalTitle}>Welcome to The Hustler Bot  </h1>
         <p style={modalDescription}>
           The Hustler Bot is your AI-powered startup mentor — designed to help entrepreneurs like you build smarter, faster, and more profitable businesses.
         </p>
@@ -59,60 +42,73 @@ function Chat() {
   const [error, setError] = useState("");
   const [showIntro, setShowIntro] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const bottomRef = useRef(null);
+  const userEmail = localStorage.getItem("user_email");
+  const navigate = useNavigate();
   const [checkingSub, setCheckingSub] = useState(true);
   const [subscriptionId, setSubscriptionId] = useState(null);
 
-  const bottomRef = useRef(null);
-  const navigate = useNavigate();
-  const userEmail = localStorage.getItem("user_email");
-
   useEffect(() => {
-    const fetchSubscriptionStatus = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-      try {
-        const res = await API.get("/auth/status/subscription", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setSubscriptionId(res.data.subscription_id);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchSubscriptionStatus();
-  }, []);
+   const fetchSubscriptionStatus = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const res = await API.get("/auth/status/subscription", {
+        headers: { Authorization: `Bearer ${token}` }
+
+      });
+      setSubscriptionId(res.data.subscription_id);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchSubscriptionStatus();
+}, []);
 
   useEffect(() => {
     const checkSubscription = async () => {
       const token = localStorage.getItem("token");
       if (!token) return;
+    
       try {
         const res = await API.get("/auth/status/subscription", {
           headers: { Authorization: `Bearer ${token}` }
+
         });
-        if (!res.data.is_subscribed) navigate("/subscribe");
+        if (!res.data.is_subscribed) {
+          navigate("/subscribe");
+        }
       } catch (err) {
         console.error("Failed to check subscription:", err);
       } finally {
         setCheckingSub(false);
       }
     };
+    
+  
     checkSubscription();
   }, [navigate]);
-
+  
+  
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+  }, [messages]);
 
   useEffect(() => {
     loadSessions();
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem("seen_intro")) setShowIntro(true);
+    if (!localStorage.getItem("seen_intro")) {
+      setShowIntro(true);
+    }
   }, []);
+  
 
+  
+  
   const loadSessions = async () => {
     try {
       const data = await getSessions();
@@ -131,24 +127,24 @@ function Chat() {
       setMessages([]);
     }
   };
-
   const handleCancelSubscription = async () => {
     const confirmCancel = window.confirm(
       "Are you sure you want to cancel auto-renewal? You'll keep access until the end of your billing period."
     );
     if (!confirmCancel) return;
-
+  
     const token = localStorage.getItem("token");
     if (!token || !subscriptionId) {
       alert("Missing subscription details.");
       return;
     }
-
+  
     try {
       const res = await API.post("/paddle/cancel-subscription", {
         subscription_id: subscriptionId
       }, {
         headers: { Authorization: `Bearer ${token}` }
+
       });
       alert(res.data.message);
     } catch (err) {
@@ -156,33 +152,38 @@ function Chat() {
       alert("Failed to cancel subscription. Please try again.");
     }
   };
-
+  
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-
+  
     try {
       let sessionId = currentSessionId;
+  
       if (!sessionId) {
-        sessionId = await startSession();
+        sessionId = await startSession();  // ✅ Now returns the number directly
         setCurrentSessionId(sessionId);
         await loadSessions();
       }
-
+      
+  
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-      setLoading(true);
-
+      
+      console.log("Sending:", { sessionId, prompt });
       const reply = await sendMessageToSession(sessionId, prompt);
+  
+      if (messages.length === 3) {
+        await loadSessions();
+      }
+  
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
-    } finally {
-      setLoading(false);
     }
   };
-
+  
   const handleNewSession = () => {
     setMessages([]);
     setPrompt("");
@@ -196,7 +197,10 @@ function Chat() {
     localStorage.removeItem("seen_intro");
     navigate("/login");
   };
-
+  
+  
+  
+  
 
   return (
     <div style={layout}>
@@ -248,43 +252,23 @@ function Chat() {
         </div>
 
         <div style={chatWindow}>
-  {messages.map((msg, i) => (
-    <div key={i} style={{
-      display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
-    }}>
-      <div style={{
-        background: msg.role === "user" ? "#8b0000" : "#660000",
-        padding: "12px 16px", borderRadius: "16px",
-        color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
-      }}>
-        <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
-        <div style={{ marginTop: "6px" }}>
-          {msg.role === "assistant" ? <TypingText text={msg.content} speed={15} /> : msg.content}
+          {messages.map((msg, i) => (
+            <div key={i} style={{
+              display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
+            }}>
+              <div style={{
+                background: msg.role === "user" ? "#8b0000" : "#660000",
+                padding: "12px 16px", borderRadius: "16px",
+                color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+              }}>
+                <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
+                <div style={{ marginTop: "6px" }}>{msg.content}</div>
+              </div>
+            </div>
+          ))}
+          <div ref={bottomRef} />
         </div>
-      </div>
-    </div>
-  ))}
-
-  {loading && (
-    <div style={{
-      display: "flex", justifyContent: "flex-start"
-    }}>
-      <div style={{
-        background: "#660000",
-        padding: "12px 16px", borderRadius: "16px",
-        color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
-      }}>
-        <strong>The Hustler Bot</strong>
-        <div style={{ marginTop: "6px" }}>The Hustler Bot is thinking...</div>
-      </div>
-    </div>
-  )}
-
-  <div ref={bottomRef} />
-</div>
-
 
         <form onSubmit={handleSend} style={chatForm}>
           <textarea
@@ -425,4 +409,4 @@ const cancelButton = {
   margin: "1rem auto 0", fontSize: "0.95rem"
 };
 
-export default Chat;
+export default Chat; 
