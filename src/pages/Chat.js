@@ -4,27 +4,29 @@ import { startSession, sendMessageToSession, getSessions, getMessagesForSession 
 import API from "../api/api";
 import { useRive } from "rive-react";
 import { AnimatePresence, motion } from "framer-motion";
-function TypingText({ text = "", speed = 20 }) {
+function TypingText({ text = "", speed = 20, onComplete }) {
   const [displayed, setDisplayed] = useState("");
+  const indexRef = useRef(0);
 
   useEffect(() => {
-    if (!text) {
-      setDisplayed("");
-      return;
-    }
-    let index = 0;
     setDisplayed("");
+    indexRef.current = 0;
+    if (!text) return;
+
     const interval = setInterval(() => {
-      setDisplayed((prev) => prev + text[index]);
-      index++;
-      if (index >= text.length) clearInterval(interval);
+      setDisplayed((prev) => prev + text[indexRef.current]);
+      indexRef.current += 1;
+      if (indexRef.current >= text.length) {
+        clearInterval(interval);
+        if (onComplete) onComplete();
+      }
     }, speed);
+
     return () => clearInterval(interval);
-  }, [text]);
+  }, [text, onComplete]);
 
-  return <div>{displayed || ""}<span className="animate-pulse">|</span></div>;
+  return <div>{displayed}</div>;
 }
-
 
 function IntroModal({ onContinue }) {
   return (
@@ -54,6 +56,8 @@ export  function Chat() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
   const [sessions, setSessions] = useState([]);
+  const [pendingReply, setPendingReply] = useState("");
+
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [error, setError] = useState("");
   const [showIntro, setShowIntro] = useState(false);
@@ -144,7 +148,8 @@ export  function Chat() {
       setPrompt("");
       setLoadingReply(true);
       const reply = await sendMessageToSession(sessionId, prompt);
-      setMessages((prev) => [...prev, { role: "assistant", content: "", fullContent: reply }]);
+      setPendingReply(reply);
+
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
     } finally {
@@ -220,31 +225,48 @@ export  function Chat() {
         </div>
 
         <div style={chatWindow}>
-          <AnimatePresence>
-            {messages.map((msg, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}
-              >
-                <div style={{
-                  background: msg.role === "user" ? "#8b0000" : "#660000",
-                  padding: "12px 16px", borderRadius: "16px", color: "#fff",
-                  maxWidth: "75%", whiteSpace: "pre-wrap", boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
-                }}>
-                  <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
-                  <div style={{ marginTop: "6px" }}>
-                    {msg.role === "assistant" ? <TypingText text={msg.content} /> : msg.content}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-          <div ref={bottomRef} />
+  {messages.map((msg, i) => (
+    <div key={i} style={{
+      display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
+    }}>
+      <div style={{
+        background: msg.role === "user" ? "#8b0000" : "#660000",
+        padding: "12px 16px", borderRadius: "16px",
+        color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+      }}>
+        <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
+        <div style={{ marginTop: "6px" }}>{msg.content}</div>
+      </div>
+    </div>
+  ))}
+
+  {pendingReply && (
+    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+      <div style={{
+        background: "#660000",
+        padding: "12px 16px", borderRadius: "16px",
+        color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+      }}>
+        <strong>The Hustler Bot</strong>
+        <div style={{ marginTop: "6px" }}>
+          <TypingText
+            text={pendingReply}
+            speed={15}
+            onComplete={() => {
+              setMessages((prev) => [...prev, { role: "assistant", content: pendingReply }]);
+              setPendingReply("");
+            }}
+          />
         </div>
+      </div>
+    </div>
+  )}
+
+  <div ref={bottomRef} />
+</div>
+
 
         <form onSubmit={handleSend} style={chatForm}>
           <textarea
