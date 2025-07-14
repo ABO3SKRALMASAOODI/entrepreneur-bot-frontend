@@ -248,23 +248,43 @@ function Chat() {
         </div>
 
         <div style={chatWindow}>
-          {messages.map((msg, i) => (
-            <div key={i} style={{
-              display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
-            }}>
-              <div style={{
-                background: msg.role === "user" ? "#8b0000" : "#660000",
-                padding: "12px 16px", borderRadius: "16px",
-                color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
-              }}>
-                <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
-                <div style={{ marginTop: "6px" }}>{msg.content}</div>
-              </div>
-            </div>
-          ))}
-          <div ref={bottomRef} />
+  {messages.map((msg, i) => (
+    <div key={i} style={{
+      display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
+    }}>
+      <div style={{
+        background: msg.role === "user" ? "#8b0000" : "#660000",
+        padding: "12px 16px", borderRadius: "16px",
+        color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+      }}>
+        <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
+        <div style={{ marginTop: "6px" }}>
+          {msg.role === "assistant" ? <TypingText text={msg.content} speed={15} /> : msg.content}
         </div>
+      </div>
+    </div>
+  ))}
+
+  {loading && (
+    <div style={{
+      display: "flex", justifyContent: "flex-start"
+    }}>
+      <div style={{
+        background: "#660000",
+        padding: "12px 16px", borderRadius: "16px",
+        color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+      }}>
+        <strong>The Hustler Bot</strong>
+        <div style={{ marginTop: "6px" }}>The Hustler Bot is thinking...</div>
+      </div>
+    </div>
+  )}
+
+  <div ref={bottomRef} />
+</div>
+
 
         <form onSubmit={handleSend} style={chatForm}>
           <textarea
