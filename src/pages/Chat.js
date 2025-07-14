@@ -291,16 +291,23 @@ export  function Chat() {
 
 
 
-        <form onSubmit={handleSend} style={chatForm}>
-          <textarea
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Ask your business question..."
-            rows={2}
-            style={inputBox}
-          />
-          <button type="submit" style={mainBtn}>➤</button>
-        </form>
+<form onSubmit={handleSend} style={chatForm}>
+  <textarea
+    value={prompt}
+    onChange={(e) => setPrompt(e.target.value)}
+    onKeyDown={(e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleSend(e);
+      }
+    }}
+    placeholder="Ask your business question..."
+    rows={2}
+    style={inputBox}
+  />
+  <button type="submit" style={mainBtn}>➤</button>
+</form>
+
 
         {error && (
           <div style={{ padding: "0.5rem 1rem", color: "#ff8080", backgroundColor: "#2f1f1f" }}>
