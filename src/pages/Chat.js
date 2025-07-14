@@ -142,22 +142,23 @@ export  function Chat() {
         setCurrentSessionId(sessionId);
         await loadSessions();
       }
-
+  
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
       setLoadingReply(true);
+  
       const reply = await sendMessageToSession(sessionId, prompt);
       setPendingReply(reply);
-      await loadSessions();
-      
-
+      await loadSessions(); // Already here, keep it
+  
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
     } finally {
       setLoadingReply(false);
     }
   };
+  
 
   useEffect(() => {
     if (!messages.length) return;
