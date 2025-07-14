@@ -213,7 +213,6 @@ export  function Chat() {
   display: "flex",
   flexDirection: "column",
 }}>
-
   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
     <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
     <button onClick={() => setSidebarOpen(false)} style={closeBtn}>×</button>
@@ -221,7 +220,15 @@ export  function Chat() {
 
   <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
 
-  <div style={{ flexGrow: 1, overflowY: "auto" }}>
+  <div style={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }}>
+    <div style={{ marginBottom: "1rem" }}>
+      <p style={{ fontSize: "0.95rem", color: "#aaa" }}>
+        {userEmail || "User"}
+      </p>
+      <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
+      <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
+    </div>
+
     <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
       {sessions.map((session) => {
         const sessionMessages = session.messages || [];
@@ -251,14 +258,7 @@ export  function Chat() {
         );
       })}
     </ul>
-
-    <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
-      {userEmail || "User"}
-    </p>
-    <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
-    <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
   </div>
-
 </div>
 
 
