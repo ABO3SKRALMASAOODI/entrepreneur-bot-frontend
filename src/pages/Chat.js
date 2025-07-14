@@ -177,12 +177,19 @@ export  function Chat() {
     }
   }, [messages]);
 
-  const handleNewSession = () => {
-    setMessages([]);
-    setPrompt("");
-    setError("");
-    setCurrentSessionId(null);
+  const handleNewSession = async () => {
+    try {
+      const sessionId = await startSession();
+      setCurrentSessionId(sessionId);
+      await loadSessions();
+      setMessages([]);
+      setPrompt("");
+      setError("");
+    } catch (err) {
+      console.error("Failed to create new session:", err);
+    }
   };
+  
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -208,6 +215,26 @@ export  function Chat() {
           <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
           <button onClick={() => setSidebarOpen(false)} style={closeBtn}>×</button>
         </div>
+        <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
+
+<ul style={{ listStyle: "none", padding: 0 }}>
+  {sessions.map((session) => (
+    <li
+      key={session.id}
+      style={{
+        marginBottom: "8px",
+        padding: "8px",
+        borderRadius: "8px",
+        backgroundColor: currentSessionId === session.id ? "#8b0000" : "#222",
+        color: "#fff",
+        cursor: "pointer"
+      }}
+      onClick={() => loadMessages(session.id)}
+    >
+      {session.name || `Session ${session.id}`}
+    </li>
+  ))}
+</ul>
 
         <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
           {userEmail || "User"}
