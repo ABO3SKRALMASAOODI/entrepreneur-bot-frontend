@@ -203,59 +203,64 @@ export  function Chat() {
       <Link to="/account" style={floatingAccountBtn}>👤</Link>
 
       <div style={{
-        flex: "0 0 260px",
-        width: sidebarOpen ? "260px" : "0",
-        transition: "width 0.3s ease",
-        backgroundColor: "#111",
-        color: "#fff",
-        padding: sidebarOpen ? "2rem 1rem" : "0",
-        overflow: "hidden"
-      }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
-          <button onClick={() => setSidebarOpen(false)} style={closeBtn}>×</button>
-        </div>
-        <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
+  flex: "0 0 auto",
+  width: sidebarOpen ? "260px" : "0",
+  transition: "width 0.3s ease, padding 0.3s ease",
+  backgroundColor: "#111",
+  color: "#fff",
+  padding: sidebarOpen ? "2rem 1rem" : "0",
+  overflow: "hidden",
+  display: "flex",
+  flexDirection: "column",
+}}>
 
-        <ul style={{ listStyle: "none", padding: 0 }}>
-  {sessions.map((session) => {
-    const sessionMessages = session.messages || [];
-    const title =
-      sessionMessages.length > 0
-        ? sessionMessages
-            .slice(0, 5)
-            .map((msg) => msg.content)
-            .join(" ")
-            .slice(0, 50) + "..."
-        : "Untitled Session";
+  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <h2 style={{ fontSize: "1.3rem", marginBottom: "1.5rem" }}>The Hustler Bot</h2>
+    <button onClick={() => setSidebarOpen(false)} style={closeBtn}>×</button>
+  </div>
 
-    return (
-      <li
-        key={session.id}
-        style={{
-          marginBottom: "8px",
-          padding: "8px",
-          borderRadius: "8px",
-          backgroundColor: currentSessionId === session.id ? "#8b0000" : "#222",
-          color: "#fff",
-          cursor: "pointer",
-        }}
-        onClick={() => loadMessages(session.id)}
-      >
-        {title}
-      </li>
-    );
-  })}
-</ul>
+  <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
 
+  <div style={{ flexGrow: 1, overflowY: "auto" }}>
+    <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+      {sessions.map((session) => {
+        const sessionMessages = session.messages || [];
+        const title =
+          sessionMessages.length > 0
+            ? sessionMessages
+                .slice(0, 5)
+                .map((msg) => msg.content)
+                .join(" ")
+                .slice(0, 50) + "..."
+            : "Untitled Session";
+        return (
+          <li
+            key={session.id}
+            style={{
+              marginBottom: "8px",
+              padding: "8px",
+              borderRadius: "8px",
+              backgroundColor: currentSessionId === session.id ? "#8b0000" : "#222",
+              color: "#fff",
+              cursor: "pointer",
+            }}
+            onClick={() => loadMessages(session.id)}
+          >
+            {title}
+          </li>
+        );
+      })}
+    </ul>
 
-        <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
-          {userEmail || "User"}
-        </p>
+    <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
+      {userEmail || "User"}
+    </p>
+    <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
+    <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
+  </div>
 
-        <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
-        <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
-      </div>
+</div>
+
 
       <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         <div style={topBar}>
