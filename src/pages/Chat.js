@@ -266,6 +266,21 @@ export  function Chat() {
 
   <div ref={bottomRef} />
 </div>
+{(loading || pendingReply) && (
+  <div style={{
+    position: "fixed",
+    bottom: "120px",
+    right: "20px",
+    zIndex: 10010,
+    backgroundColor: "#660000",
+    padding: "12px 16px",
+    borderRadius: "16px",
+    color: "#fff",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.4)"
+  }}>
+    🤖 The Hustler Bot is thinking...
+  </div>
+)}
 
 
         <form onSubmit={handleSend} style={chatForm}>
@@ -369,6 +384,18 @@ const closeBtn = {
   backgroundColor: "#222", border: "none", borderRadius: "50%",
   width: "32px", height: "32px", color: "#fff", fontSize: "1.2rem",
   fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
+};
+const floatingBotBubbleStyle = {
+  position: "fixed",
+  bottom: "120px",
+  right: "20px",
+  zIndex: 10010,
+  backgroundColor: "#660000",
+  padding: "12px 16px",
+  borderRadius: "16px",
+  color: "#fff",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+  fontWeight: "bold"
 };
 
 const floatingAccountBtn = {
