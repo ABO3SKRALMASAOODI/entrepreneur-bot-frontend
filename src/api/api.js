@@ -8,12 +8,20 @@ const API = axios.create({
 // Include token automatically if available
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
 
+  // Skip Authorization for these routes:
+  if (
+    token &&
+    !config.url.includes("/auth/refresh-token") &&
+    !config.url.includes("/auth/login") &&
+    !config.url.includes("/auth/register")
+  ) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
+
 
 // ----- AUTHENTICATED CHAT SESSION ROUTES -----
 
