@@ -241,16 +241,9 @@ export  function Chat() {
     {/* Session list with scroll */}
     <div style={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }}>
       <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-        {sessions.map((session) => {
-          const sessionMessages = session.messages || [];
-          const title =
-            sessionMessages.length > 0
-              ? sessionMessages
-                  .slice(0, 5)
-                  .map((msg) => msg.content)
-                  .join(" ")
-                  .slice(0, 50) + "..."
-              : "Untitled Session";
+      {sessions.map((session) => {
+      const title = session.title || "Untitled Session";
+
           return (
             <li
               key={session.id}
