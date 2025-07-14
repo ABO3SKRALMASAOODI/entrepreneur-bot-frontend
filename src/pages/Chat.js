@@ -44,7 +44,7 @@ function IntroModal({ onContinue }) {
   );
 }
 
-export default function Chat() {
+export  function Chat() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
   const [sessions, setSessions] = useState([]);
