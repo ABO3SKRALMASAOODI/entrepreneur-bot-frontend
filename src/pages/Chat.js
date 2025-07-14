@@ -257,7 +257,7 @@ export  function Chat() {
       background: "transparent",
       fontWeight: "bold"
     }}>
-      The Hustler Bot is thinking...
+      Thinking...
     </div>
   </div>
 )}
