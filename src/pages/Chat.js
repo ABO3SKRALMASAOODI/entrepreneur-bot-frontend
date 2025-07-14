@@ -149,6 +149,8 @@ export  function Chat() {
       setLoadingReply(true);
       const reply = await sendMessageToSession(sessionId, prompt);
       setPendingReply(reply);
+      await loadSessions();
+      
 
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
