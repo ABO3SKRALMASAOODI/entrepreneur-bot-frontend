@@ -221,46 +221,52 @@ export  function Chat() {
 
   <h4 style={{ fontSize: "1rem", marginBottom: "0.5rem", color: "#bbb" }}>Sessions</h4>
 
-  {/* User Email fixed outside scroll */}
+  {/* Email outside scroll */}
   <p style={{ fontSize: "0.95rem", marginBottom: "1rem", color: "#aaa" }}>
     {userEmail || "User"}
   </p>
 
-  {/* Scrollable area starts here */}
-  <div style={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }}>
-    <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-      {sessions.map((session) => {
-        const sessionMessages = session.messages || [];
-        const title =
-          sessionMessages.length > 0
-            ? sessionMessages
-                .slice(0, 5)
-                .map((msg) => msg.content)
-                .join(" ")
-                .slice(0, 50) + "..."
-            : "Untitled Session";
-        return (
-          <li
-            key={session.id}
-            style={{
-              marginBottom: "8px",
-              padding: "8px",
-              borderRadius: "8px",
-              backgroundColor: currentSessionId === session.id ? "#8b0000" : "#222",
-              color: "#fff",
-              cursor: "pointer",
-            }}
-            onClick={() => loadMessages(session.id)}
-          >
-            {title}
-          </li>
-        );
-      })}
-    </ul>
+  {/* Scrollable area */}
+  <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+    
+    {/* Buttons at top of scroll */}
+    <div style={{ flexShrink: 0 }}>
+      <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
+      <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
+    </div>
 
-    {/* Buttons inside scrollable area */}
-    <button onClick={handleNewSession} style={sidebarBtn}>New Session</button>
-    <button onClick={handleLogout} style={sidebarBtn}>Logout</button>
+    {/* Session list with scroll */}
+    <div style={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }}>
+      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+        {sessions.map((session) => {
+          const sessionMessages = session.messages || [];
+          const title =
+            sessionMessages.length > 0
+              ? sessionMessages
+                  .slice(0, 5)
+                  .map((msg) => msg.content)
+                  .join(" ")
+                  .slice(0, 50) + "..."
+              : "Untitled Session";
+          return (
+            <li
+              key={session.id}
+              style={{
+                marginBottom: "8px",
+                padding: "8px",
+                borderRadius: "8px",
+                backgroundColor: currentSessionId === session.id ? "#8b0000" : "#222",
+                color: "#fff",
+                cursor: "pointer",
+              }}
+              onClick={() => loadMessages(session.id)}
+            >
+              {title}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   </div>
 
 </div>
