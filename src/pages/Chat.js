@@ -26,13 +26,18 @@ function TypingText({ text = "", speed = 20, onComplete }) {
   }, [text, onComplete]);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div
+      style={{
+        position: "relative",
+        fontFamily: "monospace",
+        whiteSpace: "pre",
+        minHeight: "1.5em",
+      }}
+    >
       <span>{displayed}</span>
-      <span style={{ visibility: "hidden", position: "absolute", top: 0 }}>
-        {text}
-      </span>
     </div>
   );
+  
   
 }
 // he
@@ -70,7 +75,6 @@ export  function Chat() {
   const [error, setError] = useState("");
   const [showIntro, setShowIntro] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [loadingReply, setLoadingReply] = useState(false);
   const [subscriptionId, setSubscriptionId] = useState(null);
   const bottomRef = useRef(null);
   const navigate = useNavigate();
@@ -154,7 +158,7 @@ export  function Chat() {
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-      setLoadingReply(true);
+      
   
       const reply = await sendMessageToSession(sessionId, prompt);
       setPendingReply(reply);
@@ -163,30 +167,11 @@ export  function Chat() {
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
     } finally {
-      setLoadingReply(false);
+      
     }
   };
   
 
-  useEffect(() => {
-    if (!messages.length) return;
-    const last = messages[messages.length - 1];
-    if (last.role === "assistant" && last.content === "" && last.fullContent) {
-      let i = 0;
-      const interval = setInterval(() => {
-        setMessages((prev) => {
-          const m = [...prev];
-          const latest = { ...m[m.length - 1] };
-          latest.content = latest.fullContent.slice(0, i + 1);
-          m[m.length - 1] = latest;
-          return m;
-        });
-        i++;
-        if (i >= last.fullContent.length) clearInterval(interval);
-      }, 20);
-      return () => clearInterval(interval);
-    }
-  }, [messages]);
 
   const handleNewSession = async () => {
     try {
@@ -299,30 +284,30 @@ export  function Chat() {
       </div>
     </div>
   ))}
-{loadingReply && (
-  <div style={{
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    gap: "10px",
-    marginTop: "10px",
-    marginLeft: "10px"
-  }}>
-    <div style={{ width: "50px", height: "50px" }}>
-      <RiveComponent style={{ width: "100%", height: "100%" }} />
-    </div>
+
+
+{pendingReply && (
+  <>
     <div style={{
-      color: "#fff",
-      background: "transparent",
-      fontWeight: "bold"
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      gap: "10px",
+      marginTop: "10px",
+      marginLeft: "10px"
     }}>
-      Thinking...
+      <div style={{ width: "50px", height: "50px" }}>
+        <RiveComponent style={{ width: "100%", height: "100%" }} />
+      </div>
+      <div style={{
+        color: "#fff",
+        background: "transparent",
+        fontWeight: "bold"
+      }}>
+        Thinking...
+      </div>
     </div>
-  </div>
-)}
 
-
-  {pendingReply && (
     <div style={{ display: "flex", justifyContent: "flex-start" }}>
       <div style={{
         background: "#660000",
@@ -332,22 +317,20 @@ export  function Chat() {
       }}>
         <strong>The Hustler Bot</strong>
         <div style={{ marginTop: "6px" }}>
-        <TypingText
-  text={pendingReply}
-  speed={15}
-  onComplete={() => {
-    setLoadingReply(false);  // ← ADD THIS LINE
-    setPendingReply("");
-    setMessages((prev) => [...prev, { role: "assistant", content: pendingReply }]);
-  }}
-  
-/>
-
-
+          <TypingText
+            text={pendingReply}
+            speed={15}
+            onComplete={() => {
+              setPendingReply("");
+              setMessages((prev) => [...prev, { role: "assistant", content: pendingReply }]);
+            }}
+          />
         </div>
       </div>
     </div>
-  )}
+  </>
+)}
+
 
   <div ref={bottomRef} />
 </div>
