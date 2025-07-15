@@ -26,16 +26,14 @@ function TypingText({ text = "", speed = 20, onComplete }) {
   }, [text, onComplete]);
 
   return (
-    <div
-      style={{
-        position: "relative",
-        fontFamily: "monospace",
-        whiteSpace: "pre",
-        minHeight: "1.5em",
-      }}
-    >
-      <span>{displayed}</span>
-    </div>
+    <span style={{
+      fontFamily: "monospace",
+      whiteSpace: "pre-wrap"
+    }}>
+      {displayed || text[0]}
+    </span>
+    
+    
   );
   
   
@@ -312,7 +310,8 @@ export  function Chat() {
   })}
 
   {/* ✅ Show Thinking Bot only if text hasn’t started typing yet */}
-  {typingIndex !== null && typingText === "" && (
+  {typingIndex !== null && (
+
     <div style={{
       display: "flex",
       alignItems: "center",
