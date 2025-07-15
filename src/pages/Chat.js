@@ -26,18 +26,12 @@ function TypingText({ text = "", speed = 20, onComplete }) {
   }, [text, onComplete]);
 
   return (
-    <span style={{
-      fontFamily: "monospace",
-      whiteSpace: "pre-wrap"
-    }}>
-      {displayed || text[0]}
+    <span style={{ whiteSpace: "pre-wrap" }}>
+      {displayed}
     </span>
-    
-    
   );
-  
-  
 }
+
 // he
 function IntroModal({ onContinue }) {
   return (
@@ -272,42 +266,43 @@ export  function Chat() {
         </div>
 
         <div style={chatWindow}>
-  {messages.map((msg, i) => {
-    const isTyping = i === typingIndex && msg.role === "assistant";
+        {messages.map((msg, i) => {
+  const isTyping = i === typingIndex && msg.role === "assistant";
 
-    return (
-      <div key={i} style={{
-        display: "flex",
-        justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
-        fontFamily: "monospace" // ✅ Always monospace font for consistency
-      }}>
-        <div style={{
-          background: msg.role === "user" ? "#8b0000" : "#660000",
-          padding: "12px 16px", borderRadius: "16px",
-          color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
-        }}>
-          <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
-          <div style={{ marginTop: "6px" }}>
-            {isTyping ? (
-              <TypingText
-                text={typingText}
-                speed={15}
-                onComplete={() => {
-                  setMessages(prev => {
-                    const updated = [...prev];
-                    updated[i].content = typingText;
-                    return updated;
-                  });
-                  setTypingIndex(null);
-                }}
-              />
-            ) : msg.content}
+  return (
+    <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
+      {isTyping && (
+        <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+          <div style={{ width: "50px", height: "50px" }}>
+            <RiveComponent style={{ width: "100%", height: "100%" }} />
           </div>
+          <div style={{ color: "#fff", marginLeft: "8px" }}>Thinking...</div>
+        </div>
+      )}
+
+      <div style={{
+        background: msg.role === "user" ? "#8b0000" : "#660000",
+        padding: "12px 16px", borderRadius: "16px",
+        color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+        fontFamily: "inherit" // ✅ Keep browser default font!
+      }}>
+        <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
+        <div style={{ marginTop: "6px" }}>
+          {isTyping ? <TypingText text={typingText} speed={15} onComplete={() => {
+            setMessages(prev => {
+              const updated = [...prev];
+              updated[i].content = typingText;
+              return updated;
+            });
+            setTypingIndex(null);
+          }} /> : msg.content}
         </div>
       </div>
-    );
-  })}
+    </div>
+  );
+})}
+
 
   {/* ✅ Show Thinking Bot only if text hasn’t started typing yet */}
   {typingIndex !== null && (
