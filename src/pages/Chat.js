@@ -25,7 +25,15 @@ function TypingText({ text = "", speed = 20, onComplete }) {
     return () => clearInterval(interval);
   }, [text, onComplete]);
 
-  return <div>{displayed}</div>;
+  return (
+    <div style={{ position: "relative" }}>
+      <span>{displayed}</span>
+      <span style={{ visibility: "hidden", position: "absolute", top: 0 }}>
+        {text}
+      </span>
+    </div>
+  );
+  
 }
 
 function IntroModal({ onContinue }) {
@@ -328,13 +336,11 @@ export  function Chat() {
   text={pendingReply}
   speed={15}
   onComplete={() => {
-    // Slightly delay adding the message so the thinking indicator disappears more naturally
+    setPendingReply(""); // Clear thinking indicator FIRST
     setMessages((prev) => [...prev, { role: "assistant", content: pendingReply }]);
-    setTimeout(() => {
-      setPendingReply("");
-    }, 50); // You can try 0, 50, or 100ms — experiment with the number
   }}
 />
+
 
         </div>
       </div>
