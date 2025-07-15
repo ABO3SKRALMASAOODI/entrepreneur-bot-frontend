@@ -145,10 +145,10 @@ export  function Chat() {
       setMessages([]);
     }
   };
-
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
+  
     try {
       let sessionId = currentSessionId;
       if (!sessionId) {
@@ -160,21 +160,21 @@ export  function Chat() {
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
-      
   
       const reply = await sendMessageToSession(sessionId, prompt);
-      setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
-      setTypingIndex(messages.length);
-      setTypingText(reply);
-      
-      await loadSessions(); // Already here, keep it
+  
+      setMessages((prev) => {
+        const updated = [...prev, { role: "assistant", content: "" }];
+        setTypingIndex(updated.length - 1);  // ✅ CORRECTED
+        setTypingText(reply);
+        return updated;
+      });
   
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
-    } finally {
-      
     }
   };
+  
   
 
 
