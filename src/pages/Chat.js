@@ -14,8 +14,8 @@ function TypingText({ text = "", speed = 20, onComplete }) {
     if (!text) return;
 
     const interval = setInterval(() => {
-      setDisplayed((prev) => prev + text[indexRef.current]);
       indexRef.current += 1;
+      setDisplayed(text.slice(0, indexRef.current));
       if (indexRef.current >= text.length) {
         clearInterval(interval);
         if (onComplete) onComplete();
@@ -25,11 +25,7 @@ function TypingText({ text = "", speed = 20, onComplete }) {
     return () => clearInterval(interval);
   }, [text, onComplete]);
 
-  return (
-    <span style={{ whiteSpace: "pre-wrap" }}>
-      {displayed}
-    </span>
-  );
+  return <span style={{ whiteSpace: "pre-wrap" }}>{displayed}</span>;
 }
 
 // he
