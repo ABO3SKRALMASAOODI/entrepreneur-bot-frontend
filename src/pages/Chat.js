@@ -70,6 +70,7 @@ export  function Chat() {
   const bottomRef = useRef(null);
   const navigate = useNavigate();
   const userEmail = localStorage.getItem("user_email");
+  const [isBotResponding, setIsBotResponding] = useState(false);
 
   const { RiveComponent, rive } = useRive({
     src: "/hustler-robot.riv",
@@ -146,10 +147,10 @@ export  function Chat() {
         await loadSessions();
       }
   
-      // ✅ Reset typing states before sending a new message
       setTypingIndex(null);
       setTypingText("");
       setDisplayedText("");
+      setIsBotResponding(true); // ✅ Set responding state
   
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
@@ -157,7 +158,7 @@ export  function Chat() {
   
       const reply = await sendMessageToSession(sessionId, prompt);
   
-      setDisplayedText(""); // ✅ Reset displayed text before typing starts
+      setDisplayedText("");
       setMessages((prev) => {
         const updated = [...prev, { role: "assistant", content: "" }];
         setTypingIndex(updated.length - 1);
@@ -167,8 +168,16 @@ export  function Chat() {
   
     } catch (err) {
       setError(err.response?.data?.error || "Error during chat");
+      setIsBotResponding(false);
     }
   };
+  const handleStop = () => {
+    setTypingIndex(null);
+    setTypingText("");
+    setDisplayedText("");
+    setIsBotResponding(false);
+  };
+  
   
   
 
@@ -306,6 +315,9 @@ export  function Chat() {
         return updated;
       });
       setTypingIndex(null);
+      setIsBotResponding(false); // ✅ Bot finished
+
+
     }}
   />
 ) : msg.content}
@@ -340,7 +352,18 @@ export  function Chat() {
     rows={2}
     style={inputBox}
   />
+  {isBotResponding ? (
+  <button
+    type="button"
+    onClick={handleStop}
+    style={{ ...mainBtn, backgroundColor: "#444" }} 
+  >
+    Stop
+  </button>
+  ) : (
   <button type="submit" style={mainBtn}>➤</button>
+  )}
+
 </form>
 
 
