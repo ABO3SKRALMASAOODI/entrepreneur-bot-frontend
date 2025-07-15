@@ -269,10 +269,14 @@ export  function Chat() {
         </div>
 
         <div style={chatWindow}>
-  {messages.map((msg, i) => (
-    <div key={i} style={{
-      display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start"
-    }}>
+        {messages.map((msg, i) => {
+  // Hide the last assistant message if pendingReply exists
+  if (pendingReply && i === messages.length - 1 && msg.role === "assistant") {
+    return null;
+  }
+
+  return (
+    <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
       <div style={{
         background: msg.role === "user" ? "#8b0000" : "#660000",
         padding: "12px 16px", borderRadius: "16px",
@@ -283,7 +287,9 @@ export  function Chat() {
         <div style={{ marginTop: "6px" }}>{msg.content}</div>
       </div>
     </div>
-  ))}
+  );
+})}
+
 
 
 {pendingReply && (
