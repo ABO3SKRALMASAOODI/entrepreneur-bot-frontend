@@ -274,67 +274,69 @@ export  function Chat() {
         </div>
 
         <div style={chatWindow}>
-        {messages.map((msg, i) => {
-  const isTyping = i === typingIndex && msg.role === "assistant";
+  {messages.map((msg, i) => {
+    const isTyping = i === typingIndex && msg.role === "assistant";
 
-  return (
-    <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
-      <div style={{
-        background: msg.role === "user" ? "#8b0000" : "#660000",
-        padding: "12px 16px", borderRadius: "16px",
-        color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+    return (
+      <div key={i} style={{
+        display: "flex",
+        justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
+        fontFamily: "monospace" // ✅ Always monospace font for consistency
       }}>
-        <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
-        <div style={{ marginTop: "6px" }}>
-          {isTyping ? (
-            <TypingText
-              text={typingText}
-              speed={15}
-              onComplete={() => {
-                setMessages((prev) => {
-                  const updated = [...prev];
-                  updated[i].content = typingText;
-                  return updated;
-                });
-                setTypingIndex(null);
-              }}
-            />
-          ) : msg.content}
+        <div style={{
+          background: msg.role === "user" ? "#8b0000" : "#660000",
+          padding: "12px 16px", borderRadius: "16px",
+          color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
+        }}>
+          <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
+          <div style={{ marginTop: "6px" }}>
+            {isTyping ? (
+              <TypingText
+                text={typingText}
+                speed={15}
+                onComplete={() => {
+                  setMessages(prev => {
+                    const updated = [...prev];
+                    updated[i].content = typingText;
+                    return updated;
+                  });
+                  setTypingIndex(null);
+                }}
+              />
+            ) : msg.content}
+          </div>
         </div>
       </div>
-    </div>
-  );
-})}
+    );
+  })}
 
-
-
-{typingIndex !== null && (
-  <div style={{
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    gap: "10px",
-    marginTop: "10px",
-    marginLeft: "10px"
-  }}>
-    <div style={{ width: "50px", height: "50px" }}>
-      <RiveComponent style={{ width: "100%", height: "100%" }} />
-    </div>
+  {/* ✅ Show Thinking Bot only if text hasn’t started typing yet */}
+  {typingIndex !== null && typingText === "" && (
     <div style={{
-      color: "#fff",
-      background: "transparent",
-      fontWeight: "bold"
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      gap: "10px",
+      marginTop: "10px",
+      marginLeft: "10px"
     }}>
-      Thinking...
+      <div style={{ width: "50px", height: "50px" }}>
+        <RiveComponent style={{ width: "100%", height: "100%" }} />
+      </div>
+      <div style={{
+        color: "#fff",
+        background: "transparent",
+        fontWeight: "bold"
+      }}>
+        Thinking...
+      </div>
     </div>
-  </div>
-)}
-
-
+  )}
 
   <div ref={bottomRef} />
 </div>
+
 
 
 
