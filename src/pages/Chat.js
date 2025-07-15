@@ -4,18 +4,19 @@ import { startSession, sendMessageToSession, getSessions, getMessagesForSession 
 import API from "../api/api";
 import { useRive } from "rive-react";
 import { AnimatePresence, motion } from "framer-motion";
-function TypingText({ text = "", speed = 20, onComplete }) {
-  const [displayed, setDisplayed] = useState("");
-  const indexRef = useRef(0);
+function TypingText({ text, speed, displayed, setDisplayed, onComplete }) {
+  const indexRef = useRef(displayed.length);
 
   useEffect(() => {
-    setDisplayed("");
-    indexRef.current = 0;
-    if (!text) return;
+    if (!text || indexRef.current >= text.length) {
+      if (onComplete) onComplete();
+      return;
+    }
 
     const interval = setInterval(() => {
+      setDisplayed(text.slice(0, indexRef.current + 1));
       indexRef.current += 1;
-      setDisplayed(text.slice(0, indexRef.current));
+
       if (indexRef.current >= text.length) {
         clearInterval(interval);
         if (onComplete) onComplete();
@@ -23,7 +24,7 @@ function TypingText({ text = "", speed = 20, onComplete }) {
     }, speed);
 
     return () => clearInterval(interval);
-  }, [text, onComplete]);
+  }, [text, speed, setDisplayed, onComplete]);
 
   return <span style={{ whiteSpace: "pre-wrap" }}>{displayed}</span>;
 }
@@ -59,8 +60,8 @@ export  function Chat() {
   const [sessions, setSessions] = useState([]);
   const [typingIndex, setTypingIndex] = useState(null);
   const [typingText, setTypingText] = useState("");
-
-
+  const [displayedText, setDisplayedText] = useState("");
+  const typingRef = useRef();  
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [error, setError] = useState("");
   const [showIntro, setShowIntro] = useState(false);
@@ -145,15 +146,21 @@ export  function Chat() {
         await loadSessions();
       }
   
+      // ✅ Reset typing states before sending a new message
+      setTypingIndex(null);
+      setTypingText("");
+      setDisplayedText("");
+  
       const userMessage = { role: "user", content: prompt };
       setMessages((prev) => [...prev, userMessage]);
       setPrompt("");
   
       const reply = await sendMessageToSession(sessionId, prompt);
   
+      setDisplayedText(""); // ✅ Reset displayed text before typing starts
       setMessages((prev) => {
         const updated = [...prev, { role: "assistant", content: "" }];
-        setTypingIndex(updated.length - 1);  // ✅ CORRECTED
+        setTypingIndex(updated.length - 1);
         setTypingText(reply);
         return updated;
       });
@@ -287,9 +294,11 @@ export  function Chat() {
         <div style={{ marginTop: "6px" }}>
         {isTyping ? (
   <TypingText
-    key={`typing-${i}`}   // ✅ Add this line
+    key={`typing-${i}`} // Forces re-render cleanly
     text={typingText}
     speed={15}
+    displayed={displayedText}
+    setDisplayed={setDisplayedText}
     onComplete={() => {
       setMessages(prev => {
         const updated = [...prev];
@@ -300,6 +309,7 @@ export  function Chat() {
     }}
   />
 ) : msg.content}
+
 
         </div>
       </div>
