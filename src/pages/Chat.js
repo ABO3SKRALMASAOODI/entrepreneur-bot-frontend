@@ -328,9 +328,12 @@ export  function Chat() {
     style={{
       whiteSpace: "pre-wrap",
       fontFamily: "inherit",
+      overflowWrap: "break-word",
     }}
+    className="message-content"
   />
 )}
+
 
 
 

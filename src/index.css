@@ -32,3 +32,21 @@ body {
 ::-webkit-scrollbar-track {
   background: #000;
 }
+/* Chat message content styles */
+.message-content pre {
+  background: #111;
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-top: 10px;
+  font-family: monospace;
+}
+
+.message-content code {
+  background: #111;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+}
