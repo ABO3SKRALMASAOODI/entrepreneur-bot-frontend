@@ -35,7 +35,7 @@ function TypingText({ text = "", speed = 20, onComplete }) {
   );
   
 }
-
+// he
 function IntroModal({ onContinue }) {
   return (
     <div style={modalOverlay}>
