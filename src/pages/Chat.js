@@ -336,9 +336,11 @@ export  function Chat() {
   text={pendingReply}
   speed={15}
   onComplete={() => {
-    setPendingReply(""); // Clear thinking indicator FIRST
+    setLoadingReply(false);  // ← ADD THIS LINE
+    setPendingReply("");
     setMessages((prev) => [...prev, { role: "assistant", content: pendingReply }]);
   }}
+  
 />
 
 
