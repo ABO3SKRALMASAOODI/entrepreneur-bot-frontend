@@ -48,12 +48,26 @@ export default function SubscribePage() {
           <li>🌐 Future features and updates included for free</li>
         </ul>
         <button onClick={handlePaddleSubscribe} style={{
-          backgroundColor: "#8b0000", color: "#fff", padding: "14px 28px",
-          borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1.1rem",
-          width: "100%", fontWeight: "bold"
-        }}>
-          Subscribe with Paddle
-        </button>
+  backgroundColor: "#8b0000", color: "#fff", padding: "14px 28px",
+  borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1.1rem",
+  width: "100%", fontWeight: "bold", marginBottom: "1rem"
+}}>
+  Subscribe with Paddle
+</button>
+
+<button onClick={() => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user_email");
+  localStorage.removeItem("seen_intro");
+  navigate("/login");
+}} style={{
+  backgroundColor: "#444", color: "#fff", padding: "12px",
+  borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "1rem",
+  width: "100%", fontWeight: "bold"
+}}>
+  Logout
+</button>
+
       </div>
     </div>
   );
