@@ -20,9 +20,11 @@ function PrivateRoute({ children }) {
 }
 
 function App() {
+  const token = localStorage.getItem("token");
+
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={token ? <Navigate to="/chat" /> : <LandingPage />} />
       <Route path="/login" element={<SignIn />} />
       <Route path="/enter-password" element={<EnterPassword />} />
       <Route path="/register" element={<Register />} />
