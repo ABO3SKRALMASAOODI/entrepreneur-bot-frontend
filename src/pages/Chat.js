@@ -285,14 +285,22 @@ export  function Chat() {
       }}>
         <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
         <div style={{ marginTop: "6px" }}>
-          {isTyping ? <TypingText text={typingText} speed={15} onComplete={() => {
-            setMessages(prev => {
-              const updated = [...prev];
-              updated[i].content = typingText;
-              return updated;
-            });
-            setTypingIndex(null);
-          }} /> : msg.content}
+        {isTyping ? (
+  <TypingText
+    key={`typing-${i}`}   // ✅ Add this line
+    text={typingText}
+    speed={15}
+    onComplete={() => {
+      setMessages(prev => {
+        const updated = [...prev];
+        updated[i].content = typingText;
+        return updated;
+      });
+      setTypingIndex(null);
+    }}
+  />
+) : msg.content}
+
         </div>
       </div>
     </div>
@@ -300,29 +308,7 @@ export  function Chat() {
 })}
 
 
-  {/* ✅ Show Thinking Bot only if text hasn’t started typing yet */}
-  {typingIndex !== null && (
-
-    <div style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-start",
-      gap: "10px",
-      marginTop: "10px",
-      marginLeft: "10px"
-    }}>
-      <div style={{ width: "50px", height: "50px" }}>
-        <RiveComponent style={{ width: "100%", height: "100%" }} />
-      </div>
-      <div style={{
-        color: "#fff",
-        background: "transparent",
-        fontWeight: "bold"
-      }}>
-        Thinking...
-      </div>
-    </div>
-  )}
+  
 
   <div ref={bottomRef} />
 </div>
