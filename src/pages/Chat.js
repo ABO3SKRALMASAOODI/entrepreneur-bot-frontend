@@ -4,6 +4,8 @@ import { startSession, sendMessageToSession, getSessions, getMessagesForSession 
 import API from "../api/api";
 import { useRive } from "rive-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { marked } from "marked";
+
 function TypingText({ text, speed, displayed, setDisplayed, onComplete }) {
   const indexRef = useRef(displayed.length);
 
@@ -303,7 +305,7 @@ export  function Chat() {
         <div style={{ marginTop: "6px" }}>
         {isTyping ? (
   <TypingText
-    key={`typing-${i}`} // Forces re-render cleanly
+    key={`typing-${i}`}
     text={typingText}
     speed={15}
     displayed={displayedText}
@@ -315,12 +317,21 @@ export  function Chat() {
         return updated;
       });
       setTypingIndex(null);
-      setIsBotResponding(false); // ✅ Bot finished
-
-
+      setIsBotResponding(false);
     }}
   />
-) : msg.content}
+) : (
+  <div
+    dangerouslySetInnerHTML={{
+      __html: marked.parse(msg.content || ""),
+    }}
+    style={{
+      whiteSpace: "pre-wrap",
+      fontFamily: "inherit",
+    }}
+  />
+)}
+
 
 
         </div>
