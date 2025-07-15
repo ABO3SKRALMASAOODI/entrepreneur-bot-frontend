@@ -69,7 +69,9 @@ export  function Chat() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
   const [sessions, setSessions] = useState([]);
-  const [pendingReply, setPendingReply] = useState("");
+  const [typingIndex, setTypingIndex] = useState(null);
+  const [typingText, setTypingText] = useState("");
+
 
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [error, setError] = useState("");
@@ -161,7 +163,10 @@ export  function Chat() {
       
   
       const reply = await sendMessageToSession(sessionId, prompt);
-      setPendingReply(reply);
+      setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+      setTypingIndex(messages.length);
+      setTypingText(reply);
+      
       await loadSessions(); // Already here, keep it
   
     } catch (err) {
@@ -270,10 +275,7 @@ export  function Chat() {
 
         <div style={chatWindow}>
         {messages.map((msg, i) => {
-  // Hide the last assistant message if pendingReply exists
-  if (pendingReply && i === messages.length - 1 && msg.role === "assistant") {
-    return null;
-  }
+  const isTyping = i === typingIndex && msg.role === "assistant";
 
   return (
     <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
@@ -284,7 +286,22 @@ export  function Chat() {
         boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
       }}>
         <strong>{msg.role === "user" ? "You" : "The Hustler Bot"}</strong>
-        <div style={{ marginTop: "6px" }}>{msg.content}</div>
+        <div style={{ marginTop: "6px" }}>
+          {isTyping ? (
+            <TypingText
+              text={typingText}
+              speed={15}
+              onComplete={() => {
+                setMessages((prev) => {
+                  const updated = [...prev];
+                  updated[i].content = typingText;
+                  return updated;
+                });
+                setTypingIndex(null);
+              }}
+            />
+          ) : msg.content}
+        </div>
       </div>
     </div>
   );
@@ -292,50 +309,28 @@ export  function Chat() {
 
 
 
-{pendingReply && (
-  <>
+{typingIndex !== null && (
+  <div style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    gap: "10px",
+    marginTop: "10px",
+    marginLeft: "10px"
+  }}>
+    <div style={{ width: "50px", height: "50px" }}>
+      <RiveComponent style={{ width: "100%", height: "100%" }} />
+    </div>
     <div style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-start",
-      gap: "10px",
-      marginTop: "10px",
-      marginLeft: "10px"
+      color: "#fff",
+      background: "transparent",
+      fontWeight: "bold"
     }}>
-      <div style={{ width: "50px", height: "50px" }}>
-        <RiveComponent style={{ width: "100%", height: "100%" }} />
-      </div>
-      <div style={{
-        color: "#fff",
-        background: "transparent",
-        fontWeight: "bold"
-      }}>
-        Thinking...
-      </div>
+      Thinking...
     </div>
-
-    <div style={{ display: "flex", justifyContent: "flex-start" }}>
-      <div style={{
-        background: "#660000",
-        padding: "12px 16px", borderRadius: "16px",
-        color: "#fff", maxWidth: "75%", whiteSpace: "pre-wrap",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
-      }}>
-        <strong>The Hustler Bot</strong>
-        <div style={{ marginTop: "6px" }}>
-          <TypingText
-            text={pendingReply}
-            speed={15}
-            onComplete={() => {
-              setPendingReply("");
-              setMessages((prev) => [...prev, { role: "assistant", content: pendingReply }]);
-            }}
-          />
-        </div>
-      </div>
-    </div>
-  </>
+  </div>
 )}
+
 
 
   <div ref={bottomRef} />
