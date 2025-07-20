@@ -310,6 +310,50 @@ Mentorship and education in one tool`,
             ))}
           </div>
         </section>
+{/* FINAL CTA SECTION */}
+<section className="relative py-36 bg-gradient-to-b from-black via-[#110000] to-black overflow-hidden z-20">
+  <motion.div
+    className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[200%] h-full bg-gradient-radial from-red-800/30 to-transparent blur-2xl opacity-60 pointer-events-none"
+    initial={{ scale: 0.7, opacity: 0 }}
+    whileInView={{ scale: 1, opacity: 1 }}
+    transition={{ duration: 1.5 }}
+  />
+  <motion.h2
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1 }}
+    className="text-4xl md:text-5xl font-bold text-white text-center drop-shadow-[0_0_15px_#ff1a1a] z-10 relative"
+  >
+    Ready to Build Your Empire?
+  </motion.h2>
+  <motion.p
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1, delay: 0.2 }}
+    className="mt-6 text-lg md:text-2xl text-center text-gray-300 max-w-3xl mx-auto z-10 relative"
+  >
+    Join thousands of founders using Hustler Bot to launch faster, scale smarter, and win more confidently.
+  </motion.p>
+  <motion.div
+    className="mt-10 flex justify-center gap-6 z-10 relative"
+    initial={{ opacity: 0, y: 60 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1, delay: 0.4 }}
+  >
+    <button
+      onClick={() => navigate("/register")}
+      className="bg-gradient-to-r from-red-600 to-red-900 px-8 py-4 rounded-xl font-bold text-white shadow-[0_0_20px_#ff1a1a] hover:scale-105 transition"
+    >
+      Get Started
+    </button>
+    <button
+      onClick={() => navigate("/login")}
+      className="bg-gray-800 border border-red-600 px-8 py-4 rounded-xl font-bold text-white hover:bg-gray-700 hover:border-red-400 transition"
+    >
+      Login
+    </button>
+  </motion.div>
+</section>
 
         {/* BUBBLE CHAT */}
         <div
