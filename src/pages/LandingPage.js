@@ -141,19 +141,7 @@ function LandingPage() {
   🧾 Full data transparency  
   ✅ Built with privacy-first principles`,
     },
-    {
-      icon: "💳",
-      title: "7-Day Free Trial",
-      desc: "No payment needed upfront. Try the bot, build something real, and only pay if it works.",
-      moreInfo: `We believe in earning your trust — not forcing it.
-  
-  That’s why we let you use Hustler Bot free for 7 days with zero commitment.
-  
-  🆓 No credit card required  
-  ⚙️ Access all premium features  
-  📈 Build and validate real ideas  
-  💸 Upgrade only if it delivers value`,
-    },
+    
   ];
   
   return (
