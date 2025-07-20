@@ -34,36 +34,50 @@ export default function SubscribePage() {
       backgroundColor: "#000",
       color: "#fff",
       textAlign: "center",
-      padding: "2rem"
+      padding: "2rem",
+      fontFamily: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto"
     }}>
       <div style={{
         maxWidth: "640px",
+        width: "100%",
         backgroundColor: "#111",
         padding: "3rem",
         borderRadius: "2rem",
-        boxShadow: "0 0 50px rgba(255, 26, 26, 0.3)"
+        boxShadow: "0 0 45px rgba(255, 26, 26, 0.35)",
+        border: "1px solid #8b0000"
       }}>
-        <h1 style={{ marginBottom: "1.5rem", fontSize: "2rem", fontWeight: "bold" }}>
-          Unlock Full Access to The Hustler Bot
+        <h1 style={{
+          fontSize: "2.25rem",
+          fontWeight: "800",
+          marginBottom: "1.5rem",
+          lineHeight: "1.2"
+        }}>
+          Unlock Full Access to Hustler Bot
         </h1>
-        <p style={{ fontSize: "1.1rem", marginBottom: "2rem", color: "#ccc" }}>
-          Upgrade for <strong>$20/month</strong> and get unlimited access to advanced AI mentorship built for entrepreneurs.
+
+        <p style={{
+          fontSize: "1.125rem",
+          color: "#ccc",
+          marginBottom: "2rem"
+        }}>
+          Upgrade for <strong>$20/month</strong> to access the full power of Hustler Bot — your intelligent startup mentor.
         </p>
 
         <ul style={{
           textAlign: "left",
-          marginBottom: "2rem",
+          marginBottom: "2.5rem",
           color: "#ddd",
-          lineHeight: "1.8",
-          paddingLeft: "1rem",
-          fontSize: "1rem"
+          fontSize: "1rem",
+          lineHeight: "1.75",
+          listStyleType: "disc",
+          paddingLeft: "1.25rem"
         }}>
-          <li>&bull; Ask unlimited business, strategy, and product questions</li>
-          <li>&bull; Receive personalized startup guidance tailored to your idea and stage</li>
-          <li>&bull; Access expert-level insight across marketing, funding, positioning, and more</li>
-          <li>&bull; Get actionable suggestions for MVPs, landing pages, ads, and campaigns</li>
-          <li>&bull; Enjoy faster responses and direct access to priority support</li>
-          <li>&bull; Unlock future features and improvements at no additional cost</li>
+          <li>Ask unlimited business, product, and marketing questions</li>
+          <li>Get personalized strategies tailored to your startup’s stage</li>
+          <li>Access expert insights across growth, funding, and positioning</li>
+          <li>Generate high-converting landing pages, ads, and content</li>
+          <li>Receive faster replies and access priority support</li>
+          <li>Unlock all future updates and premium features automatically</li>
         </ul>
 
         <button onClick={handlePaddleSubscribe} style={{
@@ -73,12 +87,16 @@ export default function SubscribePage() {
           borderRadius: "12px",
           border: "none",
           cursor: "pointer",
-          fontSize: "1.1rem",
-          width: "100%",
+          fontSize: "1.125rem",
           fontWeight: "bold",
-          marginBottom: "1rem",
-          boxShadow: "0 0 20px #ff1a1a88"
-        }}>
+          width: "100%",
+          marginBottom: "1.2rem",
+          boxShadow: "0 0 25px rgba(255, 26, 26, 0.3)",
+          transition: "transform 0.2s ease"
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
+        onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1.0)")}
+        >
           Subscribe Now
         </button>
 
@@ -88,17 +106,21 @@ export default function SubscribePage() {
           localStorage.removeItem("seen_intro");
           navigate("/login");
         }} style={{
-          backgroundColor: "#444",
+          backgroundColor: "#333",
           color: "#fff",
           padding: "12px",
           borderRadius: "12px",
           border: "none",
           cursor: "pointer",
           fontSize: "1rem",
+          fontWeight: "bold",
           width: "100%",
-          fontWeight: "bold"
-        }}>
-          Logout
+          transition: "background 0.2s ease"
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#555")}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#333")}
+        >
+          Log Out
         </button>
       </div>
     </div>
