@@ -141,8 +141,21 @@ function LandingPage() {
   🧾 Full data transparency  
   ✅ Built with privacy-first principles`,
     },
-    
+    {
+      icon: "📚",
+      title: "Learn While You Build",
+      desc: "Master startup strategy, marketing, and product design as you grow — with every conversation.",
+      moreInfo: `Hustler Bot doesn’t just give answers — it teaches you the “why” behind every step.
+  
+  You’ll improve your business skills with each chat, absorbing proven startup wisdom in real time.
+  
+  🎓 Learn startup strategy through real examples  
+  🧠 Build intuition with interactive explanations  
+  🔁 Develop as a founder while executing tasks  
+  📘 It's mentorship *and* an education platform in one`,
+    },
   ];
+  
   
   return (
     <>
