@@ -55,8 +55,8 @@ export default function Agents() {
         body: JSON.stringify({ project: userMessage.content }),
       });
       const data = await res.json();
-      const botReply = data.plan || JSON.stringify(data);
-
+      const botReply = data.content || data.plan || JSON.stringify(data);
+      
       setDisplayedText("");
       setMessages((prev) => {
         const updated = [...prev, { role: "assistant", content: "" }];
