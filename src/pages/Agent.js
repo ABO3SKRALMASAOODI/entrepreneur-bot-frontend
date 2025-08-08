@@ -54,9 +54,22 @@ export default function Agents() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ project: userMessage.content }),
       });
+
       const data = await res.json();
+
+      // Show error in chat if backend sends error
+      if (data.error) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: `❌ ${data.error}` },
+        ]);
+        setIsBotResponding(false);
+        return;
+      }
+
+      // Support both content and plan keys
       const botReply = data.content || data.plan || JSON.stringify(data);
-      
+
       setDisplayedText("");
       setMessages((prev) => {
         const updated = [...prev, { role: "assistant", content: "" }];
@@ -66,6 +79,10 @@ export default function Agents() {
       });
     } catch (err) {
       console.error("Error:", err);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "❌ Network or server error" },
+      ]);
       setIsBotResponding(false);
     }
   };
@@ -175,6 +192,7 @@ export default function Agents() {
   );
 }
 
+// Styles
 const layout = {
   height: "100vh",
   width: "100vw",
