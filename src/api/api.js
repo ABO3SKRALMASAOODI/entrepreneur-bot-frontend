@@ -41,7 +41,9 @@ export const getMessagesForSession = async (session_id) => {
   return res.data.messages;
 };
 export const callOrchestrator = async (projectDescription) => {
-  const res = await API.post("/agents/orchestrator", { project: projectDescription });
+  const res = await API.post("/api/agents/orchestrator", {
+    project: projectDescription,
+  });
   return res.data;
 };
 
