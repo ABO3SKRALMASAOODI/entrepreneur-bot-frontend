@@ -1,59 +1,227 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { marked } from "marked";
+
+function TypingText({ text, speed, displayed, setDisplayed, onComplete }) {
+  const indexRef = useRef(displayed.length);
+
+  useEffect(() => {
+    if (!text || indexRef.current >= text.length) {
+      if (onComplete) onComplete();
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setDisplayed(text.slice(0, indexRef.current + 1));
+      indexRef.current += 1;
+
+      if (indexRef.current >= text.length) {
+        clearInterval(interval);
+        if (onComplete) onComplete();
+      }
+    }, speed);
+
+    return () => clearInterval(interval);
+  }, [text, speed, setDisplayed, onComplete]);
+
+  return <span style={{ whiteSpace: "pre-wrap" }}>{displayed}</span>;
+}
 
 export default function Agents() {
-  const [project, setProject] = useState("");
-  const [response, setResponse] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [prompt, setPrompt] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [typingIndex, setTypingIndex] = useState(null);
+  const [typingText, setTypingText] = useState("");
+  const [displayedText, setDisplayedText] = useState("");
+  const [isBotResponding, setIsBotResponding] = useState(false);
+  const bottomRef = useRef(null);
 
-  const handleGeneratePlan = async () => {
-    if (!project.trim()) return alert("Please enter a project description");
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-    setLoading(true);
-    setResponse(null);
+  const handleSend = async (e) => {
+    e.preventDefault();
+    if (!prompt.trim()) return;
+
+    setIsBotResponding(true);
+    const userMessage = { role: "user", content: prompt };
+    setMessages((prev) => [...prev, userMessage]);
+    setPrompt("");
 
     try {
       const res = await fetch("/api/agents/orchestrator", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ project }),
+        body: JSON.stringify({ project: userMessage.content }),
       });
-
       const data = await res.json();
-      setResponse(data);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
+      const botReply = data.plan || JSON.stringify(data);
+
+      setDisplayedText("");
+      setMessages((prev) => {
+        const updated = [...prev, { role: "assistant", content: "" }];
+        setTypingIndex(updated.length - 1);
+        setTypingText(botReply);
+        return updated;
+      });
+    } catch (err) {
+      console.error("Error:", err);
+      setIsBotResponding(false);
     }
   };
 
-  return (
-    <div style={{ padding: "20px" }}>
-      <h1>Agents Playground</h1>
-      <textarea
-        placeholder="Describe your project..."
-        value={project}
-        onChange={(e) => setProject(e.target.value)}
-        rows="5"
-        style={{ width: "100%", padding: "10px" }}
-      />
-      <br />
-      <button onClick={handleGeneratePlan} disabled={loading}>
-        {loading ? "Generating..." : "Generate Plan"}
-      </button>
+  const handleStop = () => {
+    setTypingIndex(null);
+    setTypingText("");
+    setDisplayedText("");
+    setIsBotResponding(false);
+  };
 
-      {response && (
-        <pre
-          style={{
-            marginTop: "20px",
-            padding: "10px",
-            background: "#f4f4f4",
-            whiteSpace: "pre-wrap",
+  return (
+    <div style={layout}>
+      <div style={chatWindow}>
+        {messages.map((msg, i) => {
+          const isTyping = i === typingIndex && msg.role === "assistant";
+          return (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: msg.role === "user" ? "flex-end" : "flex-start",
+              }}
+            >
+              <div
+                style={{
+                  background: msg.role === "user" ? "#8b0000" : "#660000",
+                  padding: "12px 16px",
+                  borderRadius: "16px",
+                  color: "#fff",
+                  maxWidth: "75%",
+                  whiteSpace: "pre-wrap",
+                  boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                  fontFamily: "inherit",
+                }}
+              >
+                <strong>{msg.role === "user" ? "You" : "Orchestrator"}</strong>
+                <div style={{ marginTop: "6px" }}>
+                  {isTyping ? (
+                    <TypingText
+                      key={`typing-${i}`}
+                      text={typingText}
+                      speed={15}
+                      displayed={displayedText}
+                      setDisplayed={setDisplayedText}
+                      onComplete={() => {
+                        setMessages((prev) => {
+                          const updated = [...prev];
+                          updated[i].content = typingText;
+                          return updated;
+                        });
+                        setTypingIndex(null);
+                        setIsBotResponding(false);
+                      }}
+                    />
+                  ) : (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: marked.parse(msg.content || ""),
+                      }}
+                      style={{
+                        whiteSpace: "pre-wrap",
+                        fontFamily: "inherit",
+                        overflowWrap: "break-word",
+                      }}
+                      className="message-content"
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+        <div ref={bottomRef} />
+      </div>
+
+      <form onSubmit={handleSend} style={chatForm}>
+        <textarea
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend(e);
+            }
           }}
-        >
-          {JSON.stringify(response, null, 2)}
-        </pre>
-      )}
+          placeholder="Ask your agent anything..."
+          rows={2}
+          style={inputBox}
+        />
+        {isBotResponding ? (
+          <button
+            type="button"
+            onClick={handleStop}
+            style={{ ...mainBtn, backgroundColor: "#444" }}
+          >
+            Stop
+          </button>
+        ) : (
+          <button type="submit" style={mainBtn}>
+            ➤
+          </button>
+        )}
+      </form>
     </div>
   );
 }
+
+const layout = {
+  height: "100vh",
+  width: "100vw",
+  display: "flex",
+  flexDirection: "column",
+  backgroundColor: "#000",
+  color: "#eee",
+  fontFamily: "Segoe UI, sans-serif",
+};
+
+const chatWindow = {
+  flexGrow: 1,
+  overflowY: "auto",
+  padding: "1rem",
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+  backgroundColor: "#000",
+};
+
+const chatForm = {
+  padding: "1rem",
+  backgroundColor: "#000",
+  display: "flex",
+  justifyContent: "center",
+  borderTop: "1px solid #222",
+};
+
+const inputBox = {
+  width: "70%",
+  maxWidth: "800px",
+  backgroundColor: "#111",
+  color: "#fff",
+  border: "1px solid #444",
+  borderRadius: "12px",
+  padding: "12px",
+  fontSize: "1rem",
+  resize: "none",
+  marginRight: "10px",
+};
+
+const mainBtn = {
+  backgroundColor: "#8b0000",
+  color: "#fff",
+  padding: "10px 18px",
+  borderRadius: "10px",
+  border: "none",
+  cursor: "pointer",
+  fontSize: "1rem",
+};
