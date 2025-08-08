@@ -1,23 +1,17 @@
-export const metadata = {
-    title: "Agent Lab",
-    robots: { index: false, follow: false },
-  };
-  
-  export default function AgentPage() {
-    return (
-      <main style={{ padding: 24 }}>
+// src/pages/testagent.js
+import Head from "next/head";
+
+export default function TestAgent() {
+  return (
+    <>
+      <Head>
+        <title>Agent Lab</title>
+        <meta name="robots" content="noindex,nofollow" />
+      </Head>
+      <main style={{ padding: 24, color: "#fff", background: "#111", minHeight: "100vh" }}>
         <h1>Agent Lab</h1>
-        <p>Experiments go here.</p>
-        {/* Example:
-        <button onClick={async () => {
-          const r = await fetch("/api/agent", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ping: true }),
-          });
-          console.log(await r.json());
-        }}>Test API</button> */}
+        <p>It works 🎉</p>
       </main>
-    );
-  }
-  
+    </>
+  );
+}
