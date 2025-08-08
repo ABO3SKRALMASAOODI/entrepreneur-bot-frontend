@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { marked } from "marked";
+import { callOrchestrator } from "../api/api";
 
 function TypingText({ text, speed, displayed, setDisplayed, onComplete }) {
   const indexRef = useRef(displayed.length);
@@ -33,6 +34,7 @@ export default function Agents() {
   const [typingText, setTypingText] = useState("");
   const [displayedText, setDisplayedText] = useState("");
   const [isBotResponding, setIsBotResponding] = useState(false);
+  const [error, setError] = useState("");
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -49,25 +51,7 @@ export default function Agents() {
     setPrompt("");
 
     try {
-      const res = await fetch("/api/agents/orchestrator", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ project: userMessage.content }),
-      });
-
-      const data = await res.json();
-
-      // Show error in chat if backend sends error
-      if (data.error) {
-        setMessages((prev) => [
-          ...prev,
-          { role: "assistant", content: `❌ ${data.error}` },
-        ]);
-        setIsBotResponding(false);
-        return;
-      }
-
-      // Support both content and plan keys
+      const data = await callOrchestrator(userMessage.content);
       const botReply = data.content || data.plan || JSON.stringify(data);
 
       setDisplayedText("");
@@ -79,10 +63,7 @@ export default function Agents() {
       });
     } catch (err) {
       console.error("Error:", err);
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "❌ Network or server error" },
-      ]);
+      setError("Network or server error");
       setIsBotResponding(false);
     }
   };
@@ -188,11 +169,16 @@ export default function Agents() {
           </button>
         )}
       </form>
+
+      {error && (
+        <div style={{ padding: "0.5rem 1rem", color: "#ff8080", backgroundColor: "#2f1f1f" }}>
+          ❌ {error}
+        </div>
+      )}
     </div>
   );
 }
 
-// Styles
 const layout = {
   height: "100vh",
   width: "100vw",
