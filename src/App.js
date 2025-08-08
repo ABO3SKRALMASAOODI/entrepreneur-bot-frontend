@@ -13,6 +13,7 @@ import LandingPage from "./pages/LandingPage";
 import FeaturesPage from "./pages/FeaturesPage";
 import PaddleCheckoutPage from "./pages/PaddleCheckoutPage";
 import SubscribePage from "./pages/SubscribePage";
+import Agent from "./pages/Agent";
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -37,6 +38,8 @@ function App() {
       <Route path="/paddle-checkout" element={<PaddleCheckoutPage />} />
       <Route path="/subscribe" element={<SubscribePage />} />
       <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
+      <Route path="/agent" element={<Agent />} />
+
     </Routes>
   );
 }
