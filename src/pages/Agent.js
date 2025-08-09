@@ -44,21 +44,44 @@ export default function Agents() {
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-
+  
     setIsBotResponding(true);
     const userMessage = { role: "user", content: prompt };
     setMessages((prev) => [...prev, userMessage]);
     setPrompt("");
-
+  
     try {
       const data = await callOrchestrator(userMessage.content);
-      const botReply = data.content || data.plan || JSON.stringify(data);
-
+  
+      // If backend is asking a clarifying question
+      if (data.role === "assistant" && !data.spec) {
+        setDisplayedText("");
+        setMessages((prev) => {
+          const updated = [...prev, { role: "assistant", content: "" }];
+          setTypingIndex(updated.length - 1);
+          setTypingText(data.content);
+          return updated;
+        });
+        return;
+      }
+  
+      // If backend has the final spec
+      if (data.spec) {
+        const botReply = data.content || JSON.stringify(data.spec, null, 2);
+        setDisplayedText("");
+        setMessages((prev) => {
+          const updated = [...prev, { role: "assistant", content: "" }];
+          setTypingIndex(updated.length - 1);
+          setTypingText(botReply);
+          return updated;
+        });
+        return;
+      }
+  
+      // Fallback for unexpected data
       setDisplayedText("");
       setMessages((prev) => {
-        const updated = [...prev, { role: "assistant", content: "" }];
-        setTypingIndex(updated.length - 1);
-        setTypingText(botReply);
+        const updated = [...prev, { role: "assistant", content: JSON.stringify(data) }];
         return updated;
       });
     } catch (err) {
@@ -67,6 +90,7 @@ export default function Agents() {
       setIsBotResponding(false);
     }
   };
+  
 
   const handleStop = () => {
     setTypingIndex(null);
