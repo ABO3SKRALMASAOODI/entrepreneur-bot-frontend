@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { marked } from "marked";
 import { callOrchestrator } from "../api/api";
 
-// Typing animation component for orchestrator messages
 function TypingText({ text, speed, displayed, setDisplayed, onComplete }) {
   const indexRef = useRef(displayed.length);
 
@@ -36,6 +35,7 @@ export default function Agents() {
   const [displayedText, setDisplayedText] = useState("");
   const [isBotResponding, setIsBotResponding] = useState(false);
   const [error, setError] = useState("");
+
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -47,21 +47,18 @@ export default function Agents() {
     if (!prompt.trim()) return;
 
     setIsBotResponding(true);
-    const userMessage = { role: "user", source: "user", content: prompt };
+    const userMessage = { role: "user", content: prompt };
     setMessages((prev) => [...prev, userMessage]);
     setPrompt("");
 
     try {
       const data = await callOrchestrator(userMessage.content);
 
-      // Case 1: Backend asking a clarifying question (no spec)
+      // Clarifying question from backend
       if (data.role === "assistant" && !data.spec) {
         setDisplayedText("");
         setMessages((prev) => {
-          const updated = [
-            ...prev,
-            { role: "assistant", source: "orchestrator", content: "" }
-          ];
+          const updated = [...prev, { role: "assistant", content: "" }];
           setTypingIndex(updated.length - 1);
           setTypingText(data.content);
           return updated;
@@ -69,56 +66,24 @@ export default function Agents() {
         return;
       }
 
-      // Case 2: Orchestrator + agents pipeline
-      if (data.orchestrator_output && data.agents_output) {
-        // Show orchestrator first
+      // Final spec from backend
+      if (data.spec) {
+        const botReply = data.content || JSON.stringify(data.spec, null, 2);
         setDisplayedText("");
         setMessages((prev) => {
-          const updated = [
-            ...prev,
-            { role: "assistant", source: "orchestrator", content: "" }
-          ];
+          const updated = [...prev, { role: "assistant", content: "" }];
           setTypingIndex(updated.length - 1);
-          setTypingText(data.orchestrator_output);
+          setTypingText(botReply);
           return updated;
         });
-
-        // Once orchestrator finishes typing, show agents one by one
-        const onOrchestratorComplete = () => {
-          setMessages((prev) => {
-            const updated = [...prev];
-            updated[typingIndex].content = data.orchestrator_output;
-            return updated;
-          });
-          setTypingIndex(null);
-          setIsBotResponding(false);
-
-          data.agents_output.forEach((agent, idx) => {
-            setTimeout(() => {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  role: "assistant",
-                  source: "agent",
-                  content: `${agent.agent_name}:\n${agent.output}`
-                },
-              ]);
-            }, idx * 500); // delay between agents
-          });
-        };
-
-        // Attach callback to TypingText via state
-        setTypingText(data.orchestrator_output);
-        setDisplayedText("");
-        setTypingIndex(messages.length); // orchestrator message index
-        return setTypingTextCallback(() => onOrchestratorComplete);
+        return;
       }
 
-      // Case 3: Unexpected data
+      // Fallback for unexpected data
       setDisplayedText("");
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", source: "orchestrator", content: JSON.stringify(data) }
+        { role: "assistant", content: JSON.stringify(data) },
       ]);
     } catch (err) {
       console.error("Error:", err);
@@ -126,9 +91,6 @@ export default function Agents() {
       setIsBotResponding(false);
     }
   };
-
-  // Typing callback storage
-  const [typingTextCallback, setTypingTextCallback] = useState(null);
 
   const handleStop = () => {
     setTypingIndex(null);
@@ -163,13 +125,7 @@ export default function Agents() {
                   fontFamily: "inherit",
                 }}
               >
-                <strong>
-                  {msg.role === "user"
-                    ? "You"
-                    : msg.source === "agent"
-                    ? msg.content.split(":")[0] // agent name before ":"
-                    : "Orchestrator"}
-                </strong>
+                <strong>{msg.role === "user" ? "You" : "Orchestrator"}</strong>
                 <div style={{ marginTop: "6px" }}>
                   {isTyping ? (
                     <TypingText
@@ -186,7 +142,6 @@ export default function Agents() {
                         });
                         setTypingIndex(null);
                         setIsBotResponding(false);
-                        if (typingTextCallback) typingTextCallback();
                       }}
                     />
                   ) : (
@@ -240,7 +195,13 @@ export default function Agents() {
       </form>
 
       {error && (
-        <div style={{ padding: "0.5rem 1rem", color: "#ff8080", backgroundColor: "#2f1f1f" }}>
+        <div
+          style={{
+            padding: "0.5rem 1rem",
+            color: "#ff8080",
+            backgroundColor: "#2f1f1f",
+          }}
+        >
           ❌ {error}
         </div>
       )}
