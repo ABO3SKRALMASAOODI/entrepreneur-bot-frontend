@@ -45,16 +45,16 @@ export default function Agents() {
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-
+  
     setIsBotResponding(true);
     const userMessage = { role: "user", content: prompt };
     setMessages((prev) => [...prev, userMessage]);
     setPrompt("");
-
+  
     try {
       const data = await callOrchestrator(userMessage.content);
-
-      // Clarifying question from backend
+  
+      // Clarifying question from backend (no spec yet)
       if (data.role === "assistant" && !data.spec) {
         setDisplayedText("");
         setMessages((prev) => {
@@ -65,9 +65,10 @@ export default function Agents() {
         });
         return;
       }
-
-      // Final spec from backend
+  
+      // Final spec + optional agents_output
       if (data.spec) {
+        // First, show the orchestrator plan
         const botReply = data.content || JSON.stringify(data.spec, null, 2);
         setDisplayedText("");
         setMessages((prev) => {
@@ -76,9 +77,22 @@ export default function Agents() {
           setTypingText(botReply);
           return updated;
         });
+  
+        // Then, if there are agents outputs, push each as its own message
+        if (data.agents_output && Array.isArray(data.agents_output) && data.agents_output.length > 0) {
+          data.agents_output.forEach(agent => {
+            setMessages(prev => [
+              ...prev,
+              {
+                role: "assistant",
+                content: `### ${agent.file}\n\`\`\`python\n${agent.code}\n\`\`\``
+              }
+            ]);
+          });
+        }
         return;
       }
-
+  
       // Fallback for unexpected data
       setDisplayedText("");
       setMessages((prev) => [
@@ -91,7 +105,7 @@ export default function Agents() {
       setIsBotResponding(false);
     }
   };
-
+  
   const handleStop = () => {
     setTypingIndex(null);
     setTypingText("");
