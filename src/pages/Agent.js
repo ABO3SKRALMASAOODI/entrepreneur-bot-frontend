@@ -2,37 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { marked } from "marked";
 import { callOrchestrator } from "../api/api";
 
-function TypingText({ text, speed, displayed, setDisplayed, onComplete }) {
-  const indexRef = useRef(displayed.length);
-
-  useEffect(() => {
-    if (!text || indexRef.current >= text.length) {
-      if (onComplete) onComplete();
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setDisplayed(text.slice(0, indexRef.current + 1));
-      indexRef.current += 1;
-
-      if (indexRef.current >= text.length) {
-        clearInterval(interval);
-        if (onComplete) onComplete();
-      }
-    }, speed);
-
-    return () => clearInterval(interval);
-  }, [text, speed, setDisplayed, onComplete]);
-
-  return <span style={{ whiteSpace: "pre-wrap" }}>{displayed}</span>;
-}
-
 export default function Agents() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
-  const [typingIndex, setTypingIndex] = useState(null);
-  const [typingText, setTypingText] = useState("");
-  const [displayedText, setDisplayedText] = useState("");
   const [isBotResponding, setIsBotResponding] = useState(false);
   const [error, setError] = useState("");
 
@@ -45,140 +17,114 @@ export default function Agents() {
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-  
+
     setIsBotResponding(true);
     const userMessage = { role: "user", content: prompt };
     setMessages((prev) => [...prev, userMessage]);
     setPrompt("");
-  
+
     try {
       const data = await callOrchestrator(userMessage.content);
-  
-      // Clarifying question from backend (no spec yet)
+
+      // If it's just a clarifying question from backend
       if (data.role === "assistant" && !data.spec) {
-        setDisplayedText("");
-        setMessages((prev) => {
-          const updated = [...prev, { role: "assistant", content: "" }];
-          setTypingIndex(updated.length - 1);
-          setTypingText(data.content);
-          return updated;
-        });
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: data.content },
+        ]);
+        setIsBotResponding(false);
         return;
       }
-  
-      // Final spec + optional agents_output
+
+      // If we have final spec + optional agents output
       if (data.spec) {
-        // First, show the orchestrator plan
+        // First add the orchestrator plan
         const botReply = data.content || JSON.stringify(data.spec, null, 2);
-        setDisplayedText("");
-        setMessages((prev) => {
-          const updated = [...prev, { role: "assistant", content: "" }];
-          setTypingIndex(updated.length - 1);
-          setTypingText(botReply);
-          return updated;
-        });
-  
-        // Then, if there are agents outputs, push each as its own message
-        if (data.agents_output && Array.isArray(data.agents_output) && data.agents_output.length > 0) {
-          data.agents_output.forEach(agent => {
-            setMessages(prev => [
-              ...prev,
-              {
-                role: "assistant",
-                content: `### ${agent.file}\n\`\`\`python\n${agent.code}\n\`\`\``
-              }
-            ]);
-          });
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: botReply },
+        ]);
+
+        // Then add each agent's code output
+        if (
+          data.agents_output &&
+          Array.isArray(data.agents_output) &&
+          data.agents_output.length > 0
+        ) {
+          const agentMessages = data.agents_output.map((agent) => ({
+            role: "assistant",
+            content: `### ${agent.file}\n\`\`\`python\n${agent.code}\n\`\`\``,
+          }));
+          setMessages((prev) => [...prev, ...agentMessages]);
         }
+
+        setIsBotResponding(false);
         return;
       }
-  
+
       // Fallback for unexpected data
-      setDisplayedText("");
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: JSON.stringify(data) },
       ]);
+      setIsBotResponding(false);
     } catch (err) {
       console.error("Error:", err);
       setError("Network or server error");
       setIsBotResponding(false);
     }
   };
-  
+
   const handleStop = () => {
-    setTypingIndex(null);
-    setTypingText("");
-    setDisplayedText("");
     setIsBotResponding(false);
   };
 
   return (
     <div style={layout}>
+      {/* Chat window */}
       <div style={chatWindow}>
-        {messages.map((msg, i) => {
-          const isTyping = i === typingIndex && msg.role === "assistant";
-          return (
+        {messages.map((msg, i) => (
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: msg.role === "user" ? "flex-end" : "flex-start",
+            }}
+          >
             <div
-              key={i}
               style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: msg.role === "user" ? "flex-end" : "flex-start",
+                background: msg.role === "user" ? "#8b0000" : "#660000",
+                padding: "12px 16px",
+                borderRadius: "16px",
+                color: "#fff",
+                maxWidth: "75%",
+                whiteSpace: "pre-wrap",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                fontFamily: "inherit",
               }}
             >
-              <div
-                style={{
-                  background: msg.role === "user" ? "#8b0000" : "#660000",
-                  padding: "12px 16px",
-                  borderRadius: "16px",
-                  color: "#fff",
-                  maxWidth: "75%",
-                  whiteSpace: "pre-wrap",
-                  boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-                  fontFamily: "inherit",
-                }}
-              >
-                <strong>{msg.role === "user" ? "You" : "Orchestrator"}</strong>
-                <div style={{ marginTop: "6px" }}>
-                  {isTyping ? (
-                    <TypingText
-                      key={`typing-${i}`}
-                      text={typingText}
-                      speed={15}
-                      displayed={displayedText}
-                      setDisplayed={setDisplayedText}
-                      onComplete={() => {
-                        setMessages((prev) => {
-                          const updated = [...prev];
-                          updated[i].content = typingText;
-                          return updated;
-                        });
-                        setTypingIndex(null);
-                        setIsBotResponding(false);
-                      }}
-                    />
-                  ) : (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: marked.parse(msg.content || ""),
-                      }}
-                      style={{
-                        whiteSpace: "pre-wrap",
-                        fontFamily: "inherit",
-                        overflowWrap: "break-word",
-                      }}
-                      className="message-content"
-                    />
-                  )}
-                </div>
+              <strong>{msg.role === "user" ? "You" : "Orchestrator"}</strong>
+              <div style={{ marginTop: "6px" }}>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: marked.parse(msg.content || ""),
+                  }}
+                  style={{
+                    whiteSpace: "pre-wrap",
+                    fontFamily: "inherit",
+                    overflowWrap: "break-word",
+                  }}
+                  className="message-content"
+                />
               </div>
             </div>
-          );
-        })}
+          </div>
+        ))}
         <div ref={bottomRef} />
       </div>
 
+      {/* Input form */}
       <form onSubmit={handleSend} style={chatForm}>
         <textarea
           value={prompt}
@@ -208,6 +154,7 @@ export default function Agents() {
         )}
       </form>
 
+      {/* Error display */}
       {error && (
         <div
           style={{
