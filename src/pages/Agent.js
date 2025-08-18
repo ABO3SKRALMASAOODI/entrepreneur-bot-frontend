@@ -194,12 +194,13 @@ export default function Agents() {
       backgroundColor: "#2f1f1f",
     }}
   >
-    ❌ {error}
+    {"❌"} {error}
   </div>
 )}
-</div> {/* closes layout */}
+</div> 
 );
 }
+
 
 
 const layout = {
