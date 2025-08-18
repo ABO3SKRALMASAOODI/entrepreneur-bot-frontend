@@ -153,52 +153,54 @@ export default function Agents() {
   </div>
 ))}
 
+</div> {/* closes chatWindow */}
 
-      {/* Input form */}
-      <form onSubmit={handleSend} style={chatForm}>
-        <textarea
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSend(e);
-            }
-          }}
-          placeholder="Ask your agent anything..."
-          rows={2}
-          style={inputBox}
-        />
-        {isBotResponding ? (
-          <button
-            type="button"
-            onClick={handleStop}
-            style={{ ...mainBtn, backgroundColor: "#444" }}
-          >
-            Stop
-          </button>
-        ) : (
-          <button type="submit" style={mainBtn}>
-            ➤
-          </button>
-        )}
-      </form>
+{/* Input form */}
+<form onSubmit={handleSend} style={chatForm}>
+  <textarea
+    value={prompt}
+    onChange={(e) => setPrompt(e.target.value)}
+    onKeyDown={(e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleSend(e);
+      }
+    }}
+    placeholder="Ask your agent anything..."
+    rows={2}
+    style={inputBox}
+  />
+  {isBotResponding ? (
+    <button
+      type="button"
+      onClick={handleStop}
+      style={{ ...mainBtn, backgroundColor: "#444" }}
+    >
+      Stop
+    </button>
+  ) : (
+    <button type="submit" style={mainBtn}>
+      ➤
+    </button>
+  )}
+</form>
 
-      {/* Error display */}
-      {error && (
-        <div
-          style={{
-            padding: "0.5rem 1rem",
-            color: "#ff8080",
-            backgroundColor: "#2f1f1f",
-          }}
-        >
-          ❌ {error}
-        </div>
-      )}
-    </div>
-  );
+{/* Error display */}
+{error && (
+  <div
+    style={{
+      padding: "0.5rem 1rem",
+      color: "#ff8080",
+      backgroundColor: "#2f1f1f",
+    }}
+  >
+    ❌ {error}
+  </div>
+)}
+</div> {/* closes layout */}
+);
 }
+
 
 const layout = {
   height: "100vh",
