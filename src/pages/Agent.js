@@ -58,7 +58,6 @@ export default function Agents() {
             language: agent.language,
             content: agent.content,
           }));
-          
           setMessages((prev) => [...prev, ...agentMessages]);
         }
 
@@ -87,121 +86,119 @@ export default function Agents() {
     <div style={layout}>
       {/* Chat window */}
       <div style={chatWindow}>
-      {messages.map((msg, i) => (
-  <div
-    key={i}
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: msg.role === "user" ? "flex-end" : "flex-start",
-    }}
-  >
-    <div
-      style={{
-        background: msg.role === "user" ? "#8b0000" : "#660000",
-        padding: "12px 16px",
-        borderRadius: "16px",
-        color: "#fff",
-        maxWidth: "75%",
-        whiteSpace: "pre-wrap",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-        fontFamily: "inherit",
-      }}
-    >
-      {/* ✅ Correct label */}
-      <strong>
-        {msg.role === "user"
-          ? "You"
-          : msg.role === "agent"
-            ? `Agent — ${msg.file || msg.agent || "Unknown file"}`
-            : "Orchestrator"}
-      </strong>
-
-      <div style={{ marginTop: "6px" }}>
-        {msg.role === "agent" ? (
-          // ✅ Render clean code block for agents
-          <pre
-            className={`code-block ${msg.language || "text"}`}
+        {messages.map((msg, i) => (
+          <div
+            key={i}
             style={{
-              background: "#111",
-              padding: "12px",
-              borderRadius: "8px",
-              overflowX: "auto",
-              fontFamily: "monospace",
-              fontSize: "0.9rem",
-              whiteSpace: "pre",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: msg.role === "user" ? "flex-end" : "flex-start",
             }}
           >
-            <code>{msg.content}</code>
-          </pre>
-        ) : (
-          // ✅ Orchestrator + user still rendered via markdown
-          <div
-            dangerouslySetInnerHTML={{
-              __html: marked.parse(msg.content || ""),
-            }}
-            style={{
-              whiteSpace: "pre-wrap",
-              fontFamily: "inherit",
-              overflowWrap: "break-word",
-            }}
-            className="message-content"
-          />
-        )}
+            <div
+              style={{
+                background: msg.role === "user" ? "#8b0000" : "#660000",
+                padding: "12px 16px",
+                borderRadius: "16px",
+                color: "#fff",
+                maxWidth: "75%",
+                whiteSpace: "pre-wrap",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                fontFamily: "inherit",
+              }}
+            >
+              {/* ✅ Correct label */}
+              <strong>
+                {msg.role === "user"
+                  ? "You"
+                  : msg.role === "agent"
+                  ? `Agent — ${msg.file || msg.agent || "Unknown file"}`
+                  : "Orchestrator"}
+              </strong>
+
+              <div style={{ marginTop: "6px" }}>
+                {msg.role === "agent" ? (
+                  // ✅ Render clean code block for agents
+                  <pre
+                    className={`code-block ${msg.language || "text"}`}
+                    style={{
+                      background: "#111",
+                      padding: "12px",
+                      borderRadius: "8px",
+                      overflowX: "auto",
+                      fontFamily: "monospace",
+                      fontSize: "0.9rem",
+                      whiteSpace: "pre",
+                    }}
+                  >
+                    <code>{msg.content}</code>
+                  </pre>
+                ) : (
+                  // ✅ Orchestrator + user still rendered via markdown
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: marked.parse(msg.content || ""),
+                    }}
+                    style={{
+                      whiteSpace: "pre-wrap",
+                      fontFamily: "inherit",
+                      overflowWrap: "break-word",
+                    }}
+                    className="message-content"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
+      {/* closes chatWindow */}
+
+      {/* Input form */}
+      <form onSubmit={handleSend} style={chatForm}>
+        <textarea
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend(e);
+            }
+          }}
+          placeholder="Ask your agent anything..."
+          rows={2}
+          style={inputBox}
+        />
+        {isBotResponding ? (
+          <button
+            type="button"
+            onClick={handleStop}
+            style={{ ...mainBtn, backgroundColor: "#444" }}
+          >
+            Stop
+          </button>
+        ) : (
+          <button type="submit" style={mainBtn}>
+            ➤
+          </button>
+        )}
+      </form>
+
+      {/* Error display */}
+      {error && (
+        <div
+          style={{
+            padding: "0.5rem 1rem",
+            color: "#ff8080",
+            backgroundColor: "#2f1f1f",
+          }}
+        >
+          {"❌"} {error}
+        </div>
+      )}
     </div>
-  </div>
-))}
-
-</div> {/* closes chatWindow */}
-
-{/* Input form */}
-<form onSubmit={handleSend} style={chatForm}>
-  <textarea
-    value={prompt}
-    onChange={(e) => setPrompt(e.target.value)}
-    onKeyDown={(e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        handleSend(e);
-      }
-    }}
-    placeholder="Ask your agent anything..."
-    rows={2}
-    style={inputBox}
-  />
-  {isBotResponding ? (
-    <button
-      type="button"
-      onClick={handleStop}
-      style={{ ...mainBtn, backgroundColor: "#444" }}
-    >
-      Stop
-    </button>
-  ) : (
-    <button type="submit" style={mainBtn}>
-      ➤
-    </button>
-  )}
-</form>
-
-{/* Error display */}
-{error && (
-  <div
-    style={{
-      padding: "0.5rem 1rem",
-      color: "#ff8080",
-      backgroundColor: "#2f1f1f",
-    }}
-  >
-    {"❌"} {error}
-  </div>
-)}
-</div> 
-);
+  );
 }
-
-
 
 const layout = {
   height: "100vh",
