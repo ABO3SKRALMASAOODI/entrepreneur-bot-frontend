@@ -13,20 +13,20 @@ export default function Agents() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
   const handleSend = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-
+  
     setIsBotResponding(true);
+  
     const userMessage = { role: "user", content: prompt };
     setMessages((prev) => [...prev, userMessage]);
     setPrompt("");
-
+  
     try {
       const data = await callOrchestrator(userMessage.content);
-
-      // If it's just a clarifying question from backend
+  
+      // 🔹 Case 1: Backend just asks a clarifying question
       if (data.role === "assistant" && !data.spec) {
         setMessages((prev) => [
           ...prev,
@@ -35,17 +35,22 @@ export default function Agents() {
         setIsBotResponding(false);
         return;
       }
-
-      // If we have final spec + optional agents output
+  
+      // 🔹 Case 2: We have final spec + maybe agents output
       if (data.spec) {
-        // First add the orchestrator plan
-        const botReply = data.content || JSON.stringify(data.spec, null, 2);
+        // ✅ Show orchestrator’s verified plan as JSON
         setMessages((prev) => [
           ...prev,
-          { role: "assistant", content: botReply },
+          {
+            role: "assistant",
+            content:
+              "📋 Final Project Plan:\n\n```json\n" +
+              JSON.stringify(data.spec, null, 2) +
+              "\n```",
+          },
         ]);
-
-        // Then add each agent's code output
+  
+        // ✅ Then append agent-generated code outputs
         if (
           data.agents_output &&
           Array.isArray(data.agents_output) &&
@@ -58,18 +63,18 @@ export default function Agents() {
             language: agent.language,
             content: agent.content,
           }));
-          
+  
           setMessages((prev) => [...prev, ...agentMessages]);
         }
-
+  
         setIsBotResponding(false);
         return;
       }
-
-      // Fallback for unexpected data
+  
+      // 🔹 Case 3: Unexpected data structure
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: JSON.stringify(data) },
+        { role: "assistant", content: JSON.stringify(data, null, 2) },
       ]);
       setIsBotResponding(false);
     } catch (err) {
@@ -78,6 +83,7 @@ export default function Agents() {
       setIsBotResponding(false);
     }
   };
+  
 
   const handleStop = () => {
     setIsBotResponding(false);
