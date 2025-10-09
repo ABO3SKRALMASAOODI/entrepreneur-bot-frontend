@@ -38,7 +38,7 @@ function App() {
       <Route path="/paddle-checkout" element={<PaddleCheckoutPage />} />
       <Route path="/subscribe" element={<SubscribePage />} />
       <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
-      <Route path="/agent" element={<Agent />} />
+      <Route path="/tigdar" element={<Agent />} />
 
     </Routes>
   );
