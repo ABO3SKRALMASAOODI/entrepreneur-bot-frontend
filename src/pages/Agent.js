@@ -154,45 +154,47 @@ function LandingPage() {
       <div className="bg-black text-white font-sans overflow-x-hidden">
         {/* HERO */}
         <section className="relative min-h-screen flex flex-col justify-center items-center px-6 overflow-hidden">
-          <motion.div
-            className="absolute top-0 left-0 w-full h-full bg-gradient-radial from-red-900/30 via-transparent to-black pointer-events-none z-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 2 }}
-          />
-          <motion.div
-            className="z-10 text-center max-w-4xl"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-          >
-            <h1 className="text-6xl md:text-7xl font-extrabold text-white drop-shadow-[0_0_25px_#ff1a1a]">
-              تقدر
-            </h1>
-            <p className="mt-6 text-xl md:text-2xl text-gray-300">
-              مساحتك الآمنة لتحسين صحتك النفسية، خطوة بخطوة.
-            </p>
-            <div className="mt-10 flex justify-center gap-6">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                onClick={() => navigate("/register")}
-                className="bg-gradient-to-r from-red-600 to-red-900 px-8 py-4 rounded-xl font-bold text-white shadow-lg"
-              >
-                ابدأ الآن
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                onClick={() => navigate("/login")}
-                className="bg-gray-800 border border-red-600 px-8 py-4 rounded-xl font-bold text-white"
-              >
-                تسجيل الدخول
-              </motion.button>
-            </div>
-          </motion.div>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-10 w-[700px] h-[700px] z-0 opacity-90">
-            <HeroBot style={{ width: "100%", height: "100%" }} />
-          </div>
+        <motion.div
+        className="absolute top-0 left-0 w-full h-full bg-gradient-radial from-red-900/30 via-transparent to-black pointer-events-none z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+        />
+        <motion.div
+        className="z-10 text-center max-w-4xl"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        >
+        <h1 className="text-6xl md:text-7xl font-extrabold text-white drop-shadow-[0_0_25px_#ff1a1a]">
+        تقدر
+        </h1>
+         <p className="mt-6 text-xl md:text-2xl text-gray-300">
+        لأنك تقدر تتجاوز صعوباتك النفسية، خطوة بخطوة، ومع دعم من يفهمك.
+        </p>
+        <div className="mt-10 flex justify-center gap-6">
+        <motion.button
+        whileHover={{ scale: 1.05 }}
+        onClick={() => navigate("/register")}
+        className="bg-gradient-to-r from-red-600 to-red-900 px-8 py-4 rounded-xl font-bold text-white shadow-lg"
+        >
+        ابدأ رحلتك الآن
+        </motion.button>
+        <motion.button
+        whileHover={{ scale: 1.05 }}
+        onClick={() => navigate("/login")}
+        className="bg-gray-800 border border-red-600 px-8 py-4 rounded-xl font-bold text-white"
+        >
+        تسجيل الدخول
+        </motion.button>
+        </div>
+        </motion.div>
+
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-10 w-[700px] h-[700px] z-0 opacity-90">
+        <HeroBot style={{ width: "100%", height: "100%" }} />
+        </div>
         </section>
+
 
         {/* FEATURE CARDS */}
         <section className="py-36 bg-black text-white text-center px-4 md:px-12 z-10 relative">
